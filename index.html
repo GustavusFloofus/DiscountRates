@@ -204,7 +204,7 @@
       white-space: nowrap;
     }
 
-    tbody tr:first-child td {
+    tbody tr.highlight-latest td {
       font-weight: 700;
     }
 
@@ -401,7 +401,7 @@
       });
     }
 
-    function buildTable(targetId, rows, keys, columnLabels = null) {
+    function buildTable(targetId, rows, keys, columnLabels = null, highlightDate = null) {
       const wrap = document.getElementById(targetId);
       const descRows = [...rows].sort((a, b) => String(b.date).localeCompare(String(a.date)));
 
@@ -423,6 +423,9 @@
 
       descRows.forEach((row) => {
         const tr = document.createElement("tr");
+        if (highlightDate && row.date === highlightDate) {
+          tr.classList.add("highlight-latest");
+        }
         const tdDate = document.createElement("td");
         tdDate.textContent = formatDE(row.date);
         tr.appendChild(tdDate);
@@ -444,8 +447,7 @@
     function makeLineChart(canvasId, rows, keys, palette, initiallyVisible, customLabels = null) {
       const ctx = document.getElementById(canvasId).getContext("2d");
       const ascRows = [...rows]
-	  .filter(r => r.date >= "2022-01-01")
-	  .sort((a, b) => String(a.date).localeCompare(String(b.date)));
+        .sort((a, b) => String(a.date).localeCompare(String(b.date)));
       const labels = ascRows.map(r => formatDE(r.date));
       const visible = new Set(initiallyVisible);
 
@@ -533,7 +535,15 @@
         config.buttonLabels
       );
 
-      buildTable(config.tableId, config.rows, config.keys, config.columnLabels);
+      buildTable(config.tableId, config.rows, config.keys, config.columnLabels, config.highlightDate || null);
+    }
+
+    function getLatestDate(rows) {
+      const dates = rows
+        .map(row => row.date)
+        .filter(Boolean)
+        .sort((a, b) => String(a).localeCompare(String(b)));
+      return dates.length ? dates[dates.length - 1] : null;
     }
 
     function rowsFromSheet(workbook, sheetName) {
@@ -570,6 +580,8 @@
           ifrs: rowsFromSheet(workbook, 'IFRS')
         };
 
+        const highlightDate = getLatestDate(data.ugb) || getLatestDate(data.ifrs) || getLatestDate(data.avg);
+
         destroyCharts();
 
         setupSection({
@@ -581,7 +593,8 @@
           palette: palettes.ugb,
           initiallyVisible: ["5", "10", "15", "20", "25"],
           columnLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"},
-          buttonLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"}
+          buttonLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"},
+          highlightDate
         });
 
         setupSection({
@@ -609,7 +622,8 @@
             "8":"8 Jahre",
             "9":"9 Jahre",
             "10":"10 Jahre"
-          }
+          },
+          highlightDate
         });
 
         setupSection({
@@ -621,7 +635,8 @@
           palette: palettes.ifrs,
           initiallyVisible: ["5", "10", "15", "20", "25"],
           columnLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"},
-          buttonLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"}
+          buttonLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"},
+          highlightDate
         });
 
         document.getElementById('loading').style.display = 'none';
