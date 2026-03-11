@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Zinssätze für Sozialkapitalbewertung | UGB Stichtagszins, Durchschnittszins 15 Jahre und IFRS</title>
+  <meta name="description" content="Zinssätze für die Sozialkapitalbewertung: UGB Stichtagszins, Durchschnittszins bei 15 Jahren Restlaufzeit und IFRS Zinsbandbreite. Interaktive Grafiken und Wertetabellen." />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="de_AT" />
+  <meta property="og:title" content="Zinssätze für Sozialkapitalbewertung | UGB Stichtagszins, Durchschnittszins 15 Jahre und IFRS" />
+  <meta property="og:description" content="Interaktive Übersichten zu UGB Stichtagszins, Durchschnittszins bei 15 Jahren Restlaufzeit und IFRS Zinsbandbreite." />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Zinssätze für Sozialkapitalbewertung" />
+  <meta name="twitter:description" content="UGB Stichtagszins, Durchschnittszins bei 15 Jahren Restlaufzeit und IFRS Zinsbandbreite." />
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "name":"Zinssätze für Sozialkapitalbewertung",
+    "description":"Interaktive Übersichten zu UGB Stichtagszins, Durchschnittszins bei 15 Jahren Restlaufzeit und IFRS Zinsbandbreite.",
+    "inLanguage":"de-AT"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --orange: #d86b00;
+      --orange-dark: #c35f00;
+      --text: #7a8597;
+      --muted: #7a8597;
+      --navy: #1f3654;
+      --navy-2: #2e4c72;
+      --navy-3: #456993;
+      --navy-4: #5b86b8;
+      --navy-5: #7ea8d2;
+      --navy-6: #9dbfe1;
+      --navy-7: #b8d1ea;
+      --line: #d7dde7;
+      --bg: #ffffff;
+      --panel: #ffffff;
+      --panel-soft: #f7f9fc;
+      --shadow: none;
+      --radius: 22px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Open Sans", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .wrap {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 10px 0 0;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: clamp(1.45rem, 2.8vw, 2rem);
+      color: var(--orange);
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    main { padding-bottom: 64px; }
+
+    .section {
+      padding: 6px 0 18px;
+    }
+
+    .section + .section {
+      margin-top: 18px;
+      padding-top: 18px;
+    }
+
+    .section-text {
+      margin: 0 0 16px;
+      color: var(--muted);
+      max-width: none;
+      font-size: 1.02rem;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px 22px 18px;
+      margin-bottom: 18px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 12px;
+      align-items: center;
+      justify-content: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      position: relative;
+    }
+
+    .chip input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .chip label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid #cbd4e1;
+      background: #fff;
+      color: var(--navy);
+      font-size: .95rem;
+      cursor: pointer;
+      transition: .18s ease;
+      user-select: none;
+      font-weight: 600;
+    }
+
+    .chip label::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      background: var(--chip-color, var(--navy));
+      box-shadow: 0 0 0 2px rgba(255,255,255,.9) inset;
+    }
+
+    .chip input:checked + label {
+      background: var(--panel-soft);
+      border-color: #8ea3bf;
+      transform: translateY(-1px);
+    }
+
+    .chart-shell {
+      height: 430px;
+      position: relative;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+      font-size: .95rem;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #f5f7fa;
+      color: var(--navy);
+      text-align: left;
+      font-weight: 700;
+      z-index: 1;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+    }
+
+    tbody tr:first-child td {
+      font-weight: 700;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .table-caption {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin: 6px 0 12px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .loading,
+    .error-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px 18px;
+      background: #fff;
+      margin: 18px 0;
+      color: var(--navy);
+    }
+
+    .error-box {
+      color: #8a2331;
+      border-color: #e4b8bf;
+      background: #fff7f8;
+      display: none;
+    }
+
+    @media (max-width: 760px) {
+      .wrap { width: min(calc(100% - 20px), var(--max)); }
+      .panel { padding: 16px; }
+      .chart-shell { height: 320px; }
+      .toolbar { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap"></div>
+  </header>
+
+  <main class="wrap">
+    <div id="loading" class="loading">Lade Daten aus <strong>valog_zinssaetze_data.xlsx</strong> ...</div>
+    <div id="errorBox" class="error-box"></div>
+
+    <section class="section" id="ugb-stichtag">
+      <h2>Stichtagszins für Sozialkapitalbewertung nach UGB</h2>
+      <p class="section-text">Es werden die Marktzinssätze für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für unterschiedliche Restlaufzeiten dargestellt.</p>
+
+      <div class="panel">
+        <div class="toolbar">
+          <div class="chips" id="chips-ugb"></div>
+        </div>
+        <div class="chart-shell">
+          <canvas id="chart-ugb"></canvas>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="table-caption">
+          <span>Wertetabelle</span>
+          <span>Stand: Februar 2026</span>
+        </div>
+        <div class="table-wrap" id="table-ugb"></div>
+      </div>
+    </section>
+
+    <section class="section" id="ugb-durchschnitt">
+      <h2>Durchschnittszinssatz bei pauschaler Restlaufzeit von 15 Jahren für Sozialkapitalbewertung nach UGB</h2>
+      <p class="section-text">Es werden die durchschnittlichen Marktzinssätze für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung in unterschiedlichen Zeiträumen für eine Restlaufzeiten von 15 Jahren dargestellt.</p>
+      <p class="section-text">Die hochgerechneten Werte basieren auf der Annahme gleichbleibender Zinsen.</p>
+
+      <div class="panel">
+        <div class="toolbar">
+          <div class="chips" id="chips-avg"></div>
+        </div>
+        <div class="chart-shell">
+          <canvas id="chart-avg"></canvas>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="table-caption">
+          <span>Wertetabelle – Durchschnittszins (15 Jahre Restlaufzeit)</span>
+          <span>bis Dezember 2030</span>
+        </div>
+        <div class="table-wrap" id="table-avg"></div>
+      </div>
+    </section>
+
+    <section class="section" id="ifrs">
+      <h2>Zinsbandbreite für Sozialkapitalbewertung nach IFRS</h2>
+      <p class="section-text">Es wird die Zinsbandbreite gemäß Methodik nach IAS 19 für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für Restlaufzeiten zwischen 5 und 25 Jahren dargestellt.</p>
+
+      <div class="panel">
+        <div class="toolbar">
+          <div class="chips" id="chips-ifrs"></div>
+        </div>
+        <div class="chart-shell">
+          <canvas id="chart-ifrs"></canvas>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="table-caption">
+          <span>Wertetabelle</span>
+          <span>Stand: Februar 2026</span>
+        </div>
+        <div class="table-wrap" id="table-ifrs"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const DATA_FILE = './valog_zinssaetze_data.xlsx';
+
+    const palettes = {
+      ugb: {
+        "5": "#1f3654",
+        "10": "#2e4c72",
+        "15": "#456993",
+        "20": "#5b86b8",
+        "25": "#7ea8d2"
+      },
+      avg: {
+        "Stichtagszins": "#1f3654",
+        "5": "#2b4669",
+        "6": "#3a5b85",
+        "7": "#4e74a3",
+        "8": "#678fc0",
+        "9": "#84aad7",
+        "10": "#a7c6e7"
+      },
+      ifrs: {
+        "5": "#1f3654",
+        "10": "#2e4c72",
+        "15": "#456993",
+        "20": "#5b86b8",
+        "25": "#7ea8d2"
+      }
+    };
+
+    let charts = [];
+
+    function formatDE(dateStr) {
+      const [y, m, d] = String(dateStr).split("-");
+      return `${d}.${m}.${y}`;
+    }
+
+    function euroPercent(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return "–";
+      return Number(v).toFixed(2).replace(".", ",") + "%";
+    }
+
+    function showError(message) {
+      document.getElementById('loading').style.display = 'none';
+      const box = document.getElementById('errorBox');
+      box.style.display = 'block';
+      box.innerHTML = message;
+    }
+
+    function destroyCharts() {
+      charts.forEach(c => c.destroy());
+      charts = [];
+    }
+
+    function buildChips(targetId, keys, palette, checkedKeys, onToggle, customLabels = null) {
+      const wrap = document.getElementById(targetId);
+      wrap.innerHTML = "";
+      keys.forEach((key) => {
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.style.setProperty("--chip-color", palette[key] || "#1f3654");
+
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.id = `${targetId}-${key}`;
+        input.checked = checkedKeys.includes(key);
+        input.addEventListener("change", () => onToggle(key, input.checked));
+
+        const label = document.createElement("label");
+        label.htmlFor = input.id;
+        label.textContent = customLabels?.[key] || `${key} Jahre`;
+
+        chip.appendChild(input);
+        chip.appendChild(label);
+        wrap.appendChild(chip);
+      });
+    }
+
+    function buildTable(targetId, rows, keys, columnLabels = null) {
+      const wrap = document.getElementById(targetId);
+      const descRows = [...rows].sort((a, b) => String(b.date).localeCompare(String(a.date)));
+
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      const tbody = document.createElement("tbody");
+
+      const headRow = document.createElement("tr");
+      const thDate = document.createElement("th");
+      thDate.textContent = "Stichtag";
+      headRow.appendChild(thDate);
+
+      keys.forEach((key) => {
+        const th = document.createElement("th");
+        th.textContent = columnLabels?.[key] || `${key} Jahre`;
+        headRow.appendChild(th);
+      });
+      thead.appendChild(headRow);
+
+      descRows.forEach((row) => {
+        const tr = document.createElement("tr");
+        const tdDate = document.createElement("td");
+        tdDate.textContent = formatDE(row.date);
+        tr.appendChild(tdDate);
+
+        keys.forEach((key) => {
+          const td = document.createElement("td");
+          td.textContent = euroPercent(row[key]);
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+      wrap.innerHTML = "";
+      wrap.appendChild(table);
+    }
+
+    function makeLineChart(canvasId, rows, keys, palette, initiallyVisible, customLabels = null) {
+      const ctx = document.getElementById(canvasId).getContext("2d");
+      const ascRows = [...rows].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+      const labels = ascRows.map(r => formatDE(r.date));
+      const visible = new Set(initiallyVisible);
+
+      const chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels,
+          datasets: keys.map((key) => ({
+            label: customLabels?.[key] || `${key} Jahre`,
+            data: ascRows.map(r => r[key]),
+            borderColor: palette[key],
+            backgroundColor: palette[key],
+            borderWidth: 2.5,
+            tension: 0.12,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            hidden: !visible.has(key)
+          }))
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: "index",
+            intersect: false
+          },
+          plugins: {
+            legend: { display: false },
+            title: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => `${ctx.dataset.label}: ${euroPercent(ctx.parsed.y)}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: "rgba(31,54,84,0.10)" },
+              ticks: {
+                color: "#627895",
+                maxRotation: 0,
+                autoSkip: true,
+                maxTicksLimit: 8
+              }
+            },
+            y: {
+              grid: { color: "rgba(31,54,84,0.10)" },
+              ticks: {
+                color: "#627895",
+                callback: (value) => Number(value).toFixed(2).replace(".", ",") + "%"
+              }
+            }
+          }
+        }
+      });
+
+      charts.push(chart);
+
+      return {
+        toggle(key, isVisible) {
+          const ds = chart.data.datasets.find(d => d.label === (customLabels?.[key] || `${key} Jahre`));
+          if (!ds) return;
+          ds.hidden = !isVisible;
+          chart.update();
+        }
+      };
+    }
+
+    function setupSection(config) {
+      const chart = makeLineChart(
+        config.canvasId,
+        config.rows,
+        config.keys,
+        config.palette,
+        config.initiallyVisible,
+        config.columnLabels
+      );
+
+      buildChips(
+        config.chipsId,
+        config.keys,
+        config.palette,
+        config.initiallyVisible,
+        (key, checked) => chart.toggle(key, checked),
+        config.buttonLabels
+      );
+
+      buildTable(config.tableId, config.rows, config.keys, config.columnLabels);
+    }
+
+    function rowsFromSheet(workbook, sheetName) {
+      const sheet = workbook.Sheets[sheetName];
+      if (!sheet) throw new Error(`Sheet "${sheetName}" wurde nicht gefunden.`);
+      const rows = XLSX.utils.sheet_to_json(sheet, { defval: null });
+      return rows.map(row => {
+        const out = {};
+        Object.keys(row).forEach(key => {
+          if (key === 'date') {
+            out.date = String(row[key]).slice(0, 10);
+          } else {
+            const val = row[key];
+            out[key] = (val === null || val === "") ? null : Number(val);
+          }
+        });
+        return out;
+      });
+    }
+
+    async function init() {
+      try {
+        const response = await fetch(DATA_FILE);
+        if (!response.ok) {
+          throw new Error(`Die Datei ${DATA_FILE} konnte nicht geladen werden (HTTP ${response.status}).`);
+        }
+
+        const arrayBuffer = await response.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+
+        const data = {
+          ugb: rowsFromSheet(workbook, 'UGB_Stichtagszins'),
+          avg: rowsFromSheet(workbook, 'UGB_Durchschnitt_15J'),
+          ifrs: rowsFromSheet(workbook, 'IFRS')
+        };
+
+        destroyCharts();
+
+        setupSection({
+          canvasId: "chart-ugb",
+          chipsId: "chips-ugb",
+          tableId: "table-ugb",
+          rows: data.ugb,
+          keys: ["5", "10", "15", "20", "25"],
+          palette: palettes.ugb,
+          initiallyVisible: ["5", "10", "15", "20", "25"],
+          columnLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"},
+          buttonLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"}
+        });
+
+        setupSection({
+          canvasId: "chart-avg",
+          chipsId: "chips-avg",
+          tableId: "table-avg",
+          rows: data.avg,
+          keys: ["Stichtagszins", "5", "6", "7", "8", "9", "10"],
+          palette: palettes.avg,
+          initiallyVisible: ["Stichtagszins", "5", "6", "7", "8", "9", "10"],
+          columnLabels: {
+            "Stichtagszins":"Stichtagszins",
+            "5":"5J-DS-Zins",
+            "6":"6J-DS-Zins",
+            "7":"7J-DS-Zins",
+            "8":"8J-DS-Zins",
+            "9":"9J-DS-Zins",
+            "10":"10J-DS-Zins"
+          },
+          buttonLabels: {
+            "Stichtagszins":"Stichtagszins",
+            "5":"5 Jahre",
+            "6":"6 Jahre",
+            "7":"7 Jahre",
+            "8":"8 Jahre",
+            "9":"9 Jahre",
+            "10":"10 Jahre"
+          }
+        });
+
+        setupSection({
+          canvasId: "chart-ifrs",
+          chipsId: "chips-ifrs",
+          tableId: "table-ifrs",
+          rows: data.ifrs,
+          keys: ["5", "10", "15", "20", "25"],
+          palette: palettes.ifrs,
+          initiallyVisible: ["5", "10", "15", "20", "25"],
+          columnLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"},
+          buttonLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"}
+        });
+
+        document.getElementById('loading').style.display = 'none';
+      } catch (err) {
+        showError(`
+          <strong>Daten konnten nicht geladen werden.</strong><br>
+          ${err.message}<br><br>
+          Stelle sicher, dass sich <code>index.html</code> und <code>valog_zinssaetze_data.xlsx</code> im selben Ordner befinden
+          und die Seite über einen Webserver / GitHub Pages geöffnet wird (nicht direkt via <code>file://</code>).
+        `);
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
