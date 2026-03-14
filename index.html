@@ -14,10 +14,6 @@
   <meta property="og:title" content="Zinssätze für Sozialkapitalbewertung | UGB Stichtagszins, Durchschnittszins 15 Jahre und IFRS" />
   <meta property="og:description" content="Interaktive Übersichten zu UGB Stichtagszins, Durchschnittszins bei 15 Jahren Restlaufzeit und IFRS Zinsbandbreite." />
 
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Zinssätze für Sozialkapitalbewertung" />
-  <meta name="twitter:description" content="UGB Stichtagszins, Durchschnittszins bei 15 Jahren Restlaufzeit und IFRS Zinsbandbreite." />
-
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -72,10 +68,7 @@
       margin: 0 auto;
     }
 
-    header {
-      padding: 10px 0 0;
-      margin-bottom: 12px;
-    }
+    header { padding: 10px 0 0; margin-bottom: 12px; }
 
     h2 {
       margin: 0 0 8px;
@@ -85,16 +78,17 @@
       font-weight: 700;
     }
 
+    h3 {
+      margin: 24px 0 10px;
+      font-size: 1.15rem;
+      color: var(--navy);
+      font-weight: 700;
+    }
+
     main { padding-bottom: 64px; }
 
-    .section {
-      padding: 6px 0 18px;
-    }
-
-    .section + .section {
-      margin-top: 18px;
-      padding-top: 18px;
-    }
+    .section { padding: 6px 0 18px; }
+    .section + .section { margin-top: 18px; padding-top: 18px; }
 
     .section-text {
       margin: 0 0 16px;
@@ -121,21 +115,10 @@
       margin-bottom: 14px;
     }
 
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
 
-    .chip {
-      position: relative;
-    }
-
-    .chip input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
+    .chip { position: relative; }
+    .chip input { position: absolute; opacity: 0; pointer-events: none; }
 
     .chip label {
       display: inline-flex;
@@ -155,8 +138,7 @@
 
     .chip label::before {
       content: "";
-      width: 10px;
-      height: 10px;
+      width: 10px; height: 10px;
       border-radius: 50%;
       display: inline-block;
       background: var(--chip-color, var(--navy));
@@ -169,10 +151,34 @@
       transform: translateY(-1px);
     }
 
-    .chart-shell {
-      height: 430px;
-      position: relative;
+    /* Chart type buttons */
+    .chart-types {
+      display: flex;
+      gap: 4px;
+      margin-left: auto;
+      background: #f0f3f7;
+      border-radius: 10px;
+      padding: 3px;
     }
+    .chart-type-btn {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--navy);
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: .15s ease;
+    }
+    .chart-type-btn.active {
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+    .chart-type-btn:hover:not(.active) { background: #e8ecf1; }
+
+    .chart-shell { height: 430px; position: relative; }
 
     .table-wrap {
       overflow: auto;
@@ -204,13 +210,8 @@
       white-space: nowrap;
     }
 
-    tbody tr.highlight-latest td {
-      font-weight: 700;
-    }
-
-    tbody tr:hover {
-      background: #f8fafc;
-    }
+    tbody tr.highlight-latest td { font-weight: 700; }
+    tbody tr:hover { background: #f8fafc; }
 
     .table-caption {
       display: flex;
@@ -222,8 +223,7 @@
       font-size: 1rem;
     }
 
-    .loading,
-    .error-box {
+    .loading, .error-box {
       border: 1px solid var(--line);
       border-radius: 18px;
       padding: 16px 18px;
@@ -239,23 +239,83 @@
       display: none;
     }
 
+    /* Methodology section */
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 18px;
+      margin-top: 16px;
+    }
+
+    .method-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px 22px;
+      background: var(--panel-soft);
+    }
+
+    .method-card h4 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    .method-card p {
+      margin: 0;
+      font-size: .93rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .method-steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 0;
+    }
+    .method-steps li {
+      counter-increment: step;
+      padding: 10px 0 10px 44px;
+      position: relative;
+      font-size: .95rem;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+    }
+    .method-steps li:last-child { border-bottom: none; }
+    .method-steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: #fff;
+      font-weight: 700;
+      font-size: .85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     @media (max-width: 760px) {
       .wrap { width: min(calc(100% - 20px), var(--max)); }
       .panel { padding: 16px; }
       .chart-shell { height: 320px; }
       .toolbar { align-items: flex-start; }
+      .chart-types { margin-left: 0; margin-top: 6px; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrap"></div>
-  </header>
+  <header><div class="wrap"></div></header>
 
   <main class="wrap">
     <div id="loading" class="loading">Lade Daten aus <strong>valog_zinssaetze_data.xlsx</strong> ...</div>
     <div id="errorBox" class="error-box"></div>
 
+    <!-- ========== SECTION 1: UGB STICHTAGSZINS ========== -->
     <section class="section" id="ugb-stichtag">
       <h2>Stichtagszins für Sozialkapitalbewertung nach UGB</h2>
       <p class="section-text">Es werden die Marktzinssätze für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für unterschiedliche Restlaufzeiten dargestellt.</p>
@@ -263,44 +323,52 @@
       <div class="panel">
         <div class="toolbar">
           <div class="chips" id="chips-ugb"></div>
+          <div class="chart-types" id="types-ugb">
+            <button class="chart-type-btn active" data-type="line">Linie</button>
+            <button class="chart-type-btn" data-type="bar">Balken</button>
+            <button class="chart-type-btn" data-type="area">Fläche</button>
+          </div>
         </div>
-        <div class="chart-shell">
-          <canvas id="chart-ugb"></canvas>
-        </div>
+        <div class="chart-shell"><canvas id="chart-ugb"></canvas></div>
       </div>
 
       <div class="panel">
         <div class="table-caption">
           <span>Wertetabelle</span>
-          <span>Stand: Februar 2026</span>
+          <span id="stand-ugb"></span>
         </div>
         <div class="table-wrap" id="table-ugb"></div>
       </div>
     </section>
 
+    <!-- ========== SECTION 2: UGB DURCHSCHNITTSZINS ========== -->
     <section class="section" id="ugb-durchschnitt">
       <h2>Durchschnittszinssatz bei pauschaler Restlaufzeit von 15 Jahren für Sozialkapitalbewertung nach UGB</h2>
-      <p class="section-text">Es werden die durchschnittlichen Marktzinssätze für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung in unterschiedlichen Zeiträumen für eine Restlaufzeiten von 15 Jahren dargestellt.</p>
+      <p class="section-text">Es werden die durchschnittlichen Marktzinssätze für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung in unterschiedlichen Zeiträumen für eine Restlaufzeit von 15 Jahren dargestellt.</p>
       <p class="section-text">Die hochgerechneten Werte basieren auf der Annahme gleichbleibender Zinsen.</p>
 
       <div class="panel">
         <div class="toolbar">
           <div class="chips" id="chips-avg"></div>
+          <div class="chart-types" id="types-avg">
+            <button class="chart-type-btn active" data-type="line">Linie</button>
+            <button class="chart-type-btn" data-type="bar">Balken</button>
+            <button class="chart-type-btn" data-type="area">Fläche</button>
+          </div>
         </div>
-        <div class="chart-shell">
-          <canvas id="chart-avg"></canvas>
-        </div>
+        <div class="chart-shell"><canvas id="chart-avg"></canvas></div>
       </div>
 
       <div class="panel">
         <div class="table-caption">
           <span>Wertetabelle – Durchschnittszins (15 Jahre Restlaufzeit)</span>
-          <span>bis Dezember 2030</span>
+          <span id="stand-avg"></span>
         </div>
         <div class="table-wrap" id="table-avg"></div>
       </div>
     </section>
 
+    <!-- ========== SECTION 3: IFRS ========== -->
     <section class="section" id="ifrs">
       <h2>Zinsbandbreite für Sozialkapitalbewertung nach IFRS</h2>
       <p class="section-text">Es wird die Zinsbandbreite gemäß Methodik nach IAS 19 für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für Restlaufzeiten zwischen 5 und 25 Jahren dargestellt.</p>
@@ -308,18 +376,74 @@
       <div class="panel">
         <div class="toolbar">
           <div class="chips" id="chips-ifrs"></div>
+          <div class="chart-types" id="types-ifrs">
+            <button class="chart-type-btn active" data-type="line">Linie</button>
+            <button class="chart-type-btn" data-type="bar">Balken</button>
+            <button class="chart-type-btn" data-type="area">Fläche</button>
+          </div>
         </div>
-        <div class="chart-shell">
-          <canvas id="chart-ifrs"></canvas>
-        </div>
+        <div class="chart-shell"><canvas id="chart-ifrs"></canvas></div>
       </div>
 
       <div class="panel">
         <div class="table-caption">
           <span>Wertetabelle</span>
-          <span>Stand: Februar 2026</span>
+          <span id="stand-ifrs"></span>
         </div>
         <div class="table-wrap" id="table-ifrs"></div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 4: METHODIK & GLOSSAR ========== -->
+    <section class="section" id="methodik">
+      <h2>Methodik & Hintergrund</h2>
+      <p class="section-text">Die dargestellten Zinssätze basieren auf einer standardisierten, versicherungsmathematischen Herleitung aus Marktdaten. Nachfolgend wird der Berechnungsweg sowie zentrale Begriffe erläutert.</p>
+
+      <h3>Berechnungsweg der UGB-Zinssätze</h3>
+      <div class="panel" style="background:var(--panel-soft);">
+        <ol class="method-steps">
+          <li><strong>Null-Kupon-Euro-Swapkurve:</strong> Monatliche Abrufe der Null-Kupon-Euro-Zinsswapkurve der Deutschen Bundesbank für 50 Laufzeiten (1–50 Jahre). Diese Kurve bildet die risikofreie Zinsstruktur ab.</li>
+          <li><strong>iBoxx EUR Corporates AA:</strong> Monatliche Rendite und Modified Duration der iBoxx-EUR-Corporates-AA-Indexfamilie. Dieser Index bildet hochklassig geratete (AA) festverzinsliche Euro-Unternehmensanleihen ab.</li>
+          <li><strong>Aufschlag (Credit Spread):</strong> Die Differenz zwischen der iBoxx-AA-Rendite und dem auf die gleiche Duration interpolierten Swapsatz ergibt den Credit Spread – den Aufschlag für das Kreditrisiko hochklassiger Emittenten.</li>
+          <li><strong>Stichtagszins:</strong> Addition des Stichtags-Spreads auf die aktuelle Swapkurve ergibt die Stichtagszinsen für jede Laufzeit.</li>
+          <li><strong>Durchschnittszins (5–10 Jahre):</strong> Für den UGB-Durchschnittszins werden gleitende Mittelwerte (5, 6, 7, 8, 9 und 10 Jahre) der Swapkurve und des iBoxx berechnet. Der resultierende Durchschnitts-Spread wird auf die gemittelte Swapkurve addiert.</li>
+        </ol>
+      </div>
+
+      <h3>Glossar der Fachbegriffe</h3>
+      <div class="method-grid">
+        <div class="method-card">
+          <h4>Zinsswap (Interest Rate Swap)</h4>
+          <p>Ein Zinsswap ist ein Finanzderivat, bei dem zwei Parteien Zinszahlungen tauschen – typischerweise einen festen gegen einen variablen Zinssatz. Die Null-Kupon-Swapkurve wird aus diesen Instrumenten abgeleitet und bildet die marktimplizierte risikofreie Zinsstrukturkurve für den Euro-Raum ab.</p>
+        </div>
+        <div class="method-card">
+          <h4>Rendite (Yield)</h4>
+          <p>Die Rendite bezeichnet die effektive Verzinsung einer Anleihe unter Berücksichtigung von Kupon, Kurs und Restlaufzeit. Die Annual Yield des iBoxx-AA-Index ist die gewichtete Durchschnittsrendite aller im Index enthaltenen hochklassig gerateten Euro-Unternehmensanleihen.</p>
+        </div>
+        <div class="method-card">
+          <h4>Duration (Modified Duration)</h4>
+          <p>Die Modified Duration misst die Zinssensitivität einer Anleihe: Sie gibt an, um wie viel Prozent sich der Kurs einer Anleihe bei einer Veränderung des Marktzinses um einen Prozentpunkt ändert. Gleichzeitig ist sie ein Näherungswert für die gewichtete durchschnittliche Restlaufzeit der Zahlungsströme.</p>
+        </div>
+        <div class="method-card">
+          <h4>Credit Spread (Aufschlag)</h4>
+          <p>Der Credit Spread ist die Differenz zwischen der Rendite einer Unternehmensanleihe und dem entsprechenden risikofreien Zinssatz (Swapsatz). Er kompensiert Investoren für das Ausfallrisiko des Emittenten und ist ein Maß für die Kreditrisikoprämie am Markt.</p>
+        </div>
+        <div class="method-card">
+          <h4>iBoxx EUR Corporates AA</h4>
+          <p>Ein von S&P/IHS Markit berechneter Anleihenindex, der liquide, festverzinsliche Euro-Unternehmensanleihen mit einem Mindestrating von AA umfasst. Er dient als Referenz für den Marktzinssatz hochklassiger Emittenten gemäß IAS 19 und UGB.</p>
+        </div>
+        <div class="method-card">
+          <h4>Durchschnittszins (UGB)</h4>
+          <p>Der UGB-Durchschnittszins wird gemäß AFRAC-Stellungnahme 27 als gleitender Mittelwert über einen Zeitraum von bis zu 10 Jahren ermittelt. Er glättet kurzfristige Marktschwankungen und wird häufig mit einer pauschalen Restlaufzeit von 15 Jahren angesetzt.</p>
+        </div>
+        <div class="method-card">
+          <h4>IAS 19 (IFRS)</h4>
+          <p>International Accounting Standard 19 regelt die Bilanzierung von Leistungen an Arbeitnehmer, einschließlich Pensionsverpflichtungen. Der Abzinsungssatz muss dem Marktzinssatz erstrangiger festverzinslicher Unternehmensanleihen zum Stichtag entsprechen (Stichtagsprinzip, kein Durchschnitt).</p>
+        </div>
+        <div class="method-card">
+          <h4>Null-Kupon-Kurve (Zero-Coupon Curve)</h4>
+          <p>Eine Zinsstrukturkurve, die den theoretischen Zinssatz für Anleihen ohne Kuponzahlungen für jede Laufzeit angibt. Sie wird aus den Marktpreisen von Swaps oder Anleihen mittels Bootstrapping abgeleitet und dient als Grundlage für die laufzeitgenaue Diskontierung.</p>
+        </div>
       </div>
     </section>
   </main>
@@ -328,325 +452,273 @@
     const DATA_FILE = './valog_zinssaetze_data.xlsx';
 
     const palettes = {
-      ugb: {
-        "5": "#1f3654",
-        "10": "#2e4c72",
-        "15": "#456993",
-        "20": "#5b86b8",
-        "25": "#7ea8d2"
-      },
-      avg: {
-        "Stichtagszins": "#1f3654",
-        "5": "#2b4669",
-        "6": "#3a5b85",
-        "7": "#4e74a3",
-        "8": "#678fc0",
-        "9": "#84aad7",
-        "10": "#a7c6e7"
-      },
-      ifrs: {
-        "5": "#1f3654",
-        "10": "#2e4c72",
-        "15": "#456993",
-        "20": "#5b86b8",
-        "25": "#7ea8d2"
-      }
+      ugb: { "5":"#1f3654","10":"#2e4c72","15":"#456993","20":"#5b86b8","25":"#7ea8d2" },
+      avg: { "Stichtagszins":"#1f3654","5":"#2b4669","6":"#3a5b85","7":"#4e74a3","8":"#678fc0","9":"#84aad7","10":"#a7c6e7" },
+      ifrs: { "5":"#1f3654","10":"#2e4c72","15":"#456993","20":"#5b86b8","25":"#7ea8d2" }
     };
 
-    let charts = [];
+    let chartInstances = {};
 
+    /* ---- helpers ---- */
+    const months = ['Jänner','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
     function formatDE(dateStr) {
       const [y, m, d] = String(dateStr).split("-");
       return `${d}.${m}.${y}`;
     }
-
+    function formatMonthYear(dateStr) {
+      const [y, m] = String(dateStr).split("-");
+      return `${months[parseInt(m,10)-1]} ${y}`;
+    }
     function euroPercent(v) {
       if (v === null || v === undefined || Number.isNaN(v)) return "–";
       return Number(v).toFixed(2).replace(".", ",") + "%";
     }
-
-    function showError(message) {
+    function showError(msg) {
       document.getElementById('loading').style.display = 'none';
       const box = document.getElementById('errorBox');
-      box.style.display = 'block';
-      box.innerHTML = message;
+      box.style.display = 'block'; box.innerHTML = msg;
     }
 
-    function destroyCharts() {
-      charts.forEach(c => c.destroy());
-      charts = [];
-    }
-
-    function buildChips(targetId, keys, palette, checkedKeys, onToggle, customLabels = null) {
-      const wrap = document.getElementById(targetId);
-      wrap.innerHTML = "";
-      keys.forEach((key) => {
-        const chip = document.createElement("div");
-        chip.className = "chip";
-        chip.style.setProperty("--chip-color", palette[key] || "#1f3654");
-
-        const input = document.createElement("input");
-        input.type = "checkbox";
-        input.id = `${targetId}-${key}`;
-        input.checked = checkedKeys.includes(key);
-        input.addEventListener("change", () => onToggle(key, input.checked));
-
-        const label = document.createElement("label");
-        label.htmlFor = input.id;
-        label.textContent = customLabels?.[key] || `${key} Jahre`;
-
-        chip.appendChild(input);
-        chip.appendChild(label);
-        wrap.appendChild(chip);
-      });
-    }
-
-    function buildTable(targetId, rows, keys, columnLabels = null, highlightDate = null) {
-      const wrap = document.getElementById(targetId);
-      const descRows = [...rows].sort((a, b) => String(b.date).localeCompare(String(a.date)));
-
-      const table = document.createElement("table");
-      const thead = document.createElement("thead");
-      const tbody = document.createElement("tbody");
-
-      const headRow = document.createElement("tr");
-      const thDate = document.createElement("th");
-      thDate.textContent = "Stichtag";
-      headRow.appendChild(thDate);
-
-      keys.forEach((key) => {
-        const th = document.createElement("th");
-        th.textContent = columnLabels?.[key] || `${key} Jahre`;
-        headRow.appendChild(th);
-      });
-      thead.appendChild(headRow);
-
-      descRows.forEach((row) => {
-        const tr = document.createElement("tr");
-        if (highlightDate && row.date === highlightDate) {
-          tr.classList.add("highlight-latest");
-        }
-        const tdDate = document.createElement("td");
-        tdDate.textContent = formatDE(row.date);
-        tr.appendChild(tdDate);
-
-        keys.forEach((key) => {
-          const td = document.createElement("td");
-          td.textContent = euroPercent(row[key]);
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-
-      table.appendChild(thead);
-      table.appendChild(tbody);
-      wrap.innerHTML = "";
-      wrap.appendChild(table);
-    }
-
-    function makeLineChart(canvasId, rows, keys, palette, initiallyVisible, customLabels = null) {
-      const ctx = document.getElementById(canvasId).getContext("2d");
-      const ascRows = [...rows]
-        .sort((a, b) => String(a.date).localeCompare(String(b.date)));
-      const labels = ascRows.map(r => formatDE(r.date));
-      const visible = new Set(initiallyVisible);
-
-      const chart = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels,
-          datasets: keys.map((key) => ({
-            label: customLabels?.[key] || `${key} Jahre`,
-            data: ascRows.map(r => r[key]),
-            borderColor: palette[key],
-            backgroundColor: palette[key],
-            borderWidth: 2.5,
-            tension: 0.12,
-            pointRadius: 0,
-            pointHoverRadius: 4,
-            hidden: !visible.has(key)
-          }))
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: {
-            mode: "index",
-            intersect: false
-          },
-          plugins: {
-            legend: { display: false },
-            title: { display: false },
-            tooltip: {
-              callbacks: {
-                label: (ctx) => `${ctx.dataset.label}: ${euroPercent(ctx.parsed.y)}`
-              }
-            }
-          },
-          scales: {
-            x: {
-              grid: { color: "rgba(31,54,84,0.10)" },
-              ticks: {
-                color: "#627895",
-                maxRotation: 0,
-                autoSkip: true,
-                maxTicksLimit: 8
-              }
-            },
-            y: {
-              grid: { color: "rgba(31,54,84,0.10)" },
-              ticks: {
-                color: "#627895",
-                callback: (value) => Number(value).toFixed(2).replace(".", ",") + "%"
-              }
-            }
-          }
-        }
-      });
-
-      charts.push(chart);
-
-      return {
-        toggle(key, isVisible) {
-          const ds = chart.data.datasets.find(d => d.label === (customLabels?.[key] || `${key} Jahre`));
-          if (!ds) return;
-          ds.hidden = !isVisible;
-          chart.update();
-        }
-      };
-    }
-
-    function setupSection(config) {
-      const chart = makeLineChart(
-        config.canvasId,
-        config.rows,
-        config.keys,
-        config.palette,
-        config.initiallyVisible,
-        config.columnLabels
-      );
-
-      buildChips(
-        config.chipsId,
-        config.keys,
-        config.palette,
-        config.initiallyVisible,
-        (key, checked) => chart.toggle(key, checked),
-        config.buttonLabels
-      );
-
-      buildTable(config.tableId, config.rows, config.keys, config.columnLabels, config.highlightDate || null);
-    }
-
-    function getLatestDate(rows) {
-      const dates = rows
-        .map(row => row.date)
-        .filter(Boolean)
-        .sort((a, b) => String(a).localeCompare(String(b)));
-      return dates.length ? dates[dates.length - 1] : null;
-    }
-
+    /* ---- read Excel (compatible with "Stichtag" header) ---- */
     function rowsFromSheet(workbook, sheetName) {
       const sheet = workbook.Sheets[sheetName];
-      if (!sheet) throw new Error(`Sheet "${sheetName}" wurde nicht gefunden.`);
+      if (!sheet) throw new Error(`Sheet "${sheetName}" nicht gefunden.`);
       const rows = XLSX.utils.sheet_to_json(sheet, { defval: null });
       return rows.map(row => {
         const out = {};
         Object.keys(row).forEach(key => {
-          if (key === 'date') {
-            out.date = String(row[key]).slice(0, 10);
+          if (key === 'Stichtag') {
+            // Handle Excel serial dates or ISO strings
+            const raw = row[key];
+            if (typeof raw === 'number') {
+              const d = XLSX.SSF.parse_date_code(raw);
+              out.date = `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`;
+            } else {
+              out.date = String(raw).slice(0, 10);
+            }
           } else {
             const val = row[key];
-            out[key] = (val === null || val === "") ? null : Number(val);
+            out[String(key)] = (val === null || val === "") ? null : Number(val);
           }
         });
         return out;
       });
     }
 
+    /* ---- chips (toggle series) ---- */
+    function buildChips(targetId, keys, palette, checked, onToggle, labels) {
+      const wrap = document.getElementById(targetId); wrap.innerHTML = "";
+      keys.forEach(key => {
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.style.setProperty("--chip-color", palette[key] || "#1f3654");
+        const input = document.createElement("input");
+        input.type = "checkbox"; input.id = `${targetId}-${key}`;
+        input.checked = checked.includes(key);
+        input.addEventListener("change", () => onToggle(key, input.checked));
+        const label = document.createElement("label");
+        label.htmlFor = input.id;
+        label.textContent = labels?.[key] || `${key} Jahre`;
+        chip.appendChild(input); chip.appendChild(label); wrap.appendChild(chip);
+      });
+    }
+
+    /* ---- table ---- */
+    function buildTable(targetId, rows, keys, labels, highlightDate) {
+      const wrap = document.getElementById(targetId);
+      const desc = [...rows].sort((a,b) => String(b.date).localeCompare(String(a.date)));
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      const tbody = document.createElement("tbody");
+      const hr = document.createElement("tr");
+      const th0 = document.createElement("th"); th0.textContent = "Stichtag"; hr.appendChild(th0);
+      keys.forEach(k => { const th = document.createElement("th"); th.textContent = labels?.[k] || `${k} Jahre`; hr.appendChild(th); });
+      thead.appendChild(hr);
+      desc.forEach(row => {
+        const tr = document.createElement("tr");
+        if (highlightDate && row.date === highlightDate) tr.classList.add("highlight-latest");
+        const td0 = document.createElement("td"); td0.textContent = formatDE(row.date); tr.appendChild(td0);
+        keys.forEach(k => { const td = document.createElement("td"); td.textContent = euroPercent(row[k]); tr.appendChild(td); });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(thead); table.appendChild(tbody);
+      wrap.innerHTML = ""; wrap.appendChild(table);
+    }
+
+    /* ---- chart (supports line, bar, area) ---- */
+    function makeChart(canvasId, rows, keys, palette, visible, labels, type) {
+      const ctx = document.getElementById(canvasId).getContext("2d");
+      const asc = [...rows].sort((a,b) => String(a.date).localeCompare(String(b.date)));
+      const xlabels = asc.map(r => formatDE(r.date));
+      const visSet = new Set(visible);
+
+      const isBar = type === 'bar';
+      const isArea = type === 'area';
+
+      const chart = new Chart(ctx, {
+        type: isBar ? 'bar' : 'line',
+        data: {
+          labels: xlabels,
+          datasets: keys.map(key => ({
+            label: labels?.[key] || `${key} Jahre`,
+            data: asc.map(r => r[key]),
+            borderColor: palette[key],
+            backgroundColor: isArea
+              ? palette[key] + '30'
+              : isBar ? palette[key] + 'CC' : palette[key],
+            borderWidth: isBar ? 0 : 2.5,
+            tension: 0.12,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            fill: isArea ? true : false,
+            hidden: !visSet.has(key)
+          }))
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${euroPercent(ctx.parsed.y)}` } }
+          },
+          scales: {
+            x: {
+              grid: { color: "rgba(31,54,84,0.10)" },
+              ticks: { color: "#627895", maxRotation: 0, autoSkip: true, maxTicksLimit: 8 },
+              ...(isBar ? { stacked: false } : {})
+            },
+            y: {
+              grid: { color: "rgba(31,54,84,0.10)" },
+              ticks: { color: "#627895", callback: v => Number(v).toFixed(2).replace(".",",") + "%" }
+            }
+          }
+        }
+      });
+
+      return chart;
+    }
+
+    /* ---- wire up chart type buttons ---- */
+    function setupChartTypes(typesId, sectionKey) {
+      const wrap = document.getElementById(typesId);
+      if (!wrap) return;
+      wrap.querySelectorAll('.chart-type-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          wrap.querySelectorAll('.chart-type-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          rebuildChart(sectionKey, btn.dataset.type);
+        });
+      });
+    }
+
+    /* ---- full section setup ---- */
+    const sectionConfigs = {};
+
+    function setupSection(cfg) {
+      sectionConfigs[cfg.sectionKey] = cfg;
+
+      cfg.chart = makeChart(cfg.canvasId, cfg.rows, cfg.keys, cfg.palette, cfg.initiallyVisible, cfg.columnLabels, 'line');
+      chartInstances[cfg.sectionKey] = cfg.chart;
+
+      buildChips(cfg.chipsId, cfg.keys, cfg.palette, cfg.initiallyVisible,
+        (key, checked) => {
+          const ds = cfg.chart.data.datasets.find(d => d.label === (cfg.columnLabels?.[key] || `${key} Jahre`));
+          if (ds) { ds.hidden = !checked; cfg.chart.update(); }
+        },
+        cfg.buttonLabels
+      );
+
+      buildTable(cfg.tableId, cfg.rows, cfg.keys, cfg.columnLabels, cfg.highlightDate);
+      setupChartTypes(cfg.typesId, cfg.sectionKey);
+    }
+
+    function rebuildChart(sectionKey, type) {
+      const cfg = sectionConfigs[sectionKey];
+      if (!cfg) return;
+
+      // Remember which series are currently visible
+      const vis = cfg.chart.data.datasets.filter(d => !d.hidden).map(d => {
+        return cfg.keys.find(k => (cfg.columnLabels?.[k] || `${k} Jahre`) === d.label) || d.label;
+      });
+
+      cfg.chart.destroy();
+      cfg.chart = makeChart(cfg.canvasId, cfg.rows, cfg.keys, cfg.palette, vis, cfg.columnLabels, type);
+      chartInstances[cfg.sectionKey] = cfg.chart;
+
+      // Re-wire chips
+      buildChips(cfg.chipsId, cfg.keys, cfg.palette, vis,
+        (key, checked) => {
+          const ds = cfg.chart.data.datasets.find(d => d.label === (cfg.columnLabels?.[key] || `${key} Jahre`));
+          if (ds) { ds.hidden = !checked; cfg.chart.update(); }
+        },
+        cfg.buttonLabels
+      );
+    }
+
+    function getLatestDate(rows) {
+      const d = rows.map(r => r.date).filter(Boolean).sort();
+      return d.length ? d[d.length-1] : null;
+    }
+
+    /* ---- init ---- */
     async function init() {
       try {
-        const response = await fetch(DATA_FILE);
-        if (!response.ok) {
-          throw new Error(`Die Datei ${DATA_FILE} konnte nicht geladen werden (HTTP ${response.status}).`);
-        }
-
-        const arrayBuffer = await response.arrayBuffer();
-        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        const resp = await fetch(DATA_FILE);
+        if (!resp.ok) throw new Error(`${DATA_FILE} nicht geladen (HTTP ${resp.status}).`);
+        const buf = await resp.arrayBuffer();
+        const wb = XLSX.read(buf, { type: 'array' });
 
         const data = {
-          ugb: rowsFromSheet(workbook, 'UGB_Stichtagszins'),
-          avg: rowsFromSheet(workbook, 'UGB_Durchschnitt_15J'),
-          ifrs: rowsFromSheet(workbook, 'IFRS')
+          ugb:  rowsFromSheet(wb, 'UGB_Stichtagszins'),
+          avg:  rowsFromSheet(wb, 'UGB_Durchschnitt_15J'),
+          ifrs: rowsFromSheet(wb, 'IFRS')
         };
 
-        const highlightDate = getLatestDate(data.ugb) || getLatestDate(data.ifrs) || getLatestDate(data.avg);
-
-        destroyCharts();
+        const hl = getLatestDate(data.ugb) || getLatestDate(data.ifrs);
+        const standText = hl ? `Stand: ${formatMonthYear(hl)}` : '';
+        document.getElementById('stand-ugb').textContent = standText;
+        document.getElementById('stand-avg').textContent = standText;
+        document.getElementById('stand-ifrs').textContent = standText;
 
         setupSection({
-          canvasId: "chart-ugb",
-          chipsId: "chips-ugb",
-          tableId: "table-ugb",
+          sectionKey: "ugb", canvasId: "chart-ugb", chipsId: "chips-ugb", tableId: "table-ugb", typesId: "types-ugb",
           rows: data.ugb,
-          keys: ["5", "10", "15", "20", "25"],
+          keys: ["5","10","15","20","25"],
           palette: palettes.ugb,
-          initiallyVisible: ["5", "10", "15", "20", "25"],
+          initiallyVisible: ["5","10","15","20","25"],
           columnLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"},
           buttonLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"},
-          highlightDate
+          highlightDate: hl
         });
 
         setupSection({
-          canvasId: "chart-avg",
-          chipsId: "chips-avg",
-          tableId: "table-avg",
+          sectionKey: "avg", canvasId: "chart-avg", chipsId: "chips-avg", tableId: "table-avg", typesId: "types-avg",
           rows: data.avg,
-          keys: ["Stichtagszins", "5", "6", "7", "8", "9", "10"],
+          keys: ["Stichtagszins","5","6","7","8","9","10"],
           palette: palettes.avg,
-          initiallyVisible: ["Stichtagszins", "5", "6", "7", "8", "9", "10"],
-          columnLabels: {
-            "Stichtagszins":"Stichtagszins",
-            "5":"5J-DS-Zins",
-            "6":"6J-DS-Zins",
-            "7":"7J-DS-Zins",
-            "8":"8J-DS-Zins",
-            "9":"9J-DS-Zins",
-            "10":"10J-DS-Zins"
-          },
-          buttonLabels: {
-            "Stichtagszins":"Stichtagszins",
-            "5":"5 Jahre",
-            "6":"6 Jahre",
-            "7":"7 Jahre",
-            "8":"8 Jahre",
-            "9":"9 Jahre",
-            "10":"10 Jahre"
-          },
-          highlightDate
+          initiallyVisible: ["Stichtagszins","5","6","7","8","9","10"],
+          columnLabels: { "Stichtagszins":"Stichtagszins","5":"5J-DS-Zins","6":"6J-DS-Zins","7":"7J-DS-Zins","8":"8J-DS-Zins","9":"9J-DS-Zins","10":"10J-DS-Zins" },
+          buttonLabels: { "Stichtagszins":"Stichtagszins","5":"5 Jahre","6":"6 Jahre","7":"7 Jahre","8":"8 Jahre","9":"9 Jahre","10":"10 Jahre" },
+          highlightDate: hl
         });
 
         setupSection({
-          canvasId: "chart-ifrs",
-          chipsId: "chips-ifrs",
-          tableId: "table-ifrs",
+          sectionKey: "ifrs", canvasId: "chart-ifrs", chipsId: "chips-ifrs", tableId: "table-ifrs", typesId: "types-ifrs",
           rows: data.ifrs,
-          keys: ["5", "10", "15", "20", "25"],
+          keys: ["5","10","15","20","25"],
           palette: palettes.ifrs,
-          initiallyVisible: ["5", "10", "15", "20", "25"],
+          initiallyVisible: ["5","10","15","20","25"],
           columnLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"},
           buttonLabels: {"5":"5 Jahre","10":"10 Jahre","15":"15 Jahre","20":"20 Jahre","25":"25 Jahre"},
-          highlightDate
+          highlightDate: hl
         });
 
         document.getElementById('loading').style.display = 'none';
       } catch (err) {
-        showError(`
-          <strong>Daten konnten nicht geladen werden.</strong><br>
-          ${err.message}<br><br>
+        showError(`<strong>Daten konnten nicht geladen werden.</strong><br>${err.message}<br><br>
           Stelle sicher, dass sich <code>index.html</code> und <code>valog_zinssaetze_data.xlsx</code> im selben Ordner befinden
-          und die Seite über einen Webserver / GitHub Pages geöffnet wird (nicht direkt via <code>file://</code>).
-        `);
+          und die Seite über einen Webserver geöffnet wird (nicht direkt via <code>file://</code>).`);
       }
     }
 
