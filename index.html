@@ -26,14 +26,14 @@
   <style>
     :root {
       /* VALOG Corporate Design */
-      --vo: #D45D00; /* Primary Orange */
-      --vt: #00859B; /* Secondary Teal */
-      --vg: #719949; /* Green */
-      --vy: #C69214; /* Gold */
-      --vr: #963821; /* Dark Red */
-      --vdark: #575757; /* Dark Grey Text */
-      --vlight: #E8E8E8; /* Light Borders */
-      --bg: #F7F9FC; /* Page Background */
+      --vo: #D45D00; 
+      --vt: #00859B; 
+      --vg: #719949; 
+      --vy: #C69214; 
+      --vr: #963821; 
+      --vdark: #575757; 
+      --vlight: #E8E8E8; 
+      --bg: #F7F9FC; 
       --card: #FFFFFF;
       --radius: 12px;
       --font: 'Open Sans', 'Segoe UI', Arial, sans-serif;
@@ -50,13 +50,31 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* Original VALOG Header Style */
+    .site-header {
+      background: #ffffff;
+      padding: 20px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      margin-bottom: 40px;
+    }
+    .site-header .header-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .logo-svg {
+      height: 45px;
+      width: auto;
+      display: block;
+    }
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 50px 20px;
+      padding: 0 20px 50px 20px;
     }
 
-    /* Hero Header */
+    /* Hero */
     .hero {
       text-align: center;
       margin-bottom: 50px;
@@ -113,57 +131,6 @@
       padding: 30px 40px;
     }
 
-    /* FAQ / Accordion Section */
-    .faq-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 15px;
-    }
-    details {
-      background: var(--bg);
-      border: 1px solid var(--vlight);
-      border-radius: 8px;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-    details[open] {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      border-color: var(--vt);
-    }
-    summary {
-      padding: 18px 20px;
-      font-weight: 600;
-      color: var(--vt);
-      cursor: pointer;
-      list-style: none; /* Hide default arrow */
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      user-select: none;
-    }
-    summary::-webkit-details-marker { display: none; }
-    summary::after {
-      content: '+';
-      font-size: 1.5rem;
-      color: var(--vo);
-      line-height: 1;
-      transition: transform 0.3s ease;
-    }
-    details[open] summary::after {
-      content: '−';
-      transform: rotate(180deg);
-    }
-    .faq-content {
-      padding: 0 20px 20px 20px;
-      font-size: 0.95rem;
-      color: var(--vdark);
-    }
-    .faq-content ul {
-      margin-top: 10px;
-      padding-left: 20px;
-    }
-    .faq-content li { margin-bottom: 8px; }
-
     /* Charts */
     .chart-wrapper {
       position: relative;
@@ -197,10 +164,7 @@
       transition: all 0.2s ease;
       font-family: var(--font);
     }
-    .btn:hover {
-      background: var(--bg);
-      border-color: var(--vdark);
-    }
+    .btn:hover { background: var(--bg); border-color: var(--vdark); }
     .btn svg { width: 18px; height: 18px; fill: currentColor; }
     .btn.copied { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
 
@@ -218,6 +182,50 @@
     tr:hover td { background-color: #FAFAFA; }
     tr.highlight-latest td { background-color: rgba(212, 93, 0, 0.05); font-weight: 600; }
 
+    /* Methodik & Hintergrund Styles (Adapted from Original) */
+    .method-title {
+      color: var(--vt);
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+    .method-steps-box {
+      background: var(--bg);
+      border: 1px solid var(--vlight);
+      border-radius: 8px;
+      padding: 25px 30px;
+      margin-bottom: 40px;
+    }
+    .method-steps {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .method-steps li {
+      margin-bottom: 12px;
+    }
+    .method-steps li:last-child {
+      margin-bottom: 0;
+    }
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .glossary-card {
+      background: var(--bg);
+      border: 1px solid var(--vlight);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .glossary-card h4 {
+      margin: 0 0 10px 0;
+      color: var(--vt);
+      font-size: 1.05rem;
+    }
+    .glossary-card p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
     /* State Boxes */
     #loading, #errorBox { text-align: center; padding: 60px 20px; font-size: 1.1rem; background: var(--card); border-radius: var(--radius); box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
     #errorBox { display: none; color: var(--vr); }
@@ -227,16 +235,32 @@
     @media (max-width: 768px) {
       .card-header, .card-body { padding: 20px; }
       .toolbar { justify-content: flex-start; }
+      .site-header { padding: 15px 0; }
     }
   </style>
 </head>
 <body>
 
+  <header class="site-header">
+    <div class="header-wrap">
+      <a href="https://valog.com" aria-label="VALOG GmbH">
+        <svg class="logo-svg" viewBox="140 250 550 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VALOG">
+          <path fill="#D45D00" d="M217.3,336.2l-51.5-77.1h20.3l38.1,58.6l37.3-58.6h19.8l-51,77.1H217.3z"/>
+          <path fill="#D45D00" d="M350.2,336.2l-37.3-58.7l-38.1,58.7h-19.9l51.3-77.1h13.1l51,77.1H350.2z"/>
+          <path fill="#575757" d="M383.2,336.2v-77.1h18.1v63.1h61v14H383.2z"/>
+          <path fill="#575757" d="M495.4,336.2c-18,0-24.7-7.6-24.7-18.6v-39.9c0-11.1,6.8-18.6,24.7-18.6h52.2c18,0,24.7,7.6,24.7,18.6v39.9c0,11.1-6.8,18.6-24.7,18.6H495.4z M554.5,277.5c0-3.1-2.4-4.5-6.9-4.5h-52.2c-4.5,0-6.9,1.4-6.9,4.5v40.2c0,3.2,2.4,4.5,6.9,4.5h52.2c4.5,0,6.9-1.3,6.9-4.5V277.5z"/>
+          <path fill="#575757" d="M610.2,336.2c-15.9,0-25.3-5.6-25.3-17.7v-40.1c0-13.7,9.4-19.3,25.3-19.3h64.7V273H610c-5.6,0-7.3,2.1-7.3,5.4v40c0,3,3.4,3.8,7.3,3.8h40.8c3.9,0,7.2-0.8,7.2-3.6v-24.4h18v24.4c0,13.7-8,17.6-25.2,17.6H610.2z"/>
+          <path fill="#D45D00" d="M533.9,290.1c0-1.2-0.9-1.7-2.6-1.7h-19.7c-1.7,0-2.6,0.5-2.6,1.7v15.2c0,1.2,0.9,1.7,2.6,1.7h19.7c1.7,0,2.6-0.5,2.6-1.7V290.1z"/>
+        </svg>
+      </a>
+    </div>
+  </header>
+
   <div class="container">
-    <header class="hero">
+    <div class="hero">
       <h1>Zinssätze für die Sozialkapitalbewertung</h1>
-      <p>Als österreichisches Unternehmen unterliegen Sie bei der Bilanzierung von Personalrückstellungen spezifischen Vorgaben. Hier finden Sie die aktuellsten Rechnungszinssätze nach dem Unternehmensgesetzbuch (UGB) gem. Fachgutachten AFRAC 27 sowie nach IFRS (IAS 19).</p>
-    </header>
+      <p>Aktuelle Zinssätze für die Sozialkapitalbewertung nach UGB und IFRS, berechnet aus der Null-Kupon-Euro-Swapkurve der Deutschen Bundesbank und dem iBoxx EUR Corporates AA Index.</p>
+    </div>
 
     <div id="loading">
       <div class="spinner"></div>
@@ -249,78 +273,22 @@
       
       <section class="card">
         <div class="card-header">
-          <h2>Wissensbereich: Wie wir diese Zinsen berechnen</h2>
-          <p>Transparenz ist uns wichtig. Hier erklären wir einfach und kompakt, wie sich die Zinssätze für Ihre Bilanzierung zusammensetzen und woher die Daten stammen.</p>
-        </div>
-        <div class="card-body faq-grid">
-          
-          <details>
-            <summary>Wie setzt sich der Rechnungszins grundsätzlich zusammen?</summary>
-            <div class="faq-content">
-              Der Rechnungszins besteht immer aus zwei Bausteinen:
-              <ul>
-                <li><strong>1. Dem risikolosen Basiszinssatz:</strong> Hierfür verwenden wir die "Null-Kupon-Euro-Swapkurve" der Deutschen Bundesbank. Sie stellt dar, welchen Zins man für absolut sichere Anlagen am Markt erhält.</li>
-                <li><strong>2. Dem Kreditrisikoaufschlag (Spread):</strong> Da Unternehmen (anders als Staaten) ein gewisses Ausfallsrisiko haben, wird ein Aufschlag addiert. Wir ermitteln diesen aus den Renditen erstklassiger europäischer Industrieanleihen (iBoxx EUR Corporates AA Index).</li>
-              </ul>
-              Zusammen ergeben diese beiden Werte den <strong>Stichtagszins</strong>.
-            </div>
-          </details>
-
-          <details>
-            <summary>Was ist der Unterschied zwischen Stichtagszins (IFRS) und Durchschnittszins (UGB)?</summary>
-            <div class="faq-content">
-              <ul>
-                <li><strong>IFRS (International):</strong> Internationale Richtlinien wie IAS 19 verlangen eine strenge Marktbewertung am exakten Bilanzstichtag. Daher wird hier der tagesaktuelle <em>Stichtagszins</em> verwendet. Dies kann von Jahr zu Jahr zu stärkeren Schwankungen in Ihrer Bilanz führen.</li>
-                <li><strong>UGB (Österreich):</strong> Um genau diese starken Schwankungen zu vermeiden, empfiehlt das österreichische Fachgutachten AFRAC 27 die Glättung der Zinsen. Hierfür wird der <em>Durchschnitt</em> der Stichtagszinsen der letzten Jahre (meist 5 bis 10 Jahre) gebildet. Das bringt Stabilität und Planbarkeit in Ihre Unternehmensbilanz.</li>
-              </ul>
-            </div>
-          </details>
-
-          <details>
-            <summary>Woher stammen die Daten für den 7- und 10-Jahres-Durchschnitt?</summary>
-            <div class="faq-content">
-              Die Deutsche Bundesbank veröffentlicht jeden Monat hochoffizielle Durchschnittszinssätze (speziell für 7 und 10 Jahre) gemäß dem deutschen Handelsgesetzbuch (HGB §253). <br><br>
-              Da diese Werte extrem verlässlich und marktüblich sind, ziehen wir diese offiziellen Bundesbank-Daten direkt und 1:1 als Basis für unsere 7- und 10-Jahres-Kurven heran. Das garantiert Ihnen höchste Prüfungssicherheit bei Ihrem Wirtschaftsprüfer.
-            </div>
-          </details>
-
-          <details>
-            <summary>Wie werden die anderen Durchschnitte (5, 6, 8, 9 Jahre) berechnet?</summary>
-            <div class="faq-content">
-              Für Durchschnittszeiträume, die die Bundesbank nicht offiziell publiziert (also 5, 6, 8 und 9 Jahre), berechnen wir die Werte finanzmathematisch exakt selbst. <br><br>
-              Wir nehmen die historische Swapkurve der Bundesbank, berechnen daraus unseren eigenen rollierenden Durchschnitt für den gewünschten Zeitraum (z.B. die letzten 60 Monate für den 5-Jahres-Zins) und addieren anschließend den passenden Kreditrisikoaufschlag (iBoxx AA).
-            </div>
-          </details>
-
-          <details>
-            <summary>Was passiert bei zukünftigen Laufzeiten (Extrapolation)?</summary>
-            <div class="faq-content">
-              Manchmal benötigt man Zinsen für Laufzeiten in der weiten Zukunft (z.B. 30 oder 40 Jahre), für die der Anleihenmarkt (iBoxx) aktuell keine ausreichenden Daten mehr liefert. <br><br>
-              In diesem Fall nutzt unsere Software ein <strong>Extrapolationsverfahren</strong>: Wir "frieren" den letztbekannten Risikoaufschlag ein und schreiben die Kurve basierend auf der reinen Swap-Logik in die Zukunft fort. So erhalten Sie auch für extrem langfristige Personalverpflichtungen eine mathematisch saubere und stetige Zinskurve.
-            </div>
-          </details>
-
-        </div>
-      </section>
-
-      <section class="card">
-        <div class="card-header">
           <h2>UGB Stichtagszinssatz <span class="stand-badge" id="stand-ugb"></span></h2>
           <p>Der Stichtagszins spiegelt das exakte Zinsniveau am Bilanzstichtag wider. Er eignet sich für eine punktgenaue Marktbewertung.</p>
         </div>
         <div class="card-body">
           <div class="chart-wrapper"><canvas id="chart-ugb"></canvas></div>
           <div class="toolbar">
-            <button class="btn" onclick="dlPNG('chart-ugb', 'VALOG_UGB_Stichtagszins')" title="Grafik speichern">
+            <button class="btn" onclick="exportChart('chart-ugb', 'VALOG_UGB_Stichtagszins', 'download', this)">
               <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Grafik herunterladen
             </button>
-            <button class="btn" onclick="cpPNG('chart-ugb', this)" title="Grafik kopieren">
+            <button class="btn" onclick="exportChart('chart-ugb', 'VALOG_UGB_Stichtagszins', 'copy', this)">
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
             </button>
-            <button class="btn" onclick="dlTbl('wrap-table-ugb', 'VALOG_UGB_Stichtagszins_Tabelle')" title="Tabelle speichern">
+            <button class="btn" onclick="dlTbl('wrap-table-ugb', 'VALOG_UGB_Stichtagszins_Tabelle')">
               <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Tabelle herunterladen
             </button>
-            <button class="btn" onclick="cpTbl('wrap-table-ugb', this)" title="Tabelle kopieren">
+            <button class="btn" onclick="cpTbl('wrap-table-ugb', this)">
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Tabelle kopieren
             </button>
           </div>
@@ -331,15 +299,15 @@
       <section class="card">
         <div class="card-header">
           <h2>UGB Durchschnittszins (15 Jahre Restlaufzeit) <span class="stand-badge" id="stand-avg"></span></h2>
-          <p>Um bilanzielle Volatilitäten zu glätten, erlaubt AFRAC 27 die Verwendung eines historischen Durchschnittszinssatzes. Hier dargestellt ist die Entwicklung für eine angenommene Restlaufzeit von 15 Jahren (oft genutzt für Abfertigungen und Jubiläumsgelder).</p>
+          <p>Um bilanzielle Volatilitäten zu glätten, erlaubt AFRAC 27 die Verwendung eines historischen Durchschnittszinssatzes. Hier dargestellt ist die Entwicklung für eine angenommene Restlaufzeit von 15 Jahren.</p>
         </div>
         <div class="card-body">
           <div class="chart-wrapper"><canvas id="chart-avg"></canvas></div>
           <div class="toolbar">
-            <button class="btn" onclick="dlPNG('chart-avg', 'VALOG_UGB_Durchschnittszins')">
+            <button class="btn" onclick="exportChart('chart-avg', 'VALOG_UGB_Durchschnittszins', 'download', this)">
               <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Grafik herunterladen
             </button>
-            <button class="btn" onclick="cpPNG('chart-avg', this)">
+            <button class="btn" onclick="exportChart('chart-avg', 'VALOG_UGB_Durchschnittszins', 'copy', this)">
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
             </button>
             <button class="btn" onclick="dlTbl('wrap-table-avg', 'VALOG_UGB_Durchschnittszins_Tabelle')">
@@ -353,18 +321,18 @@
         </div>
       </section>
 
-      <section class="card">
+      <section class="card" id="ifrs">
         <div class="card-header">
-          <h2>IFRS Zinssatz (IAS 19) <span class="stand-badge" id="stand-ifrs"></span></h2>
-          <p>Für die internationale Rechnungslegung nach IFRS wird der Rechnungszins direkt aus den Renditen erstrangiger Industrieanleihen (AA-Rating) zum Stichtag ermittelt. Wir zeigen hier die resultierende Zinskurve für wesentliche Durationen.</p>
+          <h2>Zinsbandbreite für Sozialkapitalbewertung nach IFRS <span class="stand-badge" id="stand-ifrs"></span></h2>
+          <p>Zinsbandbreite gemäß IAS 19 für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für Restlaufzeiten zwischen 5 und 25 Jahren.</p>
         </div>
         <div class="card-body">
           <div class="chart-wrapper"><canvas id="chart-ifrs"></canvas></div>
           <div class="toolbar">
-            <button class="btn" onclick="dlPNG('chart-ifrs', 'VALOG_IFRS_Zinssaetze')">
+            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinssaetze', 'download', this)">
               <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Grafik herunterladen
             </button>
-            <button class="btn" onclick="cpPNG('chart-ifrs', this)">
+            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinssaetze', 'copy', this)">
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
             </button>
             <button class="btn" onclick="dlTbl('wrap-table-ifrs', 'VALOG_IFRS_Zinssaetze_Tabelle')">
@@ -375,6 +343,37 @@
             </button>
           </div>
           <div class="table-container" id="wrap-table-ifrs"><div id="table-ifrs"></div></div>
+        </div>
+      </section>
+
+      <section class="card" id="methodik">
+        <div class="card-header">
+          <h2>Methodik & Hintergrund</h2>
+          <p>Die dargestellten Zinssätze basieren auf einer standardisierten, versicherungsmathematischen Herleitung aus Marktdaten.</p>
+        </div>
+        <div class="card-body">
+          <h3 class="method-title">Berechnungsweg der UGB-Zinssätze</h3>
+          <div class="method-steps-box">
+            <ol class="method-steps">
+              <li><strong>Null-Kupon-Euro-Swapkurve:</strong> Monatliche Abrufe der Null-Kupon-Euro-Zinsswapkurve der Deutschen Bundesbank für 50 Laufzeiten (1–50 Jahre). Diese Kurve bildet die risikofreie Zinsstruktur ab.</li>
+              <li><strong>iBoxx EUR Corporates AA:</strong> Monatliche Rendite und Modified Duration des iBoxx-EUR-Corporates-AA-Index. Dieser Index bildet hochklassig geratete festverzinsliche Euro-Unternehmensanleihen ab.</li>
+              <li><strong>Credit Spread:</strong> Die Differenz zwischen iBoxx-AA-Rendite und dem auf die gleiche Duration interpolierten Swapsatz ergibt den Aufschlag für das Kreditrisiko.</li>
+              <li><strong>Stichtagszins:</strong> Addition des Stichtags-Spreads auf die aktuelle Swapkurve ergibt die Stichtagszinsen für jede Laufzeit.</li>
+              <li><strong>Durchschnittszins:</strong> Gleitende Mittelwerte (5–10 Jahre) der Swapkurve und des iBoxx. Der resultierende Durchschnitts-Spread wird auf die gemittelte Swapkurve addiert.</li>
+            </ol>
+          </div>
+          
+          <h3 class="method-title">Glossar</h3>
+          <div class="glossary-grid">
+            <div class="glossary-card"><h4>Zinsswap</h4><p>Finanzderivat zum Tausch von Zinszahlungen (fest ↔ variabel). Die daraus abgeleitete Null-Kupon-Swapkurve bildet die risikofreie Zinsstruktur im Euro-Raum ab.</p></div>
+            <div class="glossary-card"><h4>Rendite (Yield)</h4><p>Effektive Verzinsung einer Anleihe unter Berücksichtigung von Kupon, Kurs und Restlaufzeit. Die Annual Yield des iBoxx-AA-Index ist die gewichtete Durchschnittsrendite.</p></div>
+            <div class="glossary-card"><h4>Modified Duration</h4><p>Zinssensitivität einer Anleihe: um wie viel Prozent sich der Kurs bei 1 Prozentpunkt Marktzinsänderung ändert. Zugleich Näherung für die gewichtete Restlaufzeit.</p></div>
+            <div class="glossary-card"><h4>Credit Spread</h4><p>Differenz zwischen Unternehmensanleihenrendite und risikofreiem Swapsatz. Kompensiert für Ausfallrisiko, Maß für Kreditrisikoprämie.</p></div>
+            <div class="glossary-card"><h4>iBoxx EUR Corporates AA</h4><p>Anleihenindex von S&amp;P/IHS Markit für liquide Euro-Unternehmensanleihen mit Mindestrating AA. Referenz für Marktzinssatz hochklassiger Emittenten.</p></div>
+            <div class="glossary-card"><h4>UGB Durchschnittszins</h4><p>Gemäß AFRAC 27 als gleitender Mittelwert über bis zu 10 Jahre ermittelt. Glättet kurzfristige Schwankungen. Häufig mit 15 Jahren Restlaufzeit.</p></div>
+            <div class="glossary-card"><h4>IAS 19</h4><p>Regelt die Bilanzierung von Leistungen an Arbeitnehmer nach IFRS. Abzinsungssatz = Rendite erstrangiger Unternehmensanleihen am Stichtag (kein Durchschnitt).</p></div>
+            <div class="glossary-card"><h4>Null-Kupon-Kurve</h4><p>Zinsstrukturkurve für kuponlose Anleihen, via Bootstrapping abgeleitet. Grundlage für laufzeitgenaue Diskontierung.</p></div>
+          </div>
         </div>
       </section>
 
@@ -407,30 +406,55 @@
       b.style.display = 'block'; b.innerHTML = m;
     };
 
-    /* ==========================================================
-       EXPORT LOGIC
-       ========================================================== */
     const svgCopied = '<svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Kopiert';
 
-    function dlPNG(id, fn) {
-      const c = document.getElementById(id);
-      const a = document.createElement('a');
-      a.download = fn + '.png';
-      a.href = c.toDataURL('image/png', 1.0);
-      a.click();
-    }
-
-    async function cpPNG(id, btn) {
-      const origHtml = btn.innerHTML;
+    /* ==========================================================
+       CHART EXPORT LOGIC (NO STRIKETHROUGH ON EXPORT)
+       ========================================================== */
+    async function exportChart(id, fn, type, btn) {
+      const chart = Chart.getChart(id);
+      const canvas = document.getElementById(id);
+      const origHtml = btn ? btn.innerHTML : '';
+      
+      // 1. Completely hide "durchgestrichen" items from the legend for the export
+      const origFilter = chart.options.plugins.legend.labels.filter || null;
+      chart.options.plugins.legend.labels.filter = function(item, data) {
+        return chart.isDatasetVisible(item.datasetIndex);
+      };
+      chart.update('none'); // Update without animation
+      
+      // Give canvas a tiny moment to finish rendering the updated legend
+      await new Promise(r => setTimeout(r, 50));
+      
+      // 2. Export the canvas
       try {
-        const c = document.getElementById(id);
-        const blob = await new Promise(r => c.toBlob(r, 'image/png', 1.0));
-        await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
-        btn.classList.add('copied'); btn.innerHTML = svgCopied;
-        setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = origHtml; }, 2000);
-      } catch (e) { alert('Kopieren fehlgeschlagen. Bitte verwenden Sie den Download.'); }
+        if (type === 'download') {
+          const a = document.createElement('a');
+          a.download = fn + '.png';
+          a.href = canvas.toDataURL('image/png', 1.0);
+          a.click();
+        } else if (type === 'copy') {
+          const blob = await new Promise(r => canvas.toBlob(r, 'image/png', 1.0));
+          await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+          if (btn) {
+            btn.classList.add('copied'); btn.innerHTML = svgCopied;
+            setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = origHtml; }, 2000);
+          }
+        }
+      } catch (e) { 
+        alert('Export fehlgeschlagen. Bitte verwenden Sie den Download.'); 
+      }
+      
+      // 3. Restore the legend so they reappear with strikethrough on the website
+      if (origFilter) {
+        chart.options.plugins.legend.labels.filter = origFilter;
+      } else {
+        delete chart.options.plugins.legend.labels.filter;
+      }
+      chart.update('none');
     }
 
+    /* Table Exports */
     function dlTbl(id, fn) {
       html2canvas(document.getElementById(id), { scale: 2, backgroundColor: '#ffffff' }).then(c => {
         const a = document.createElement('a'); a.download = fn + '.png'; a.href = c.toDataURL('image/png'); a.click();
