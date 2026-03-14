@@ -1,250 +1,727 @@
 <!DOCTYPE html>
 <html lang="de-AT">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  
-  <title>Zinssätze für Sozialkapitalbewertung | UGB & IFRS | VALOG GmbH</title>
-  <meta name="description" content="Aktuelle Rechnungszinssätze für die Sozialkapitalbewertung nach UGB (AFRAC 27) und IFRS (IAS 19) in Österreich. Stichtagszinsen, Durchschnittszinsen und Methodik."/>
-  <meta name="keywords" content="Rechnungszins, Sozialkapitalbewertung, UGB, IFRS, IAS 19, AFRAC 27, Stichtagszins, Durchschnittszins, Pensionsrückstellung, Abfertigungsrückstellung, Österreich, VALOG, Zinsswap"/>
-  <meta name="author" content="VALOG GmbH"/>
-  <meta name="robots" content="index, follow"/>
-  <meta name="theme-color" content="#D45D00"/>
-  <link rel="canonical" href="https://valog.com/zinssaetze/"/>
-  
-  <meta property="og:type" content="website"/>
-  <meta property="og:locale" content="de_AT"/>
-  <meta property="og:site_name" content="VALOG GmbH"/>
-  <meta property="og:title" content="Rechnungszinssätze für Sozialkapital | UGB & IFRS"/>
-  <meta property="og:description" content="Aktuelle österreichische UGB-Stichtagszinsen, Durchschnittszinsen und IFRS-Zinsbandbreiten für die Bewertung von Personalrückstellungen."/>
-  <meta property="og:url" content="https://valog.com/zinssaetze/"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VALOG Zinssätze für Sozialkapitalbewertung | UGB-Stichtagszins, Durchschnittszins und IFRS</title>
+  <meta name="description" content="Aktuelle Zinssätze für die Sozialkapitalbewertung: UGB-Stichtagszins, 5- bis 10-Jahres-Durchschnittszins bei 15 Jahren Restlaufzeit und IFRS-Zinsdaten. Mit einfachen Erklärungen zu Swapkurve, Credit Spread, 7J/10J-Daten und Bewertungslogik." />
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+  <meta name="theme-color" content="#D45D00" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="canonical" href="https://valog.com/zinssaetze/" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="de_AT" />
+  <meta property="og:site_name" content="VALOG GmbH" />
+  <meta property="og:title" content="VALOG Zinssätze für Sozialkapitalbewertung" />
+  <meta property="og:description" content="UGB-Stichtagszins, Durchschnittszins und IFRS-Zinsdaten für Personalrückstellungen – mit klaren Grafiken, Tabellen, Methodik und einfachen FAQ." />
+  <meta property="og:url" content="https://valog.com/zinssaetze/" />
+  <meta property="og:image" content="https://valog.com/wp-content/uploads/2020/09/VALOG_Logo_orange_grau.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="VALOG Zinssätze für Sozialkapitalbewertung" />
+  <meta name="twitter:description" content="UGB-Stichtagszins, Durchschnittszins und IFRS-Zinsdaten für Personalrückstellungen – verständlich erklärt." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://valog.com/#organization",
+        "name": "VALOG GmbH",
+        "url": "https://valog.com/",
+        "logo": "https://valog.com/wp-content/uploads/2020/09/VALOG_Logo_orange_grau.png"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://valog.com/#website",
+        "url": "https://valog.com/",
+        "name": "VALOG GmbH",
+        "publisher": {"@id": "https://valog.com/#organization"}
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://valog.com/zinssaetze/#webpage",
+        "url": "https://valog.com/zinssaetze/",
+        "name": "VALOG Zinssätze für Sozialkapitalbewertung",
+        "isPartOf": {"@id": "https://valog.com/#website"},
+        "about": [
+          {"@type": "Thing", "name": "UGB-Rechnungszins"},
+          {"@type": "Thing", "name": "IAS 19 Abzinsungssatz"},
+          {"@type": "Thing", "name": "Null-Kupon-Euro-Swapkurve"},
+          {"@type": "Thing", "name": "iBoxx EUR Corporates AA"}
+        ],
+        "inLanguage": "de-AT",
+        "publisher": {"@id": "https://valog.com/#organization"},
+        "breadcrumb": {"@id": "https://valog.com/zinssaetze/#breadcrumb"}
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://valog.com/zinssaetze/#breadcrumb",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Startseite", "item": "https://valog.com/"},
+          {"@type": "ListItem", "position": 2, "name": "Zinssätze", "item": "https://valog.com/zinssaetze/"}
+        ]
+      },
+      {
+        "@type": "Dataset",
+        "name": "VALOG Zinssätze für Sozialkapitalbewertung",
+        "description": "Monatliche UGB- und IFRS-Zinsdaten für die Bewertung von Personalrückstellungen.",
+        "inLanguage": "de-AT",
+        "isAccessibleForFree": true,
+        "creator": {"@id": "https://valog.com/#organization"},
+        "publisher": {"@id": "https://valog.com/#organization"},
+        "includedInDataCatalog": {"@type": "DataCatalog", "name": "VALOG Zinssätze"},
+        "distribution": {
+          "@type": "DataDownload",
+          "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "contentUrl": "https://valog.com/zinssaetze/valog_zinssaetze_data.xlsx"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Was ist der Unterschied zwischen Stichtagszins und Durchschnittszins?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Der Stichtagszins bildet das aktuelle Marktniveau am Bewertungsstichtag ab. Der Durchschnittszins glättet dieses Marktniveau über mehrere Abschlussstichtage hinweg. Nach AFRAC 27 kann unter UGB je nach gewählter Methodik ein aktueller oder ein durchschnittlicher Zinssatz herangezogen werden; die gewählte Ableitung ist stetig anzuwenden."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Woher kommen die 7- und 10-Jahres-Daten?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Die 7J- und 10J-Linien basieren in der Datenpipeline auf offiziellen Bundesbank-Zeitreihen zu den Abzinsungszinssätzen gemäß § 253 Abs. 2 HGB. Für österreichische UGB-Bewertungen sind diese Werte keine automatisch verbindlichen Zinssätze; AFRAC 27 erwähnt sie aber ausdrücklich als mögliche Orientierung bei der Ermittlung eines Durchschnittszinssatzes."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was passiert bei 5, 6, 8 und 9 Jahren?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Diese Durchschnittshorizonte werden in der Datenpipeline aus derselben Marktsystematik selbst berechnet: aus Swapkurve, iBoxx-AA-Rendite, Modified Duration und dem daraus abgeleiteten Credit Spread."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Warum wird oft mit 15 Jahren Restlaufzeit gearbeitet?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "§ 211 Abs. 2 Satz 2 UGB und AFRAC 27 erlauben für die Festlegung des Zinssatzes vereinfachend eine durchschnittliche Restlaufzeit von 15 Jahren, sofern im Einzelfall keine erheblichen Bedenken bestehen."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Darf für IAS 19 ein Durchschnittszins verwendet werden?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nein. IAS 19 verlangt einen stichtagsbezogenen Abzinsungssatz auf Basis von Marktrenditen hochwertiger Unternehmensanleihen; Währung und Laufzeit müssen zu den Verpflichtungen passen."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Werden auf dieser Website extrapolierte Monatsstände gezeigt?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nein. Die Website zeigt nur reale Monatsstände aus dem Export. Extrapolierte Zeilen existieren nur in der internen Arbeitsdatei als technische Fortführung und sind keine neuen Marktbeobachtungen."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 
   <style>
     :root {
-      /* VALOG Corporate Design */
-      --vo: #D45D00; 
-      --vt: #00859B; 
-      --vg: #719949; 
-      --vy: #C69214; 
-      --vr: #963821; 
-      --vdark: #575757; 
-      --vlight: #E8E8E8; 
-      --bg: #F7F9FC; 
-      --card: #FFFFFF;
-      --radius: 12px;
-      --font: 'Open Sans', 'Segoe UI', Arial, sans-serif;
+      --orange: #D45D00;
+      --cool-gray: #575757;
+      --cool-gray-80: #797979;
+      --cool-gray-60: #9A9A9A;
+      --cool-gray-40: #BCBCBC;
+      --cool-gray-20: #DDDDDD;
+      --black: #000000;
+      --white: #FFFFFF;
+      --green: #719949;
+      --teal: #00859B;
+      --yellow: #EAAA00;
+      --gold: #C69214;
+      --brick: #963821;
+      --bg: #FAFAF9;
+      --panel: #FFFFFF;
+      --soft: #F6F2EE;
+      --border: rgba(87, 87, 87, 0.14);
+      --shadow: 0 20px 50px rgba(0,0,0,0.06);
+      --radius-xl: 28px;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --page: 1240px;
+      --heading-font: "Humanist Slabserif 712", Georgia, "Times New Roman", serif;
+      --body-font: "Frutiger", "Segoe UI", Arial, sans-serif;
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      background: var(--bg);
-      color: var(--vdark);
-      font-family: var(--font);
+      font-family: var(--body-font);
+      color: var(--cool-gray);
+      background:
+        radial-gradient(circle at top right, rgba(212,93,0,0.08), transparent 30%),
+        linear-gradient(180deg, #fff 0%, var(--bg) 100%);
       line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
     }
 
-    /* Original VALOG Header Style */
-    .site-header {
-      background: #ffffff;
-      padding: 20px 0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      margin-bottom: 40px;
-    }
-    .site-header .header-wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-    .logo-svg {
-      height: 45px;
-      width: auto;
-      display: block;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px 50px 20px;
-    }
-
-    /* Hero */
-    .hero {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-    .hero h1 {
-      color: var(--vo);
-      font-size: 2.4rem;
-      margin-bottom: 15px;
-      line-height: 1.2;
-    }
-    .hero p {
-      font-size: 1.1rem;
-      color: var(--vdark);
-      max-width: 850px;
-      margin: 0 auto;
-    }
-
-    /* Cards */
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-      margin-bottom: 50px;
+    a { color: var(--orange); }
+    img { max-width: 100%; display: block; }
+    .wrap { width: min(calc(100% - 32px), var(--page)); margin: 0 auto; }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
       overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
-    .card-header {
-      padding: 30px 40px 15px 40px;
-      border-bottom: 1px solid var(--vlight);
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,0.85);
+      border-bottom: 1px solid rgba(87,87,87,0.08);
     }
-    .card-header h2 {
-      color: var(--vt);
-      margin: 0 0 10px 0;
-      font-size: 1.8rem;
+
+    .topbar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .stand-badge {
-      font-size: 0.95rem;
-      background: var(--bg);
-      padding: 6px 16px;
-      border-radius: 20px;
-      color: var(--vdark);
-      border: 1px solid var(--vlight);
-      font-weight: 600;
-    }
-    .card-header p {
-      margin: 0;
-      font-size: 0.95rem;
-    }
-    .card-body {
-      padding: 30px 40px;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 0;
     }
 
-    /* Charts */
-    .chart-wrapper {
-      position: relative;
-      height: 450px;
-      width: 100%;
-      margin-bottom: 20px;
-    }
-
-    /* Action Toolbar */
-    .toolbar {
+    .brand {
       display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      margin-bottom: 25px;
-      padding-bottom: 25px;
-      border-bottom: 1px solid var(--vlight);
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 18px;
+      text-decoration: none;
+      color: inherit;
     }
-    .btn {
+
+    .brand svg { width: 168px; height: auto; }
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--cool-gray);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.94rem;
+      font-weight: 700;
+    }
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      background: var(--soft);
+      outline: none;
+    }
+
+    main { padding: 28px 0 80px; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 26px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: 34px;
+    }
+
+    .eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 16px;
-      border: 1px solid var(--vlight);
-      background: var(--card);
-      color: var(--vdark);
-      border-radius: 6px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: var(--font);
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(212,93,0,0.08);
+      color: var(--orange);
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
-    .btn:hover { background: var(--bg); border-color: var(--vdark); }
-    .btn svg { width: 18px; height: 18px; fill: currentColor; }
-    .btn.copied { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
 
-    /* Tables */
-    .table-container {
-      overflow-x: auto;
-      border: 1px solid var(--vlight);
-      border-radius: 8px;
-    }
-    table { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.95rem; }
-    th, td { padding: 14px 20px; border-bottom: 1px solid var(--vlight); }
-    th { background: var(--bg); font-weight: 700; position: sticky; top: 0; }
-    th:first-child, td:first-child { text-align: left; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background-color: #FAFAFA; }
-    tr.highlight-latest td { background-color: rgba(212, 93, 0, 0.05); font-weight: 600; }
-
-    /* Methodik & Hintergrund Styles (Adapted from Original) */
-    .method-title {
-      color: var(--vt);
-      font-size: 1.3rem;
-      margin-bottom: 15px;
-    }
-    .method-steps-box {
-      background: var(--bg);
-      border: 1px solid var(--vlight);
-      border-radius: 8px;
-      padding: 25px 30px;
-      margin-bottom: 40px;
-    }
-    .method-steps {
+    h1, h2, h3, h4 {
       margin: 0;
-      padding-left: 20px;
+      font-family: var(--heading-font);
+      color: var(--cool-gray);
+      line-height: 1.12;
     }
-    .method-steps li {
+
+    h1 {
+      margin-top: 16px;
+      font-size: clamp(2rem, 4.8vw, 3.45rem);
+      max-width: 12ch;
+    }
+
+    .hero-lead {
+      margin: 16px 0 0;
+      font-size: 1.06rem;
+      color: var(--cool-gray-80);
+      max-width: 66ch;
+    }
+
+    .hero-points {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .hero-point {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,1), rgba(246,242,238,0.72));
+    }
+
+    .hero-point strong {
+      display: block;
+      color: var(--orange);
+      font-size: 0.92rem;
+      margin-bottom: 4px;
+    }
+
+    .hero-aside {
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      justify-content: space-between;
+      background: linear-gradient(180deg, rgba(212,93,0,0.08), rgba(255,255,255,1));
+    }
+
+    .hero-aside .mini-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--cool-gray-80);
+    }
+
+    .stand-date {
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      color: var(--orange);
+      font-family: var(--heading-font);
+      line-height: 1;
+      margin-top: 6px;
+    }
+
+    .latest-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .latest-box {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.96);
+      padding: 14px;
+    }
+
+    .latest-box small {
+      display: block;
+      color: var(--cool-gray-80);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .latest-box strong {
+      font-size: 1.3rem;
+      color: var(--cool-gray);
+    }
+
+    .notice {
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(150, 56, 33, 0.18);
+      background: rgba(150, 56, 33, 0.06);
+      color: var(--brick);
+      padding: 14px 16px;
+      font-size: 0.94rem;
+    }
+
+    .section {
+      margin-top: 34px;
+      scroll-margin-top: 92px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      margin-bottom: 14px;
+    }
+
+    .section-head p {
+      margin: 12px 0 0;
+      max-width: 72ch;
+      color: var(--cool-gray-80);
+    }
+
+    .section-kicker {
+      color: var(--orange);
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .panel {
+      padding: 22px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .chip-group, .tool-group, .quick-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .chip {
+      position: relative;
+    }
+
+    .chip input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .chip label,
+    .tool-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--cool-gray-40);
+      background: #fff;
+      color: var(--cool-gray);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      user-select: none;
+    }
+
+    .chip label::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: var(--chip-color, var(--cool-gray));
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.72);
+    }
+
+    .chip input:checked + label,
+    .chip label:hover,
+    .tool-btn:hover,
+    .tool-btn:focus-visible {
+      transform: translateY(-1px);
+      border-color: var(--cool-gray-80);
+      background: var(--soft);
+      outline: none;
+    }
+
+    .tool-btn.primary {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    .tool-btn.success {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+
+    .chart-card {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(246,242,238,0.45), #fff);
+    }
+
+    .export-frame {
+      padding: 22px 22px 16px;
+      background: #fff;
+    }
+
+    .export-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+
+    .export-title h3 {
+      font-size: 1.45rem;
+      color: var(--cool-gray);
+    }
+
+    .export-title p {
+      margin: 8px 0 0;
+      max-width: 70ch;
+      color: var(--cool-gray-80);
+      font-size: 0.96rem;
+    }
+
+    .export-meta {
+      display: grid;
+      gap: 6px;
+      text-align: right;
+      color: var(--cool-gray-80);
+      font-size: 0.9rem;
+      min-width: 220px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0 6px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--cool-gray);
+    }
+
+    .legend-line {
+      width: 22px;
+      height: 0;
+      border-top: 3px solid currentColor;
+      border-radius: 999px;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 430px;
+      margin-top: 8px;
+    }
+
+    .table-panel { margin-top: 14px; }
+
+    .table-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
       margin-bottom: 12px;
     }
-    .method-steps li:last-child {
-      margin-bottom: 0;
+
+    .table-header p {
+      margin: 0;
+      color: var(--cool-gray-80);
     }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+      font-size: 0.95rem;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #F5F4F2;
+      color: var(--cool-gray);
+      text-align: left;
+      padding: 14px 16px;
+      font-weight: 800;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody td {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody tr:hover { background: rgba(246,242,238,0.55); }
+    tbody tr.latest-row { background: rgba(212,93,0,0.08); font-weight: 800; }
+
+    .explain-grid,
+    .faq-grid,
     .glossary-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
     }
-    .glossary-card {
-      background: var(--bg);
-      border: 1px solid var(--vlight);
-      border-radius: 8px;
+
+    .info-card {
       padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: var(--shadow);
     }
-    .glossary-card h4 {
-      margin: 0 0 10px 0;
-      color: var(--vt);
-      font-size: 1.05rem;
+
+    .info-card h4 {
+      font-size: 1.04rem;
+      margin-bottom: 8px;
+      color: var(--orange);
     }
-    .glossary-card p {
+
+    .info-card p,
+    .info-card li {
       margin: 0;
-      font-size: 0.9rem;
+      color: var(--cool-gray-80);
+      font-size: 0.95rem;
     }
 
-    /* State Boxes */
-    #loading, #errorBox { text-align: center; padding: 60px 20px; font-size: 1.1rem; background: var(--card); border-radius: var(--radius); box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
-    #errorBox { display: none; color: var(--vr); }
-    .spinner { border: 4px solid var(--vlight); border-top: 4px solid var(--vo); border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 0 auto 20px auto; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .info-card ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+    }
 
-    @media (max-width: 768px) {
-      .card-header, .card-body { padding: 20px; }
-      .toolbar { justify-content: flex-start; }
-      .site-header { padding: 15px 0; }
+    details.faq {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: #fff;
+      padding: 16px 18px;
+      box-shadow: var(--shadow);
+    }
+
+    details.faq summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--cool-gray);
+      list-style: none;
+    }
+
+    details.faq summary::-webkit-details-marker { display: none; }
+    details.faq p { margin: 10px 0 0; color: var(--cool-gray-80); }
+
+    .loading,
+    .error-box {
+      border-radius: 20px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .error-box {
+      display: none;
+      color: var(--brick);
+      border-color: rgba(150,56,33,0.18);
+      background: rgba(150,56,33,0.06);
+    }
+
+    footer {
+      padding: 34px 0 54px;
+      color: var(--cool-gray-80);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    footer p { margin: 8px 0; }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .section-head {
+        display: block;
+      }
+      .export-meta {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .wrap { width: min(calc(100% - 20px), var(--page)); }
+      .topbar { align-items: flex-start; }
+      .nav-links { display: none; }
+      .hero-copy,
+      .hero-aside,
+      .panel,
+      .export-frame { padding: 18px; }
+      .hero-points,
+      .latest-grid { grid-template-columns: 1fr; }
+      .chart-wrap { height: 320px; }
+      .tool-group { width: 100%; }
     }
   </style>
 </head>
 <body>
-
-  <header class="site-header">
-    <div class="header-wrap">
-      <a href="https://valog.com" aria-label="VALOG GmbH">
-        <svg class="logo-svg" viewBox="140 250 550 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VALOG">
+  <header>
+    <div class="wrap topbar">
+      <a href="https://valog.com" class="brand" aria-label="Zur Startseite von VALOG">
+        <svg viewBox="140 250 550 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VALOG Logo">
           <path fill="#D45D00" d="M217.3,336.2l-51.5-77.1h20.3l38.1,58.6l37.3-58.6h19.8l-51,77.1H217.3z"/>
           <path fill="#D45D00" d="M350.2,336.2l-37.3-58.7l-38.1,58.7h-19.9l51.3-77.1h13.1l51,77.1H350.2z"/>
           <path fill="#575757" d="M383.2,336.2v-77.1h18.1v63.1h61v14H383.2z"/>
@@ -253,367 +730,720 @@
           <path fill="#D45D00" d="M533.9,290.1c0-1.2-0.9-1.7-2.6-1.7h-19.7c-1.7,0-2.6,0.5-2.6,1.7v15.2c0,1.2,0.9,1.7,2.6,1.7h19.7c1.7,0,2.6-0.5,2.6-1.7V290.1z"/>
         </svg>
       </a>
+      <nav class="nav-links" aria-label="Abschnittsnavigation">
+        <a href="#ueberblick">Überblick</a>
+        <a href="#ugb-stichtag">UGB-Stichtagszins</a>
+        <a href="#ugb-durchschnitt">UGB-Durchschnittszins</a>
+        <a href="#ifrs">IFRS</a>
+        <a href="#methodik">Methodik</a>
+        <a href="#faq">FAQ</a>
+      </nav>
     </div>
   </header>
 
-  <div class="container">
-    <div class="hero">
-      <h1>Zinssätze für die Sozialkapitalbewertung</h1>
-      <p>Aktuelle Zinssätze für die Sozialkapitalbewertung nach UGB und IFRS, berechnet aus der Null-Kupon-Euro-Swapkurve der Deutschen Bundesbank und dem iBoxx EUR Corporates AA Index.</p>
+  <main class="wrap">
+    <div id="loading" class="loading">Lade Daten …</div>
+    <div id="errorBox" class="error-box" role="alert"></div>
+
+    <section class="hero" id="ueberblick" aria-labelledby="hero-title">
+      <div class="card hero-copy">
+        <span class="eyebrow">VALOG Zinssätze</span>
+        <h1 id="hero-title">Zinssätze für die Sozialkapitalbewertung – klar, vergleichbar und exportierbar</h1>
+        <p class="hero-lead">
+          Diese Seite zeigt die wichtigsten Zinssätze für Personalrückstellungen in einer Form, die man rasch versteht:
+          aktueller UGB-Stichtagszins, geglättete Durchschnittszinsen und IFRS-Daten – mit erklärendem Text, Tabellen und Grafiken.
+        </p>
+        <div class="hero-points">
+          <div class="hero-point"><strong>Wofür?</strong><span>Abfertigung, Jubiläumsgeld, Pensionen und andere langfristige Personalverpflichtungen.</span></div>
+          <div class="hero-point"><strong>Wie lesen?</strong><span>Oben der Überblick, darunter je Thema eine Grafik, eine Tabelle und eine kurze Einordnung.</span></div>
+          <div class="hero-point"><strong>Export</strong><span>PNG-Export und Kopieren erfassen bewusst auch die Legende, damit die Linien im Bild eindeutig bleiben.</span></div>
+        </div>
+      </div>
+
+      <aside class="card hero-aside" aria-label="Schnellüberblick">
+        <div>
+          <div class="mini-title">Datenstand</div>
+          <div class="stand-date" id="hero-stand">–</div>
+        </div>
+        <div class="latest-grid" id="latest-grid"></div>
+        <div class="notice" id="ifrsNotice" hidden>
+          Die IFRS-Daten wirken derzeit wie Platzhalter. Für eine echte IFRS-Grafik muss der Exporter die realen IFRS-Werte liefern.
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="ugb-stichtag">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">UGB</div>
+          <h2>Stichtagszins nach Restlaufzeit</h2>
+          <p>Diese Grafik zeigt das aktuelle Marktniveau zum jeweiligen Monatsultimo für 5, 10, 15, 20 und 25 Jahre. Sie ist die richtige Sicht, wenn bewusst das aktuelle Zinsniveau gezeigt werden soll.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="control-row">
+          <div class="chip-group" id="chips-ugb"></div>
+          <div class="tool-group">
+            <button class="tool-btn" data-action="show-all" data-target="ugb">Alle anzeigen</button>
+            <button class="tool-btn" data-action="hide-all" data-target="ugb">Alle ausblenden</button>
+            <button class="tool-btn primary" data-action="download-chart" data-target="ugb">⬇ Grafik als PNG</button>
+            <button class="tool-btn primary" data-action="copy-chart" data-target="ugb">📋 Grafik kopieren</button>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="export-frame" id="export-ugb-chart">
+            <div class="export-head">
+              <div class="export-title">
+                <span class="eyebrow">VALOG</span>
+                <h3>UGB-Stichtagszins</h3>
+                <p>Marktzinssätze für unterschiedliche Restlaufzeiten. Export und Kopie enthalten die Legende, damit die Linien auch außerhalb der Website eindeutig zuordenbar bleiben.</p>
+              </div>
+              <div class="export-meta">
+                <span id="meta-ugb-stand">Stand: –</span>
+                <span>Darstellung: Prozent p.a.</span>
+              </div>
+            </div>
+            <div class="legend" id="legend-ugb"></div>
+            <div class="chart-wrap"><canvas id="chart-ugb"></canvas></div>
+          </div>
+        </div>
+
+        <div class="table-panel">
+          <div class="table-header">
+            <p><strong>Wertetabelle.</strong> Die jüngste Periode wird hervorgehoben.</p>
+            <div class="tool-group">
+              <button class="tool-btn primary" data-action="download-table" data-target="ugb">⬇ Tabelle als PNG</button>
+              <button class="tool-btn primary" data-action="copy-table" data-target="ugb">📋 Tabelle kopieren</button>
+            </div>
+          </div>
+          <div class="table-wrap" id="table-ugb"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="ugb-durchschnitt">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">UGB</div>
+          <h2>Durchschnittszins bei 15 Jahren Restlaufzeit</h2>
+          <p>Hier sieht man, wie stark die Glättung über 5 bis 10 Jahre wirkt. Je länger der Zeitraum, desto träger reagiert die Linie auf aktuelle Zinsänderungen.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="control-row">
+          <div class="chip-group" id="chips-avg"></div>
+          <div class="tool-group">
+            <button class="tool-btn" data-action="show-all" data-target="avg">Alle anzeigen</button>
+            <button class="tool-btn" data-action="hide-all" data-target="avg">Alle ausblenden</button>
+            <button class="tool-btn primary" data-action="download-chart" data-target="avg">⬇ Grafik als PNG</button>
+            <button class="tool-btn primary" data-action="copy-chart" data-target="avg">📋 Grafik kopieren</button>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="export-frame" id="export-avg-chart">
+            <div class="export-head">
+              <div class="export-title">
+                <span class="eyebrow">VALOG</span>
+                <h3>UGB-Durchschnittszins bei 15 Jahren</h3>
+                <p>Vergleich von Stichtagszins und 5- bis 10-Jahres-Durchschnittszins für eine pauschale Restlaufzeit von 15 Jahren.</p>
+              </div>
+              <div class="export-meta">
+                <span id="meta-avg-stand">Stand: –</span>
+                <span>Darstellung: Prozent p.a.</span>
+              </div>
+            </div>
+            <div class="legend" id="legend-avg"></div>
+            <div class="chart-wrap"><canvas id="chart-avg"></canvas></div>
+          </div>
+        </div>
+
+        <div class="table-panel">
+          <div class="table-header">
+            <p><strong>Wertetabelle.</strong> So sieht man sofort, wie weit geglättete Zinssätze unter dem aktuellen Niveau liegen.</p>
+            <div class="tool-group">
+              <button class="tool-btn primary" data-action="download-table" data-target="avg">⬇ Tabelle als PNG</button>
+              <button class="tool-btn primary" data-action="copy-table" data-target="avg">📋 Tabelle kopieren</button>
+            </div>
+          </div>
+          <div class="table-wrap" id="table-avg"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="ifrs">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">IFRS / IAS 19</div>
+          <h2>IFRS-Zinsdaten nach Restlaufzeit</h2>
+          <p>IAS 19 verlangt einen stichtagsbezogenen Abzinsungssatz. Deshalb sollte dieser Bereich nicht wie ein Durchschnittszins-Layer aussehen, sondern wie ein klarer Snapshot mit sauberem Quellenhinweis.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="control-row">
+          <div class="chip-group" id="chips-ifrs"></div>
+          <div class="tool-group">
+            <button class="tool-btn" data-action="show-all" data-target="ifrs">Alle anzeigen</button>
+            <button class="tool-btn" data-action="hide-all" data-target="ifrs">Alle ausblenden</button>
+            <button class="tool-btn primary" data-action="download-chart" data-target="ifrs">⬇ Grafik als PNG</button>
+            <button class="tool-btn primary" data-action="copy-chart" data-target="ifrs">📋 Grafik kopieren</button>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="export-frame" id="export-ifrs-chart">
+            <div class="export-head">
+              <div class="export-title">
+                <span class="eyebrow">VALOG</span>
+                <h3>IFRS-Zinsdaten</h3>
+                <p>Wenn echte IFRS-Werte vorhanden sind, sollte diese Grafik die stichtagsbezogene Kurve zeigen. Momentan erkennt die Seite automatisch, ob nur Platzhalterwerte vorliegen.</p>
+              </div>
+              <div class="export-meta">
+                <span id="meta-ifrs-stand">Stand: –</span>
+                <span>Darstellung: Prozent p.a.</span>
+              </div>
+            </div>
+            <div class="legend" id="legend-ifrs"></div>
+            <div class="chart-wrap"><canvas id="chart-ifrs"></canvas></div>
+          </div>
+        </div>
+
+        <div class="table-panel">
+          <div class="table-header">
+            <p><strong>Wertetabelle.</strong> Auf der Live-Seite sollte hier ein eindeutiger Hinweis erscheinen, falls nur Platzhalter exportiert wurden.</p>
+            <div class="tool-group">
+              <button class="tool-btn primary" data-action="download-table" data-target="ifrs">⬇ Tabelle als PNG</button>
+              <button class="tool-btn primary" data-action="copy-table" data-target="ifrs">📋 Tabelle kopieren</button>
+            </div>
+          </div>
+          <div class="table-wrap" id="table-ifrs"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="methodik">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Methodik</div>
+          <h2>Wie die Zinssätze in einfachen Schritten hergeleitet werden</h2>
+          <p>Die Seite soll nicht nur Zahlen zeigen, sondern auch verständlich machen, wie aus Marktdaten ein plausibler Rechnungszins abgeleitet wird und wo die Grenzen dieser Vereinfachung liegen.</p>
+        </div>
+      </div>
+
+      <div class="explain-grid">
+        <article class="info-card">
+          <h4>1. Ausgangspunkt: die Swapkurve</h4>
+          <p>Die technische Basis ist die monatliche Null-Kupon-Euro-Swapkurve der Deutschen Bundesbank für Laufzeiten von 1 bis 50 Jahren. Sie liefert eine liquide EUR-Zinsstruktur über viele Laufzeiten hinweg.</p>
+        </article>
+        <article class="info-card">
+          <h4>2. Von „nahezu risikofrei“ zu Unternehmensanleihen</h4>
+          <p>Personalrückstellungen werden nicht mit einem reinen Swapsatz bewertet. Deshalb wird zusätzlich das Renditeniveau hochwertiger Unternehmensanleihen herangezogen – hier über einen EUR-Corporates-AA-Index.</p>
+        </article>
+        <article class="info-card">
+          <h4>3. Der Credit Spread</h4>
+          <p>Aus der iBoxx-AA-Rendite wird jener Swapsatz abgezogen, der zur Modified Duration des Index passt. Die Differenz ist der Credit Spread – also der Aufschlag gegenüber der Swapbasis.</p>
+        </article>
+        <article class="info-card">
+          <h4>4. Der Stichtagszins</h4>
+          <p>Für den aktuellen Marktstichtag wird der aktuelle Credit Spread auf die aktuelle Swapkurve gelegt. So entsteht eine stichtagsbezogene, laufzeitabhängige Zinskurve.</p>
+        </article>
+        <article class="info-card">
+          <h4>5. Der Durchschnittszins</h4>
+          <p>Für Durchschnittszinsen wird dieselbe Logik geglättet. In der Datenpipeline werden 5-, 6-, 8- und 9-Jahreswerte aus rollierenden Mittelwerten abgeleitet; 7J und 10J greifen – wo verfügbar – auf offizielle Bundesbank-/HGB-Zeitreihen zurück.</p>
+        </article>
+        <article class="info-card">
+          <h4>6. Warum oft 15 Jahre?</h4>
+          <p>Unter UGB kann für die Festlegung des Zinssatzes vereinfachend mit 15 Jahren durchschnittlicher Restlaufzeit gearbeitet werden, sofern im konkreten Fall keine erheblichen Bedenken bestehen. Darum zeigen die Durchschnittsgrafiken hier standardmäßig 15 Jahre.</p>
+        </article>
+      </div>
+
+      <div class="glossary-grid">
+        <article class="info-card">
+          <h4>Was ist ein Zinsswap?</h4>
+          <p>Ein Zinsswap ist ein Vertrag, bei dem feste gegen variable Zinszahlungen getauscht werden. Für die Bewertung von Personalrückstellungen ist nicht der Vertrag selbst entscheidend, sondern die aus dem Swapmarkt ableitbare Zinsstrukturkurve.</p>
+        </article>
+        <article class="info-card">
+          <h4>Was bedeutet Modified Duration?</h4>
+          <p>Die Modified Duration misst die Zinssensitivität eines Anleiheportfolios. In diesem Prozess dient sie außerdem als praktische Näherung dafür, an welcher Stelle der Swapkurve der iBoxx-Index sinnvoll verglichen wird.</p>
+        </article>
+        <article class="info-card">
+          <h4>Warum gerade AA?</h4>
+          <p>UGB nach AFRAC 27 und IFRS nach IAS 19 knüpfen an hochwertige Unternehmensanleihen an. Ein AA-geprägter EUR-Corporates-Index ist daher eine plausible Marktreferenz für ein hochklassiges Bonitätsniveau – ersetzt aber nicht das fachliche Urteil im Einzelfall.</p>
+        </article>
+      </div>
+
+      <div class="card" style="margin-top:24px;padding:22px 24px;">
+        <div class="section-kicker">Einordnung</div>
+        <h3 style="margin-top:4px">Was diese Seite bewusst zeigt – und was nicht</h3>
+        <p style="margin-bottom:12px">Die Grafiken zeigen eine nachvollziehbare Marktableitung. Sie automatisieren aber keine Bilanzierungsentscheidung.</p>
+        <ul style="margin:0;padding-left:18px;line-height:1.7;color:var(--cool-gray-80);">
+          <li><strong>UGB:</strong> AFRAC 27 lässt einen aktuellen oder einen durchschnittlichen Zinssatz zu; die gewählte Methode ist stetig anzuwenden.</li>
+          <li><strong>7J / 10J:</strong> Das sind auf dieser Seite Referenzlinien aus offiziellen Bundesbank-/HGB-Zeitreihen. Für österreichische UGB-Abschlüsse sind sie Orientierung, nicht automatisch der einzig zulässige Zinssatz.</li>
+          <li><strong>IFRS / IAS 19:</strong> Hier ist ein stichtagsbezogener HQCB-Zins maßgeblich; ein Durchschnittszins ist dafür nicht sachgerecht.</li>
+          <li><strong>Mandatsspezifik:</strong> Der endgültige Rechnungszins hängt weiterhin von Währung, Restlaufzeit, Verpflichtungsart, Datenqualität und fachlicher Würdigung ab.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">FAQ</div>
+          <h2>Einfache Antworten auf häufige Fragen</h2>
+          <p>Die Antworten sind bewusst einfach formuliert, bleiben aber eng an den fachlichen Grundlagen von AFRAC 27, IAS 19, Bundesbank und der verwendeten Datenpipeline.</p>
+        </div>
+      </div>
+      <div class="faq-grid">
+        <details class="faq" open>
+          <summary>Warum werden überhaupt Swaps verwendet, obwohl die Verpflichtung keine Swap-Verpflichtung ist?</summary>
+          <p>Weil die Swapkurve eine sehr gut beobachtbare EUR-Zinsstruktur über viele Laufzeiten liefert. Sie dient daher als liquide Basis. Um von dieser Basis auf hochwertige Unternehmensanleihen zu kommen, wird zusätzlich ein Credit Spread berücksichtigt.</p>
+        </details>
+        <details class="faq">
+          <summary>Was ist der Credit Spread in einem Satz?</summary>
+          <p>Der Credit Spread ist der Renditeaufschlag von hochwertigen Unternehmensanleihen gegenüber der Swapbasis. In dieser Herleitung ist er die Differenz zwischen iBoxx-AA-Rendite und dem zur Modified Duration passenden Swapsatz.</p>
+        </details>
+        <details class="faq">
+          <summary>Woher kommen die 7J- und 10J-Daten?</summary>
+          <p>Diese beiden Linien stammen in der Datenpipeline aus offiziellen Bundesbank-Zeitreihen zu den Abzinsungszinssätzen gemäß § 253 Abs. 2 HGB. Für österreichische UGB-Bewertungen sind sie keine automatisch verbindlichen „Bundesbank-UGB-Zinsen“, aber AFRAC 27 nennt die deutschen Kundmachungen ausdrücklich als mögliche Orientierung für Durchschnittszinsen.</p>
+        </details>
+        <details class="faq">
+          <summary>Und was passiert bei 5, 6, 8 und 9 Jahren?</summary>
+          <p>Diese Werte werden nicht aus einer eigenen offiziellen Bundesbank-Reihe übernommen, sondern in der Datenpipeline selbst aus rollierenden Mittelwerten abgeleitet. Die Grundlogik bleibt dieselbe: Swapbasis plus credit-spread-orientierte Ableitung.</p>
+        </details>
+        <details class="faq">
+          <summary>Warum wird auf dieser Seite meistens 15 Jahre gezeigt?</summary>
+          <p>Weil § 211 Abs. 2 Satz 2 UGB und AFRAC 27 eine 15-jährige durchschnittliche Restlaufzeit als Vereinfachung erlauben, sofern im Einzelfall keine erheblichen Bedenken bestehen. Für viele Übersichtsvergleiche ist das praktisch – für Sonderfälle kann aber eine andere Laufzeit sachgerechter sein.</p>
+        </details>
+        <details class="faq">
+          <summary>Ist IFRS dasselbe wie UGB-Durchschnittszins?</summary>
+          <p>Nein. IAS 19 verlangt einen stichtagsbezogenen Zins aus hochwertigen Unternehmensanleihen. Währung und Laufzeit müssen zur Verpflichtung passen; ein langjähriger Durchschnittszins ist dafür nicht der richtige Maßstab.</p>
+        </details>
+        <details class="faq">
+          <summary>Was bedeutet „extrapoliert“?</summary>
+          <p>In der internen Arbeitsdatei werden nach dem letzten realen Monatsstand technische Fortführungen erzeugt, damit Lookup- und Planungstabellen weiterlaufen. Diese extrapolierten Zeilen sind keine neuen Marktbeobachtungen. Der Website-Export verwendet bewusst nur reale Monatsstände.</p>
+        </details>
+        <details class="faq">
+          <summary>Ist damit der endgültige Rechnungszins schon fix?</summary>
+          <p>Nein. Die Seite liefert eine transparente Referenz und gute Vergleichswerte. Die endgültige Festlegung bleibt Teil der versicherungsmathematischen Würdigung im konkreten Bewertungsmandat.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>Alle Zinssätze sind als Richtwert zu verstehen. Die konkrete Ableitung und Anwendung sollte im jeweiligen Bewertungsmandat fachlich überprüft werden.</p>
+      <p>&copy; VALOG GmbH · <a href="https://valog.com/kontakt/">Kontakt</a> · <a href="https://valog.com/versicherungsmathematische-gutachten/">Versicherungsmathematische Gutachten</a></p>
     </div>
-
-    <div id="loading">
-      <div class="spinner"></div>
-      Daten werden geladen und aufbereitet...
-    </div>
-    
-    <div id="errorBox"></div>
-
-    <div id="content" style="display: none;">
-      
-      <section class="card">
-        <div class="card-header">
-          <h2>UGB Stichtagszinssatz <span class="stand-badge" id="stand-ugb"></span></h2>
-          <p>Der Stichtagszins spiegelt das exakte Zinsniveau am Bilanzstichtag wider. Er eignet sich für eine punktgenaue Marktbewertung.</p>
-        </div>
-        <div class="card-body">
-          <div class="chart-wrapper"><canvas id="chart-ugb"></canvas></div>
-          <div class="toolbar">
-            <button class="btn" onclick="exportChart('chart-ugb', 'VALOG_UGB_Stichtagszins', 'download', this)">
-              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Grafik herunterladen
-            </button>
-            <button class="btn" onclick="exportChart('chart-ugb', 'VALOG_UGB_Stichtagszins', 'copy', this)">
-              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
-            </button>
-            <button class="btn" onclick="dlTbl('wrap-table-ugb', 'VALOG_UGB_Stichtagszins_Tabelle')">
-              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Tabelle herunterladen
-            </button>
-            <button class="btn" onclick="cpTbl('wrap-table-ugb', this)">
-              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Tabelle kopieren
-            </button>
-          </div>
-          <div class="table-container" id="wrap-table-ugb"><div id="table-ugb"></div></div>
-        </div>
-      </section>
-
-      <section class="card">
-        <div class="card-header">
-          <h2>UGB Durchschnittszins (15 Jahre Restlaufzeit) <span class="stand-badge" id="stand-avg"></span></h2>
-          <p>Um bilanzielle Volatilitäten zu glätten, erlaubt AFRAC 27 die Verwendung eines historischen Durchschnittszinssatzes. Hier dargestellt ist die Entwicklung für eine angenommene Restlaufzeit von 15 Jahren.</p>
-        </div>
-        <div class="card-body">
-          <div class="chart-wrapper"><canvas id="chart-avg"></canvas></div>
-          <div class="toolbar">
-            <button class="btn" onclick="exportChart('chart-avg', 'VALOG_UGB_Durchschnittszins', 'download', this)">
-              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Grafik herunterladen
-            </button>
-            <button class="btn" onclick="exportChart('chart-avg', 'VALOG_UGB_Durchschnittszins', 'copy', this)">
-              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
-            </button>
-            <button class="btn" onclick="dlTbl('wrap-table-avg', 'VALOG_UGB_Durchschnittszins_Tabelle')">
-              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Tabelle herunterladen
-            </button>
-            <button class="btn" onclick="cpTbl('wrap-table-avg', this)">
-              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Tabelle kopieren
-            </button>
-          </div>
-          <div class="table-container" id="wrap-table-avg"><div id="table-avg"></div></div>
-        </div>
-      </section>
-
-      <section class="card" id="ifrs">
-        <div class="card-header">
-          <h2>Zinsbandbreite für Sozialkapitalbewertung nach IFRS <span class="stand-badge" id="stand-ifrs"></span></h2>
-          <p>Zinsbandbreite gemäß IAS 19 für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für Restlaufzeiten zwischen 5 und 25 Jahren.</p>
-        </div>
-        <div class="card-body">
-          <div class="chart-wrapper"><canvas id="chart-ifrs"></canvas></div>
-          <div class="toolbar">
-            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinssaetze', 'download', this)">
-              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Grafik herunterladen
-            </button>
-            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinssaetze', 'copy', this)">
-              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
-            </button>
-            <button class="btn" onclick="dlTbl('wrap-table-ifrs', 'VALOG_IFRS_Zinssaetze_Tabelle')">
-              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Tabelle herunterladen
-            </button>
-            <button class="btn" onclick="cpTbl('wrap-table-ifrs', this)">
-              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Tabelle kopieren
-            </button>
-          </div>
-          <div class="table-container" id="wrap-table-ifrs"><div id="table-ifrs"></div></div>
-        </div>
-      </section>
-
-      <section class="card" id="methodik">
-        <div class="card-header">
-          <h2>Methodik & Hintergrund</h2>
-          <p>Die dargestellten Zinssätze basieren auf einer standardisierten, versicherungsmathematischen Herleitung aus Marktdaten.</p>
-        </div>
-        <div class="card-body">
-          <h3 class="method-title">Berechnungsweg der UGB-Zinssätze</h3>
-          <div class="method-steps-box">
-            <ol class="method-steps">
-              <li><strong>Null-Kupon-Euro-Swapkurve:</strong> Monatliche Abrufe der Null-Kupon-Euro-Zinsswapkurve der Deutschen Bundesbank für 50 Laufzeiten (1–50 Jahre). Diese Kurve bildet die risikofreie Zinsstruktur ab.</li>
-              <li><strong>iBoxx EUR Corporates AA:</strong> Monatliche Rendite und Modified Duration des iBoxx-EUR-Corporates-AA-Index. Dieser Index bildet hochklassig geratete festverzinsliche Euro-Unternehmensanleihen ab.</li>
-              <li><strong>Credit Spread:</strong> Die Differenz zwischen iBoxx-AA-Rendite und dem auf die gleiche Duration interpolierten Swapsatz ergibt den Aufschlag für das Kreditrisiko.</li>
-              <li><strong>Stichtagszins:</strong> Addition des Stichtags-Spreads auf die aktuelle Swapkurve ergibt die Stichtagszinsen für jede Laufzeit.</li>
-              <li><strong>Durchschnittszins:</strong> Gleitende Mittelwerte (5–10 Jahre) der Swapkurve und des iBoxx. Der resultierende Durchschnitts-Spread wird auf die gemittelte Swapkurve addiert.</li>
-            </ol>
-          </div>
-          
-          <h3 class="method-title">Glossar</h3>
-          <div class="glossary-grid">
-            <div class="glossary-card"><h4>Zinsswap</h4><p>Finanzderivat zum Tausch von Zinszahlungen (fest ↔ variabel). Die daraus abgeleitete Null-Kupon-Swapkurve bildet die risikofreie Zinsstruktur im Euro-Raum ab.</p></div>
-            <div class="glossary-card"><h4>Rendite (Yield)</h4><p>Effektive Verzinsung einer Anleihe unter Berücksichtigung von Kupon, Kurs und Restlaufzeit. Die Annual Yield des iBoxx-AA-Index ist die gewichtete Durchschnittsrendite.</p></div>
-            <div class="glossary-card"><h4>Modified Duration</h4><p>Zinssensitivität einer Anleihe: um wie viel Prozent sich der Kurs bei 1 Prozentpunkt Marktzinsänderung ändert. Zugleich Näherung für die gewichtete Restlaufzeit.</p></div>
-            <div class="glossary-card"><h4>Credit Spread</h4><p>Differenz zwischen Unternehmensanleihenrendite und risikofreiem Swapsatz. Kompensiert für Ausfallrisiko, Maß für Kreditrisikoprämie.</p></div>
-            <div class="glossary-card"><h4>iBoxx EUR Corporates AA</h4><p>Anleihenindex von S&amp;P/IHS Markit für liquide Euro-Unternehmensanleihen mit Mindestrating AA. Referenz für Marktzinssatz hochklassiger Emittenten.</p></div>
-            <div class="glossary-card"><h4>UGB Durchschnittszins</h4><p>Gemäß AFRAC 27 als gleitender Mittelwert über bis zu 10 Jahre ermittelt. Glättet kurzfristige Schwankungen. Häufig mit 15 Jahren Restlaufzeit.</p></div>
-            <div class="glossary-card"><h4>IAS 19</h4><p>Regelt die Bilanzierung von Leistungen an Arbeitnehmer nach IFRS. Abzinsungssatz = Rendite erstrangiger Unternehmensanleihen am Stichtag (kein Durchschnitt).</p></div>
-            <div class="glossary-card"><h4>Null-Kupon-Kurve</h4><p>Zinsstrukturkurve für kuponlose Anleihen, via Bootstrapping abgeleitet. Grundlage für laufzeitgenaue Diskontierung.</p></div>
-          </div>
-        </div>
-      </section>
-
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  </footer>
 
   <script>
     const DATA_FILE = './valog_zinssaetze_data.xlsx';
-    
-    /* VALOG CD Palettes */
-    const P = {
-      ugb: { "5":"#D45D00", "10":"#575757", "15":"#00859B", "20":"#719949", "25":"#C69214" },
-      avg: { "Stichtagszins":"#D45D00", "5":"#575757", "6":"#00859B", "7":"#719949", "8":"#EAAA00", "9":"#C69214", "10":"#963821" },
-      ifrs: { "5":"#D45D00", "10":"#575757", "15":"#00859B", "20":"#719949", "25":"#C69214" }
+
+    const PALETTE = {
+      ugb: { '5': '#D45D00', '10': '#575757', '15': '#00859B', '20': '#719949', '25': '#C69214' },
+      avg: { 'Stichtagszins': '#D45D00', '5': '#575757', '6': '#00859B', '7': '#719949', '8': '#EAAA00', '9': '#C69214', '10': '#963821' },
+      ifrs: { '5': '#D45D00', '10': '#575757', '15': '#00859B', '20': '#719949', '25': '#C69214' }
     };
 
-    const MO = ['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-    
-    const fDE = d => { const [y, m, dd] = String(d).split("-"); return `${dd}.${m}.${y}`; };
-    const fMY = d => { const [y, m] = String(d).split("-"); return `${MO[parseInt(m, 10) - 1]} ${y}`; };
-    const pct = v => (v == null || Number.isNaN(v)) ? "–" : Number(v).toFixed(2).replace(".", ",") + "%";
+    const LABELS = {
+      ugb: { '5': '5 Jahre', '10': '10 Jahre', '15': '15 Jahre', '20': '20 Jahre', '25': '25 Jahre' },
+      avg: { 'Stichtagszins': 'Stichtagszins', '5': '5J-Durchschnitt', '6': '6J-Durchschnitt', '7': '7J-Durchschnitt', '8': '8J-Durchschnitt', '9': '9J-Durchschnitt', '10': '10J-Durchschnitt' },
+      ifrs: { '5': '5 Jahre', '10': '10 Jahre', '15': '15 Jahre', '20': '20 Jahre', '25': '25 Jahre' }
+    };
 
-    const showErr = m => {
+    const CONFIG = {
+      ugb: {
+        sheet: 'UGB_Stichtagszins',
+        canvasId: 'chart-ugb',
+        chipsId: 'chips-ugb',
+        legendId: 'legend-ugb',
+        tableId: 'table-ugb',
+        exportChartId: 'export-ugb-chart',
+        keys: ['5', '10', '15', '20', '25'],
+        visible: ['5', '10', '15', '20', '25'],
+        standId: 'meta-ugb-stand'
+      },
+      avg: {
+        sheet: 'UGB_Durchschnitt_15J',
+        canvasId: 'chart-avg',
+        chipsId: 'chips-avg',
+        legendId: 'legend-avg',
+        tableId: 'table-avg',
+        exportChartId: 'export-avg-chart',
+        keys: ['Stichtagszins', '5', '6', '7', '8', '9', '10'],
+        visible: ['Stichtagszins', '5', '6', '7', '8', '9', '10'],
+        standId: 'meta-avg-stand'
+      },
+      ifrs: {
+        sheet: 'IFRS',
+        canvasId: 'chart-ifrs',
+        chipsId: 'chips-ifrs',
+        legendId: 'legend-ifrs',
+        tableId: 'table-ifrs',
+        exportChartId: 'export-ifrs-chart',
+        keys: ['5', '10', '15', '20', '25'],
+        visible: ['5', '10', '15', '20', '25'],
+        standId: 'meta-ifrs-stand'
+      }
+    };
+
+    const MONTHS = ['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+    const state = {};
+
+    const pct = value => (value == null || Number.isNaN(value)) ? '–' : `${Number(value).toFixed(2).replace('.', ',')}%`;
+    const asIsoDate = value => {
+      if (typeof value === 'number') {
+        const parts = XLSX.SSF.parse_date_code(value);
+        return `${parts.y}-${String(parts.m).padStart(2, '0')}-${String(parts.d).padStart(2, '0')}`;
+      }
+      return String(value).slice(0, 10);
+    };
+    const formatDateDE = iso => {
+      const [y, m, d] = String(iso).split('-');
+      return `${d}.${m}.${y}`;
+    };
+    const formatMonthYear = iso => {
+      const [y, m] = String(iso).split('-');
+      return `${MONTHS[Number(m) - 1]} ${y}`;
+    };
+
+    function showError(message) {
       document.getElementById('loading').style.display = 'none';
-      const b = document.getElementById('errorBox');
-      b.style.display = 'block'; b.innerHTML = m;
-    };
-
-    const svgCopied = '<svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Kopiert';
-
-    /* ==========================================================
-       CHART EXPORT LOGIC (NO STRIKETHROUGH ON EXPORT)
-       ========================================================== */
-    async function exportChart(id, fn, type, btn) {
-      const chart = Chart.getChart(id);
-      const canvas = document.getElementById(id);
-      const origHtml = btn ? btn.innerHTML : '';
-      
-      // 1. Completely hide "durchgestrichen" items from the legend for the export
-      const origFilter = chart.options.plugins.legend.labels.filter || null;
-      chart.options.plugins.legend.labels.filter = function(item, data) {
-        return chart.isDatasetVisible(item.datasetIndex);
-      };
-      chart.update('none'); // Update without animation
-      
-      // Give canvas a tiny moment to finish rendering the updated legend
-      await new Promise(r => setTimeout(r, 50));
-      
-      // 2. Export the canvas
-      try {
-        if (type === 'download') {
-          const a = document.createElement('a');
-          a.download = fn + '.png';
-          a.href = canvas.toDataURL('image/png', 1.0);
-          a.click();
-        } else if (type === 'copy') {
-          const blob = await new Promise(r => canvas.toBlob(r, 'image/png', 1.0));
-          await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
-          if (btn) {
-            btn.classList.add('copied'); btn.innerHTML = svgCopied;
-            setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = origHtml; }, 2000);
-          }
-        }
-      } catch (e) { 
-        alert('Export fehlgeschlagen. Bitte verwenden Sie den Download.'); 
-      }
-      
-      // 3. Restore the legend so they reappear with strikethrough on the website
-      if (origFilter) {
-        chart.options.plugins.legend.labels.filter = origFilter;
-      } else {
-        delete chart.options.plugins.legend.labels.filter;
-      }
-      chart.update('none');
+      const box = document.getElementById('errorBox');
+      box.style.display = 'block';
+      box.innerHTML = message;
     }
 
-    /* Table Exports */
-    function dlTbl(id, fn) {
-      html2canvas(document.getElementById(id), { scale: 2, backgroundColor: '#ffffff' }).then(c => {
-        const a = document.createElement('a'); a.download = fn + '.png'; a.href = c.toDataURL('image/png'); a.click();
-      });
-    }
-
-    function cpTbl(id, btn) {
-      const origHtml = btn.innerHTML;
-      html2canvas(document.getElementById(id), { scale: 2, backgroundColor: '#ffffff' }).then(c => {
-        c.toBlob(async b => {
-          try {
-            await navigator.clipboard.write([new ClipboardItem({'image/png': b})]);
-            btn.classList.add('copied'); btn.innerHTML = svgCopied;
-            setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = origHtml; }, 2000);
-          } catch (e) { alert('Kopieren fehlgeschlagen.'); }
-        }, 'image/png');
-      });
-    }
-
-    /* Chart.js Plugin for Export Background */
-    Chart.register({
-      id: 'customCanvasBackgroundColor',
-      beforeDraw: (chart, args, options) => {
-        const {ctx} = chart;
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-over';
-        ctx.fillStyle = options.color || '#ffffff';
-        ctx.fillRect(0, 0, chart.width, chart.height);
-        ctx.restore();
-      }
-    });
-
-    /* ==========================================================
-       DATA PARSER
-       ========================================================== */
-    function readSheet(wb, name) {
-      const s = wb.Sheets[name];
-      if (!s) throw new Error(`Sheet "${name}" nicht gefunden.`);
-      return XLSX.utils.sheet_to_json(s, {defval: null}).map(r => {
-        const o = {};
-        Object.keys(r).forEach(k => {
-          if (k === 'Stichtag') {
-            const v = r[k];
-            o.date = typeof v === 'number' 
-              ? (d => `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`)(XLSX.SSF.parse_date_code(v)) 
-              : String(v).slice(0, 10);
+    function parseSheet(workbook, sheetName) {
+      const sheet = workbook.Sheets[sheetName];
+      if (!sheet) throw new Error(`Sheet "${sheetName}" wurde nicht gefunden.`);
+      return XLSX.utils.sheet_to_json(sheet, { defval: null }).map(row => {
+        const out = {};
+        Object.keys(row).forEach(key => {
+          if (key === 'Stichtag') {
+            out.date = asIsoDate(row[key]);
           } else {
-            o[String(k)] = (r[k] == null || r[k] === "") ? null : Number(r[k]);
+            out[String(key)] = row[key] == null || row[key] === '' ? null : Number(row[key]);
           }
         });
-        return o;
+        return out;
       });
     }
 
-    /* ==========================================================
-       BUILDERS
-       ========================================================== */
-    function makeChart(cid, rows, keys, pal, lbl) {
-      const ctx = document.getElementById(cid).getContext("2d");
-      const asc = [...rows].sort((a,b) => String(a.date).localeCompare(String(b.date)));
-      let mx = 0; keys.forEach(k => asc.forEach(r => { if(r[k] != null && r[k] > mx) mx = r[k]; }));
-      const yMax = Math.ceil((mx + 0.5) * 2) / 2;
+    function getLatestDate(rows) {
+      return rows.map(r => r.date).filter(Boolean).sort().at(-1) || null;
+    }
 
-      return new Chart(ctx, {
-        type: "line",
+    function sortAsc(rows) {
+      return [...rows].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+    }
+
+    function sortDesc(rows) {
+      return [...rows].sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    }
+
+    function detectPlaceholderIFRS(rows, keys) {
+      const values = [];
+      rows.forEach(row => keys.forEach(key => {
+        if (row[key] != null) values.push(Number(row[key]));
+      }));
+      if (!values.length) return false;
+      return values.every(value => Math.abs(value - values[0]) < 1e-12);
+    }
+
+    function setLatestCards(data) {
+      const latestGrid = document.getElementById('latest-grid');
+      const latestUGB = sortDesc(data.ugb)[0];
+      const latestAVG = sortDesc(data.avg)[0];
+      const latestIFRS = sortDesc(data.ifrs)[0];
+      latestGrid.innerHTML = `
+        <div class="latest-box"><small>UGB 15 Jahre</small><strong>${pct(latestUGB?.['15'])}</strong></div>
+        <div class="latest-box"><small>UGB 10J-Durchschnitt</small><strong>${pct(latestAVG?.['10'])}</strong></div>
+        <div class="latest-box"><small>UGB 5 Jahre</small><strong>${pct(latestUGB?.['5'])}</strong></div>
+        <div class="latest-box"><small>IFRS 15 Jahre</small><strong>${pct(latestIFRS?.['15'])}</strong></div>
+      `;
+    }
+
+    function buildChips(sectionKey) {
+      const cfg = CONFIG[sectionKey];
+      const wrap = document.getElementById(cfg.chipsId);
+      wrap.innerHTML = '';
+      cfg.keys.forEach(key => {
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.style.setProperty('--chip-color', PALETTE[sectionKey][key] || '#575757');
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.id = `${sectionKey}-${key}`;
+        input.checked = state[sectionKey].visible.has(key);
+        input.addEventListener('change', () => {
+          toggleSeries(sectionKey, key, input.checked);
+        });
+        const label = document.createElement('label');
+        label.htmlFor = input.id;
+        label.textContent = LABELS[sectionKey][key] || key;
+        chip.appendChild(input);
+        chip.appendChild(label);
+        wrap.appendChild(chip);
+      });
+    }
+
+    function renderLegend(sectionKey) {
+      const cfg = CONFIG[sectionKey];
+      const target = document.getElementById(cfg.legendId);
+      const items = cfg.keys.filter(key => state[sectionKey].visible.has(key));
+      target.innerHTML = '';
+      items.forEach(key => {
+        const item = document.createElement('span');
+        item.className = 'legend-item';
+        item.style.color = PALETTE[sectionKey][key];
+        item.innerHTML = `<span class="legend-line"></span><span>${LABELS[sectionKey][key] || key}</span>`;
+        target.appendChild(item);
+      });
+      if (!items.length) {
+        target.innerHTML = '<span class="legend-item" style="color:#575757"><span>Keine Linie ausgewählt</span></span>';
+      }
+    }
+
+    function buildTable(sectionKey) {
+      const cfg = CONFIG[sectionKey];
+      const rows = sortDesc(state[sectionKey].rows);
+      const latest = getLatestDate(rows);
+      const wrap = document.getElementById(cfg.tableId);
+      const table = document.createElement('table');
+      const thead = document.createElement('thead');
+      const tbody = document.createElement('tbody');
+      const headerRow = document.createElement('tr');
+
+      ['Stichtag', ...cfg.keys].forEach(key => {
+        const th = document.createElement('th');
+        th.textContent = key === 'Stichtag' ? key : LABELS[sectionKey][key];
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+
+      rows.forEach(row => {
+        const tr = document.createElement('tr');
+        if (row.date === latest) tr.classList.add('latest-row');
+        const tdDate = document.createElement('td');
+        tdDate.textContent = formatDateDE(row.date);
+        tr.appendChild(tdDate);
+        cfg.keys.forEach(key => {
+          const td = document.createElement('td');
+          td.textContent = pct(row[key]);
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+      wrap.innerHTML = '';
+      wrap.appendChild(table);
+    }
+
+    function buildChart(sectionKey) {
+      const cfg = CONFIG[sectionKey];
+      const rows = sortAsc(state[sectionKey].rows);
+      const ctx = document.getElementById(cfg.canvasId).getContext('2d');
+      const maxValue = Math.max(...cfg.keys.flatMap(key => rows.map(row => row[key] ?? 0)), 0);
+      const yMax = Math.max(1, Math.ceil((maxValue + 0.35) * 2) / 2);
+
+      const datasets = cfg.keys.map(key => ({
+        label: LABELS[sectionKey][key],
+        data: rows.map(row => row[key]),
+        borderColor: PALETTE[sectionKey][key],
+        backgroundColor: PALETTE[sectionKey][key],
+        borderWidth: key === 'Stichtagszins' ? 3.4 : 2.6,
+        tension: 0.16,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        spanGaps: true,
+        hidden: !state[sectionKey].visible.has(key)
+      }));
+
+      state[sectionKey].chart = new Chart(ctx, {
+        type: 'line',
         data: {
-          labels: asc.map(r => fDE(r.date)),
-          datasets: keys.map(k => ({
-            label: lbl?.[k] || `${k} Jahre`,
-            data: asc.map(r => r[k]),
-            borderColor: pal[k],
-            backgroundColor: pal[k],
-            borderWidth: 2.5,
-            tension: 0.15,
-            pointRadius: 0,
-            pointHoverRadius: 6
-          }))
+          labels: rows.map(row => formatDateDE(row.date)),
+          datasets
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          interaction: { mode: "index", intersect: false },
+          animation: { duration: 320 },
+          interaction: { mode: 'index', intersect: false },
           plugins: {
-            customCanvasBackgroundColor: { color: 'white' },
-            legend: {
-              display: true,
-              position: 'top',
-              labels: { usePointStyle: true, pointStyle: 'rectRounded', padding: 20, color: '#575757', font: { family: "'Open Sans', sans-serif", size: 14, weight: '600' } }
-            },
+            legend: { display: false },
             tooltip: {
-              backgroundColor: 'rgba(87, 87, 87, 0.95)', padding: 12, titleFont: { size: 14 }, bodyFont: { size: 13 },
-              callbacks: { label: c => ` ${c.dataset.label}: ${pct(c.parsed.y)}` }
+              callbacks: {
+                label: context => `${context.dataset.label}: ${pct(context.parsed.y)}`
+              }
             }
           },
           scales: {
-            x: { grid: { color: "rgba(87,87,87,0.08)", drawBorder: false }, ticks: { color: "#797979", maxRotation: 45, autoSkip: true, maxTicksLimit: 12 } },
-            y: { min: 0, max: yMax, grid: { color: "rgba(87,87,87,0.08)", drawBorder: false }, ticks: { color: "#797979", callback: v => Number(v).toFixed(2).replace(".",",")+"%", stepSize: 0.5 } }
+            x: {
+              grid: { color: 'rgba(87,87,87,0.08)' },
+              ticks: { color: '#797979', maxRotation: 0, autoSkip: true, maxTicksLimit: 8 }
+            },
+            y: {
+              min: 0,
+              max: yMax,
+              grid: { color: 'rgba(87,87,87,0.08)' },
+              title: { display: true, text: 'Zinssatz in %', color: '#797979', font: { weight: '700' } },
+              ticks: {
+                color: '#797979',
+                stepSize: 0.5,
+                callback: value => `${Number(value).toFixed(2).replace('.', ',')}%`
+              }
+            }
           }
         }
       });
     }
 
-    function buildTable(id, rows, keys, lbl, hl) {
-      const w = document.getElementById(id);
-      const desc = [...rows].sort((a,b) => String(b.date).localeCompare(String(a.date)));
-      const t = document.createElement("table");
-      const th = document.createElement("thead"), tb = document.createElement("tbody"), hr = document.createElement("tr");
-      
-      const h0 = document.createElement("th"); h0.textContent = "Stichtag"; hr.appendChild(h0);
-      keys.forEach(k => { const h = document.createElement("th"); h.textContent = lbl?.[k] || `${k} Jahre`; hr.appendChild(h); });
-      th.appendChild(hr);
-      
-      desc.forEach(r => {
-        const tr = document.createElement("tr");
-        if(hl && r.date === hl) tr.classList.add("highlight-latest");
-        const td0 = document.createElement("td"); td0.textContent = fDE(r.date); tr.appendChild(td0);
-        keys.forEach(k => { const td = document.createElement("td"); td.textContent = pct(r[k]); tr.appendChild(td); });
-        tb.appendChild(tr);
-      });
-      t.appendChild(th); t.appendChild(tb);
-      w.innerHTML = ""; w.appendChild(t);
+    function toggleSeries(sectionKey, key, show) {
+      if (show) {
+        state[sectionKey].visible.add(key);
+      } else {
+        state[sectionKey].visible.delete(key);
+      }
+
+      const datasetIndex = CONFIG[sectionKey].keys.indexOf(key);
+      if (datasetIndex > -1) {
+        state[sectionKey].chart.setDatasetVisibility(datasetIndex, show);
+        state[sectionKey].chart.update();
+      }
+      renderLegend(sectionKey);
     }
 
-    /* ==========================================================
-       INITIALIZATION
-       ========================================================== */
-    function latest(rows) { const d = rows.map(r => r.date).filter(Boolean).sort(); return d.length ? d[d.length - 1] : null; }
+    function setVisibility(sectionKey, mode) {
+      if (mode === 'show-all') {
+        CONFIG[sectionKey].keys.forEach(key => state[sectionKey].visible.add(key));
+      }
+      if (mode === 'hide-all') {
+        state[sectionKey].visible.clear();
+      }
+      buildChips(sectionKey);
+      CONFIG[sectionKey].keys.forEach((key, index) => {
+        state[sectionKey].chart.setDatasetVisibility(index, state[sectionKey].visible.has(key));
+      });
+      state[sectionKey].chart.update();
+      renderLegend(sectionKey);
+    }
+
+    async function elementToBlob(element) {
+      const canvas = await html2canvas(element, {
+        backgroundColor: '#FFFFFF',
+        scale: 2,
+        useCORS: true,
+        logging: false
+      });
+      return await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    }
+
+    async function downloadElementAsPng(elementId, filename) {
+      const blob = await elementToBlob(document.getElementById(elementId));
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `${filename}.png`;
+      anchor.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function copyElementAsPng(elementId, button) {
+      try {
+        const blob = await elementToBlob(document.getElementById(elementId));
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+        button.classList.add('success');
+        const prev = button.textContent;
+        button.textContent = '✓ Kopiert';
+        setTimeout(() => {
+          button.classList.remove('success');
+          button.textContent = prev;
+        }, 1800);
+      } catch (error) {
+        alert('Kopieren fehlgeschlagen. Verwende stattdessen den PNG-Download.');
+      }
+    }
+
+    function attachActions() {
+      document.querySelectorAll('[data-action]').forEach(button => {
+        button.addEventListener('click', async () => {
+          const action = button.dataset.action;
+          const sectionKey = button.dataset.target;
+          const cfg = CONFIG[sectionKey];
+          if (!cfg) return;
+
+          if (action === 'show-all' || action === 'hide-all') {
+            setVisibility(sectionKey, action);
+            return;
+          }
+          if (action === 'download-chart') {
+            await downloadElementAsPng(cfg.exportChartId, `${sectionKey}_chart`);
+            return;
+          }
+          if (action === 'copy-chart') {
+            await copyElementAsPng(cfg.exportChartId, button);
+            return;
+          }
+          if (action === 'download-table') {
+            await downloadElementAsPng(cfg.tableId, `${sectionKey}_table`);
+            return;
+          }
+          if (action === 'copy-table') {
+            await copyElementAsPng(cfg.tableId, button);
+          }
+        });
+      });
+    }
 
     async function init() {
       try {
-        const resp = await fetch(DATA_FILE);
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        const wb = XLSX.read(await resp.arrayBuffer(), { type: 'array' });
-        
-        const D = { ugb: readSheet(wb, 'UGB_Stichtagszins'), avg: readSheet(wb, 'UGB_Durchschnitt_15J'), ifrs: readSheet(wb, 'IFRS') };
-        const hl = latest(D.ugb) || latest(D.ifrs);
-        const st = hl ? `Stand: ${fMY(hl)}` : '';
-        ['stand-ugb', 'stand-avg', 'stand-ifrs'].forEach(id => document.getElementById(id).textContent = st);
-        
-        const dl5 = { "5":"5 Jahre", "10":"10 Jahre", "15":"15 Jahre", "20":"20 Jahre", "25":"25 Jahre" };
-        const lblAvg = { "Stichtagszins":"Stichtagszins", "5":"5J-DS-Zins", "6":"6J-DS-Zins", "7":"7J-DS-Zins", "8":"8J-DS-Zins", "9":"9J-DS-Zins", "10":"10J-DS-Zins" };
+        const response = await fetch(DATA_FILE);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const workbook = XLSX.read(await response.arrayBuffer(), { type: 'array' });
 
-        makeChart("chart-ugb", D.ugb, ["5","10","15","20","25"], P.ugb, dl5);
-        buildTable("table-ugb", D.ugb, ["5","10","15","20","25"], dl5, hl);
+        const data = {
+          ugb: parseSheet(workbook, CONFIG.ugb.sheet),
+          avg: parseSheet(workbook, CONFIG.avg.sheet),
+          ifrs: parseSheet(workbook, CONFIG.ifrs.sheet)
+        };
 
-        makeChart("chart-avg", D.avg, ["Stichtagszins","5","6","7","8","9","10"], P.avg, lblAvg);
-        buildTable("table-avg", D.avg, ["Stichtagszins","5","6","7","8","9","10"], lblAvg, hl);
+        const latestDate = getLatestDate(data.ugb) || getLatestDate(data.avg) || getLatestDate(data.ifrs);
+        document.getElementById('hero-stand').textContent = latestDate ? formatMonthYear(latestDate) : '–';
 
-        makeChart("chart-ifrs", D.ifrs, ["5","10","15","20","25"], P.ifrs, dl5);
-        buildTable("table-ifrs", D.ifrs, ["5","10","15","20","25"], dl5, hl);
+        setLatestCards(data);
+
+        Object.keys(CONFIG).forEach(sectionKey => {
+          state[sectionKey] = {
+            rows: data[sectionKey],
+            visible: new Set(CONFIG[sectionKey].visible),
+            chart: null
+          };
+          buildChips(sectionKey);
+          buildTable(sectionKey);
+          buildChart(sectionKey);
+          renderLegend(sectionKey);
+          document.getElementById(CONFIG[sectionKey].standId).textContent = latestDate ? `Stand: ${formatMonthYear(latestDate)}` : 'Stand: –';
+        });
+
+        const ifrsPlaceholder = detectPlaceholderIFRS(data.ifrs, CONFIG.ifrs.keys);
+        document.getElementById('ifrsNotice').hidden = !ifrsPlaceholder;
 
         document.getElementById('loading').style.display = 'none';
-        document.getElementById('content').style.display = 'block';
-
-      } catch (e) {
-        showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass <code>index.html</code> und <code>valog_zinssaetze_data.xlsx</code> im selben Verzeichnis liegen.`);
+      } catch (error) {
+        showError(`<strong>Daten konnten nicht geladen werden.</strong><br>${error.message}<br><br>Stelle sicher, dass <code>index_reimagined.html</code> und <code>valog_zinssaetze_data.xlsx</code> im selben Ordner liegen.`);
       }
     }
-    init();
+
+    window.addEventListener('DOMContentLoaded', () => {
+      attachActions();
+      init();
+    });
   </script>
 </body>
 </html>
