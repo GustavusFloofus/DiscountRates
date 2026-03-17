@@ -99,10 +99,12 @@
 
     /* Calculator (Zinsermittlung) */
     .calc-toolbar { display: flex; gap: 20px; background: var(--bg); padding: 20px; border-radius: 8px; border: 1px solid var(--vlight); margin-bottom: 25px; flex-wrap: wrap; }
-    .calc-input-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 200px; }
+    .calc-input-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 180px; }
     .calc-input-group label { font-size: 0.9rem; font-weight: 600; color: var(--vt); }
-    .calc-input-group input { padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-family: var(--font); font-size: 1rem; color: var(--vdark); transition: border-color 0.2s; }
-    .calc-input-group input:focus { outline: none; border-color: var(--vo); box-shadow: 0 0 0 3px rgba(212, 93, 0, 0.1); }
+    .calc-input-group input, .calc-input-group select { padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-family: var(--font); font-size: 1rem; color: var(--vdark); transition: border-color 0.2s; background: #fff; }
+    .calc-input-group input:focus, .calc-input-group select:focus { outline: none; border-color: var(--vo); box-shadow: 0 0 0 3px rgba(212, 93, 0, 0.1); }
+    
+    .excel-toolbar { background: #Edf4f6; border-color: #b3d4e0; }
 
     /* Charts */
     .chart-wrapper { position: relative; height: 450px; width: 100%; margin-bottom: 20px; }
@@ -117,6 +119,8 @@
     /* Primary Button Variant */
     .btn-primary { background: var(--vo); color: #fff; border: none; padding: 12px 24px; font-size: 1.05rem; }
     .btn-primary:hover { background: #B34E00; color: #fff; }
+    .btn-excel { background: #217346; color: #fff; border: none; }
+    .btn-excel:hover { background: #175232; color: #fff; }
 
     /* Tables */
     .table-container { overflow-x: auto; border: 1px solid var(--vlight); border-radius: 8px; }
@@ -249,6 +253,7 @@
           </div>
 
           <div id="calc-body-content" style="display: none;">
+            
             <div class="calc-toolbar">
               <div class="calc-input-group">
                 <label for="calc-date">Stichtag:</label>
@@ -264,12 +269,48 @@
               </div>
             </div>
             
-            <div class="toolbar" style="margin-bottom:15px; padding-bottom:15px;">
+            <div class="calc-toolbar excel-toolbar">
+              <div class="calc-input-group">
+                <label for="export-entries">Einträge für Excel:</label>
+                <select id="export-entries">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10" selected>10</option>
+                </select>
+              </div>
+              <div class="calc-input-group">
+                <label for="export-type">Zinstyp für Excel:</label>
+                <select id="export-type">
+                  <option value="2">IAS 19 Zins</option>
+                  <option value="3">Stichtagszins UGB</option>
+                  <option value="4">5J-DSZ</option>
+                  <option value="5">6J-DSZ</option>
+                  <option value="6">7J-DSZ</option>
+                  <option value="7">8J-DSZ</option>
+                  <option value="8">9J-DSZ</option>
+                  <option value="9">10J-DSZ</option>
+                </select>
+              </div>
+              <div class="calc-input-group" style="justify-content: flex-end;">
+                <button class="btn btn-excel" onclick="exportCalcToExcel()" style="margin-top: auto; padding: 10px 18px;">
+                  <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> Excel generieren
+                </button>
+              </div>
+            </div>
+            
+            <div class="toolbar" style="margin-bottom:15px; padding-bottom:15px; border-bottom: none;">
               <button class="btn" onclick="dlTbl('wrap-table-calc', 'VALOG_Zinsermittlung_Tabelle')">
-                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Tabelle herunterladen
+                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Tabelle als Bild laden
               </button>
               <button class="btn" onclick="cpTbl('wrap-table-calc', this)">
-                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Tabelle kopieren
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Bild kopieren
               </button>
             </div>
 
@@ -311,12 +352,6 @@
             <button class="btn" onclick="exportChart('chart-ugb', 'VALOG_UGB_Stichtagszins', 'copy', this)">
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
             </button>
-            <button class="btn" onclick="dlTbl('wrap-table-ugb', 'VALOG_UGB_Stichtagszins_Tabelle')">
-              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Tabelle herunterladen
-            </button>
-            <button class="btn" onclick="cpTbl('wrap-table-ugb', this)">
-              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Tabelle kopieren
-            </button>
           </div>
           <div class="table-container" id="wrap-table-ugb"><div id="table-ugb"></div></div>
         </div>
@@ -336,12 +371,6 @@
             <button class="btn" onclick="exportChart('chart-avg', 'VALOG_UGB_Durchschnittszins', 'copy', this)">
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
             </button>
-            <button class="btn" onclick="dlTbl('wrap-table-avg', 'VALOG_UGB_Durchschnittszins_Tabelle')">
-              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Tabelle herunterladen
-            </button>
-            <button class="btn" onclick="cpTbl('wrap-table-avg', this)">
-              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Tabelle kopieren
-            </button>
           </div>
           <div class="table-container" id="wrap-table-avg"><div id="table-avg"></div></div>
         </div>
@@ -360,12 +389,6 @@
             </button>
             <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinssaetze', 'copy', this)">
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
-            </button>
-            <button class="btn" onclick="dlTbl('wrap-table-ifrs', 'VALOG_IFRS_Zinssaetze_Tabelle')">
-              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Tabelle herunterladen
-            </button>
-            <button class="btn" onclick="cpTbl('wrap-table-ifrs', this)">
-              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Tabelle kopieren
             </button>
           </div>
           <div class="table-container" id="wrap-table-ifrs"><div id="table-ifrs"></div></div>
@@ -575,7 +598,7 @@
     }
 
     /* ==========================================================
-       INTERACTIVE CALCULATOR LOGIC
+       INTERACTIVE CALCULATOR & EXCEL EXPORT LOGIC
        ========================================================== */
     let calcData = {}; 
 
@@ -633,6 +656,54 @@
       }
     }
 
+    // NEW FUNCTION: Generate the Excel File
+    function exportCalcToExcel() {
+      const numEntries = parseInt(document.getElementById('export-entries').value);
+      const typeIndex = parseInt(document.getElementById('export-type').value);
+      
+      const tbody = document.getElementById('calc-tbody');
+      const rows = tbody.querySelectorAll('tr');
+      
+      if (!rows || rows.length === 0) {
+        alert("Bitte generieren Sie zuerst die Tabelle.");
+        return;
+      }
+
+      // --- SHEET 1: Custom Simple Table ---
+      const sheet1Data = [["Ab_Monat", "Wert"]];
+      
+      for(let i = 0; i < numEntries; i++) {
+        if (i >= rows.length) break;
+        
+        // Calculate Ab_Monat (-1000 for row 1, then 12, 24, 36...)
+        const abMonat = (i === 0) ? -1000 : (i * 12);
+        
+        // Extract the correct value based on user selection
+        const cells = rows[i].querySelectorAll('td');
+        const rawText = cells[typeIndex].innerText; // Looks like "2,50%" or "–"
+        
+        let numericValue = rawText;
+        if (rawText !== "–") {
+            // Convert string "2,50%" to float 0.025
+            numericValue = parseFloat(rawText.replace(',', '.').replace('%', '')) / 100;
+        }
+        
+        sheet1Data.push([abMonat, numericValue]);
+      }
+      const ws1 = XLSX.utils.aoa_to_sheet(sheet1Data);
+
+      // --- SHEET 2: Full Table ---
+      const tableElement = document.getElementById('table-calc');
+      const ws2 = XLSX.utils.table_to_sheet(tableElement);
+
+      // --- CREATE WORKBOOK & DOWNLOAD ---
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws1, "Zinstabelle");
+      XLSX.utils.book_append_sheet(wb, ws2, "Alle Daten");
+
+      XLSX.writeFile(wb, "VALOG_Zinsermittlung_Export.xlsx");
+    }
+
 
     /* ==========================================================
        INITIALIZATION (ON DEMAND LOADING)
@@ -640,7 +711,6 @@
     function latest(rows) { const d = rows.map(r => r.date).filter(Boolean).sort(); return d.length ? d[d.length - 1] : null; }
 
     async function init() {
-      // 1. Lade NUR das kleine File sofort
       try {
         const respMini = await fetch(MINI_DATA_FILE);
         if (!respMini.ok) throw new Error(`MINI DATA HTTP ${respMini.status}`);
@@ -667,7 +737,7 @@
         document.getElementById('loading').style.display = 'none';
         document.getElementById('content').style.display = 'block';
 
-        // Event Listener für den Button hinzufügen
+        // Add Listener for manual loading button
         document.getElementById('btn-load-calc').addEventListener('click', loadFullData);
 
       } catch (e) {
@@ -676,7 +746,6 @@
     }
 
     async function loadFullData() {
-      // Zeige Lade-Ansicht
       document.getElementById('calc-start-screen').style.display = 'none';
       document.getElementById('calc-loading').style.display = 'block';
 
@@ -695,15 +764,12 @@
           z10: parseFullSheetDict(wbFull, '10J-Zins')
         };
 
-        // Event Listeners für den Rechner
         document.getElementById('calc-date').addEventListener('change', updateCalculator);
         document.getElementById('calc-duration').addEventListener('input', updateCalculator);
         document.getElementById('calc-ias').addEventListener('input', updateCalculator);
         
-        // Erstes Berechnen durchführen
         updateCalculator();
 
-        // Lade-Icon ausblenden & Rechner einblenden
         document.getElementById('calc-loading').style.display = 'none';
         document.getElementById('calc-body-content').style.display = 'block';
 
@@ -712,7 +778,6 @@
       }
     }
 
-    // Start
     init();
   </script>
 </body>
