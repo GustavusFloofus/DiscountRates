@@ -434,282 +434,383 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
-    const MINI_DATA_FILE = './valog_zinssaetze_data.xlsx';
-    const FULL_DATA_FILE = './UGB_Zinssätze.xlsx';
-    
-    /* VALOG CD Palettes */
-    const P = {
-      ugb: { "5":"#D45D00", "10":"#575757", "15":"#00859B", "20":"#719949", "25":"#C69214" },
-      avg: { "Stichtagszins":"#D45D00", "5":"#575757", "6":"#00859B", "7":"#719949", "8":"#EAAA00", "9":"#C69214", "10":"#963821" },
-      ifrs: { "5":"#D45D00", "10":"#575757", "15":"#00859B", "20":"#719949", "25":"#C69214" }
-    };
+const MINI_DATA_FILE = './valog_zinssaetze_data.xlsx';
+const FULL_DATA_FILE = './UGB_Zinssätze.xlsx';
+const IAS_FIXED_RATE = 1.0;
 
-    const MO = ['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-    
-    const fDE = d => { const [y, m, dd] = String(d).split("-"); return `${dd}.${m}.${y}`; };
-    const fMY = d => { const [y, m] = String(d).split("-"); return `${MO[parseInt(m, 10) - 1]} ${y}`; };
-    const pct = v => (v == null || Number.isNaN(v)) ? "–" : Number(v).toFixed(2).replace(".", ",") + "%";
+/* VALOG CD Palettes */
+const DURATION_PALETTE = {
+  "5": "#D45D00",
+  "10": "#575757",
+  "15": "#00859B",
+  "20": "#719949",
+  "25": "#C69214"
+};
 
-    const showErr = m => {
-      document.getElementById('loading').style.display = 'none';
-      const b = document.getElementById('errorBox');
-      b.style.display = 'block'; b.innerHTML = m;
-    };
+const P = {
+  ugb: DURATION_PALETTE,
+  avg: {
+    "Stichtagszins": "#D45D00",
+    "5": "#575757",
+    "6": "#00859B",
+    "7": "#719949",
+    "8": "#EAAA00",
+    "9": "#C69214",
+    "10": "#963821"
+  },
+  ifrs: DURATION_PALETTE
+};
 
-    const svgCopied = '<svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Kopiert';
+const TERM_KEYS = ["5", "10", "15", "20", "25"];
+const AVG_KEYS = ["Stichtagszins", "5", "6", "7", "8", "9", "10"];
+const AVG_YEAR_KEYS = [5, 6, 7, 8, 9, 10];
 
-    /* ==========================================================
-       CHART EXPORT LOGIC
-       ========================================================== */
-    async function exportChart(id, fn, type, btn) {
-      const chart = Chart.getChart(id);
-      const canvas = document.getElementById(id);
-      const origHtml = btn ? btn.innerHTML : '';
-      
-      const origFilter = chart.options.plugins.legend.labels.filter || null;
-      chart.options.plugins.legend.labels.filter = function(item, data) {
-        return chart.isDatasetVisible(item.datasetIndex);
-      };
-      chart.update('none'); 
-      await new Promise(r => setTimeout(r, 50));
-      
-      try {
-        if (type === 'download') {
-          const a = document.createElement('a'); a.download = fn + '.png'; a.href = canvas.toDataURL('image/png', 1.0); a.click();
-        } else if (type === 'copy') {
-          const blob = await new Promise(r => canvas.toBlob(r, 'image/png', 1.0));
-          await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
-          if (btn) {
-            btn.classList.add('copied'); btn.innerHTML = svgCopied;
-            setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = origHtml; }, 2000);
-          }
-        }
-      } catch (e) { alert('Export fehlgeschlagen. Bitte verwenden Sie den Download.'); }
-      
-      if (origFilter) chart.options.plugins.legend.labels.filter = origFilter;
-      else delete chart.options.plugins.legend.labels.filter;
-      chart.update('none');
-    }
+const MO = ['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 
-    function dlTbl(id, fn) {
-      html2canvas(document.getElementById(id), { scale: 2, backgroundColor: '#ffffff' }).then(c => {
-        const a = document.createElement('a'); a.download = fn + '.png'; a.href = c.toDataURL('image/png'); a.click();
-      });
-    }
+const fDE = d => {
+  const [y, m, dd] = String(d).split("-");
+  return `${dd}.${m}.${y}`;
+};
 
-    function cpTbl(id, btn) {
-      const origHtml = btn.innerHTML;
-      html2canvas(document.getElementById(id), { scale: 2, backgroundColor: '#ffffff' }).then(c => {
-        c.toBlob(async b => {
-          try {
-            await navigator.clipboard.write([new ClipboardItem({'image/png': b})]);
-            btn.classList.add('copied'); btn.innerHTML = svgCopied;
-            setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = origHtml; }, 2000);
-          } catch (e) { alert('Kopieren fehlgeschlagen.'); }
-        }, 'image/png');
-      });
-    }
+const fMY = d => {
+  const [y, m] = String(d).split("-");
+  return `${MO[parseInt(m, 10) - 1]} ${y}`;
+};
 
-    function copyDisclaimer(btn) {
-      const disclaimer = "Bitte beachten Sie, dass es sich bei den genannten Parametern um einen unverbindlichen Vorschlag der VALOG GmbH handelt. Die Auswahl der Parameter liegt letztlich in Ihrer Verantwortung. Wir empfehlen Ihnen daher, diese vorab mit Ihrem Wirtschaftsprüfer abzusprechen.";
-      const origHtml = btn.innerHTML;
-      
-      navigator.clipboard.writeText(disclaimer).then(() => {
+const pct = v => (v == null || Number.isNaN(Number(v))) ? "–" : Number(v).toFixed(2).replace(".", ",") + "%";
+
+const showErr = m => {
+  document.getElementById('loading').style.display = 'none';
+  const b = document.getElementById('errorBox');
+  b.style.display = 'block';
+  b.innerHTML = m;
+};
+
+const svgCopied = '<svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Kopiert';
+
+/* ==========================================================
+   HELPERS
+   ========================================================== */
+function toIsoDate(v) {
+  if (typeof v === 'number') {
+    const d = XLSX.SSF.parse_date_code(v);
+    return `${d.y}-${String(d.m).padStart(2, '0')}-${String(d.d).padStart(2, '0')}`;
+  }
+  return String(v).slice(0, 10);
+}
+
+function latest(rows) {
+  const d = rows.map(r => r.date).filter(Boolean).sort();
+  return d.length ? d[d.length - 1] : null;
+}
+
+function getEndOfMonthStr(year, month) {
+  const d = new Date(year, month, 0);
+  return `${year}-${String(month).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+/* ==========================================================
+   CHART EXPORT LOGIC
+   ========================================================== */
+async function exportChart(id, fn, type, btn) {
+  const chart = Chart.getChart(id);
+  const canvas = document.getElementById(id);
+  const origHtml = btn ? btn.innerHTML : '';
+
+  const origFilter = chart.options.plugins.legend.labels.filter || null;
+  chart.options.plugins.legend.labels.filter = function (item) {
+    return chart.isDatasetVisible(item.datasetIndex);
+  };
+  chart.update('none');
+
+  await new Promise(r => setTimeout(r, 50));
+
+  try {
+    if (type === 'download') {
+      const a = document.createElement('a');
+      a.download = fn + '.png';
+      a.href = canvas.toDataURL('image/png', 1.0);
+      a.click();
+    } else if (type === 'copy') {
+      const blob = await new Promise(r => canvas.toBlob(r, 'image/png', 1.0));
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+
+      if (btn) {
         btn.classList.add('copied');
         btn.innerHTML = svgCopied;
         setTimeout(() => {
           btn.classList.remove('copied');
           btn.innerHTML = origHtml;
         }, 2000);
-      }).catch(err => {
-        alert('Fehler beim Kopieren.');
-      });
-    }
-
-    Chart.register({
-      id: 'customCanvasBackgroundColor',
-      beforeDraw: (chart, args, options) => {
-        const {ctx} = chart;
-        ctx.save(); ctx.globalCompositeOperation = 'destination-over';
-        ctx.fillStyle = options.color || '#ffffff'; ctx.fillRect(0, 0, chart.width, chart.height); ctx.restore();
-      }
-    });
-
-    /* ==========================================================
-       DATA PARSERS
-       ========================================================== */
-    function readSheet(wb, name) {
-      const s = wb.Sheets[name];
-      if (!s) throw new Error(`Sheet "${name}" nicht gefunden.`);
-      return XLSX.utils.sheet_to_json(s, {defval: null}).map(r => {
-        const o = {};
-        Object.keys(r).forEach(k => {
-          if (k === 'Stichtag') {
-            const v = r[k];
-            o.date = typeof v === 'number' ? (d => `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`)(XLSX.SSF.parse_date_code(v)) : String(v).slice(0, 10);
-          } else o[String(k)] = (r[k] == null || r[k] === "") ? null : Number(r[k]);
-        });
-        return o;
-      });
-    }
-
-    function parseFullSheetDict(wb, name) {
-      const s = wb.Sheets[name];
-      if (!s) return null;
-      const rows = XLSX.utils.sheet_to_json(s, {defval: null});
-      const dict = {};
-      rows.forEach(r => {
-        let dateStr = "";
-        if (typeof r['Stichtag'] === 'number') {
-          const d = XLSX.SSF.parse_date_code(r['Stichtag']);
-          dateStr = `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`;
-        } else dateStr = String(r['Stichtag']).slice(0, 10);
-        dict[dateStr] = r;
-      });
-      return dict;
-    }
-
-    /* ==========================================================
-       BUILDERS
-       ========================================================== */
-    function makeChart(cid, rows, keys, pal, lbl) {
-      const ctx = document.getElementById(cid).getContext("2d");
-      const asc = [...rows].sort((a,b) => String(a.date).localeCompare(String(b.date)));
-      let mx = 0; keys.forEach(k => asc.forEach(r => { if(r[k] != null && r[k] > mx) mx = r[k]; }));
-      const yMax = Math.ceil((mx + 0.5) * 2) / 2;
-
-      return new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: asc.map(r => fDE(r.date)),
-          datasets: keys.map(k => ({ label: lbl?.[k] || `${k} Jahre`, data: asc.map(r => r[k]), borderColor: pal[k], backgroundColor: pal[k], borderWidth: 2.5, tension: 0.15, pointRadius: 0, pointHoverRadius: 6 }))
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false, interaction: { mode: "index", intersect: false },
-          plugins: { customCanvasBackgroundColor: { color: 'white' }, legend: { display: true, position: 'top', labels: { usePointStyle: true, pointStyle: 'rectRounded', padding: 20, color: '#575757', font: { family: "'Open Sans', sans-serif", size: 14, weight: '600' } } }, tooltip: { backgroundColor: 'rgba(87, 87, 87, 0.95)', padding: 12, callbacks: { label: c => ` ${c.dataset.label}: ${pct(c.parsed.y)}` } } },
-          scales: { x: { grid: { color: "rgba(87,87,87,0.08)", drawBorder: false }, ticks: { color: "#797979", maxRotation: 45, autoSkip: true, maxTicksLimit: 12 } }, y: { min: 0, max: yMax, grid: { color: "rgba(87,87,87,0.08)", drawBorder: false }, ticks: { color: "#797979", callback: v => Number(v).toFixed(2).replace(".",",")+"%", stepSize: 0.5 } } }
-        }
-      });
-    }
-
-    function buildTable(id, rows, keys, lbl, hl) {
-      const w = document.getElementById(id);
-      const desc = [...rows].sort((a,b) => String(b.date).localeCompare(String(a.date)));
-      const t = document.createElement("table");
-      const th = document.createElement("thead"), tb = document.createElement("tbody"), hr = document.createElement("tr");
-      
-      const h0 = document.createElement("th"); h0.textContent = "Stichtag"; hr.appendChild(h0);
-      keys.forEach(k => { const h = document.createElement("th"); h.textContent = lbl?.[k] || `${k} Jahre`; hr.appendChild(h); });
-      th.appendChild(hr);
-      
-      desc.forEach(r => {
-        const tr = document.createElement("tr");
-        if(hl && r.date === hl) tr.classList.add("highlight-latest");
-        const td0 = document.createElement("td"); td0.textContent = fDE(r.date); tr.appendChild(td0);
-        keys.forEach(k => { const td = document.createElement("td"); td.textContent = pct(r[k]); tr.appendChild(td); });
-        tb.appendChild(tr);
-      });
-      t.appendChild(th); t.appendChild(tb);
-      w.innerHTML = ""; w.appendChild(t);
-    }
-
-    /* ==========================================================
-       INTERACTIVE CALCULATOR & EXCEL EXPORT LOGIC
-       ========================================================== */
-    let calcData = {}; 
-
-    function getEndOfMonthStr(year, month) {
-      const d = new Date(year, month, 0); 
-      return `${year}-${String(month).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    }
-
-    function updateCalculator() {
-      if(!calcData.stichtag) return;
-
-      const dateInput = document.getElementById('calc-date').value;
-      const durInput = parseFloat(document.getElementById('calc-duration').value) || 4;
-      // Fixed value for IFRS data as requested
-      const iasFixed = 1.0;
-      
-      if(!dateInput) return;
-
-      const dParts = dateInput.split("-");
-      const startYear = parseInt(dParts[0]);
-      const startMonth = parseInt(dParts[1]);
-
-      const tbody = document.getElementById('calc-tbody');
-      tbody.innerHTML = '';
-
-      const durKey = `${Math.round(durInput)} Jahre`;
-
-      for(let i=0; i<10; i++) {
-        const y = startYear + i;
-        const eomStr = getEndOfMonthStr(y, startMonth);
-
-        const stZinsRow = calcData.stichtag[eomStr] || {};
-        const zins5Row = calcData.z5[eomStr] || {};
-        const zins6Row = calcData.z6[eomStr] || {};
-        const zins7Row = calcData.z7[eomStr] || {};
-        const zins8Row = calcData.z8[eomStr] || {};
-        const zins9Row = calcData.z9[eomStr] || {};
-        const zins10Row = calcData.z10[eomStr] || {};
-
-        const tr = document.createElement('tr');
-        if (i===0) tr.classList.add("highlight-latest");
-
-        tr.innerHTML = `
-          <td>${fDE(eomStr)}</td>
-          <td>${durInput}</td>
-          <td>${pct(iasFixed)}</td>
-          <td>${pct(stZinsRow[durKey])}</td>
-          <td>${pct(zins5Row[durKey])}</td>
-          <td>${pct(zins6Row[durKey])}</td>
-          <td>${pct(zins7Row[durKey])}</td>
-          <td>${pct(zins8Row[durKey])}</td>
-          <td>${pct(zins9Row[durKey])}</td>
-          <td>${pct(zins10Row[durKey])}</td>
-        `;
-        tbody.appendChild(tr);
       }
     }
-
-
-document.getElementById('calc-duration-type').addEventListener('change', (e) => {
-  const durInput = document.getElementById('calc-duration');
-  if (e.target.value === 'Pauschal') {
-    durInput.value = 15;
-    durInput.disabled = true;
-    durInput.style.backgroundColor = '#f0f0f0';
-    durInput.style.color = '#999';
-  } else {
-    durInput.disabled = false;
-    durInput.style.backgroundColor = '#fff';
-    durInput.style.color = 'var(--vdark)';
+  } catch (e) {
+    alert('Export fehlgeschlagen. Bitte verwenden Sie den Download.');
   }
-  updateCalculator();
+
+  if (origFilter) {
+    chart.options.plugins.legend.labels.filter = origFilter;
+  } else {
+    delete chart.options.plugins.legend.labels.filter;
+  }
+
+  chart.update('none');
+}
+
+function copyDisclaimer(btn) {
+  const disclaimer = "Bitte beachten Sie, dass es sich bei den genannten Parametern um einen unverbindlichen Vorschlag der VALOG GmbH handelt. Die Auswahl der Parameter liegt letztlich in Ihrer Verantwortung. Wir empfehlen Ihnen daher, diese vorab mit Ihrem Wirtschaftsprüfer abzusprechen.";
+  const origHtml = btn.innerHTML;
+
+  navigator.clipboard.writeText(disclaimer).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = svgCopied;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = origHtml;
+    }, 2000);
+  }).catch(() => {
+    alert('Fehler beim Kopieren.');
+  });
+}
+
+Chart.register({
+  id: 'customCanvasBackgroundColor',
+  beforeDraw: (chart, args, options) => {
+    const { ctx } = chart;
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.fillStyle = options.color || '#ffffff';
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+  }
 });
 
+/* ==========================================================
+   DATA PARSERS
+   ========================================================== */
+function readSheet(wb, name) {
+  const s = wb.Sheets[name];
+  if (!s) throw new Error(`Sheet "${name}" nicht gefunden.`);
+
+  return XLSX.utils.sheet_to_json(s, { defval: null }).map(r => {
+    const o = {};
+    Object.keys(r).forEach(k => {
+      if (k === 'Stichtag') {
+        o.date = toIsoDate(r[k]);
+      } else {
+        const n = Number(r[k]);
+        o[String(k)] = (r[k] == null || r[k] === "") ? null : (Number.isNaN(n) ? r[k] : n);
+      }
+    });
+    return o;
+  });
+}
+
+function parseFullSheetDict(wb, name) {
+  const s = wb.Sheets[name];
+  if (!s) return {};
+
+  const rows = XLSX.utils.sheet_to_json(s, { defval: null });
+  const dict = {};
+
+  rows.forEach(r => {
+    const dateStr = toIsoDate(r['Stichtag']);
+    dict[dateStr] = r;
+  });
+
+  return dict;
+}
+
+/* ==========================================================
+   BUILDERS
+   ========================================================== */
+function makeChart(cid, rows, keys, pal, lbl) {
+  const ctx = document.getElementById(cid).getContext("2d");
+  const asc = [...rows].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+
+  let mx = 0;
+  keys.forEach(k => asc.forEach(r => {
+    if (r[k] != null && r[k] > mx) mx = r[k];
+  }));
+
+  const yMax = Math.ceil((mx + 0.5) * 2) / 2;
+
+  return new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: asc.map(r => fDE(r.date)),
+      datasets: keys.map(k => ({
+        label: lbl?.[k] || `${k} Jahre`,
+        data: asc.map(r => r[k]),
+        borderColor: pal[k],
+        backgroundColor: pal[k],
+        borderWidth: 2.5,
+        tension: 0.15,
+        pointRadius: 0,
+        pointHoverRadius: 6
+      }))
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        customCanvasBackgroundColor: { color: 'white' },
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            usePointStyle: true,
+            pointStyle: 'rectRounded',
+            padding: 20,
+            color: '#575757',
+            font: { family: "'Open Sans', sans-serif", size: 14, weight: '600' }
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(87, 87, 87, 0.95)',
+          padding: 12,
+          callbacks: {
+            label: c => ` ${c.dataset.label}: ${pct(c.parsed.y)}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: "rgba(87,87,87,0.08)", drawBorder: false },
+          ticks: { color: "#797979", maxRotation: 45, autoSkip: true, maxTicksLimit: 12 }
+        },
+        y: {
+          min: 0,
+          max: yMax,
+          grid: { color: "rgba(87,87,87,0.08)", drawBorder: false },
+          ticks: {
+            color: "#797979",
+            callback: v => Number(v).toFixed(2).replace(".", ",") + "%",
+            stepSize: 0.5
+          }
+        }
+      }
+    }
+  });
+}
+
+function buildTable(id, rows, keys, lbl, hl) {
+  const w = document.getElementById(id);
+  const desc = [...rows].sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const t = document.createElement("table");
+  const th = document.createElement("thead");
+  const tb = document.createElement("tbody");
+  const hr = document.createElement("tr");
+
+  const h0 = document.createElement("th");
+  h0.textContent = "Stichtag";
+  hr.appendChild(h0);
+
+  keys.forEach(k => {
+    const h = document.createElement("th");
+    h.textContent = lbl?.[k] || `${k} Jahre`;
+    hr.appendChild(h);
+  });
+
+  th.appendChild(hr);
+
+  desc.forEach(r => {
+    const tr = document.createElement("tr");
+    if (hl && r.date === hl) tr.classList.add("highlight-latest");
+
+    const td0 = document.createElement("td");
+    td0.textContent = fDE(r.date);
+    tr.appendChild(td0);
+
+    keys.forEach(k => {
+      const td = document.createElement("td");
+      td.textContent = pct(r[k]);
+      tr.appendChild(td);
+    });
+
+    tb.appendChild(tr);
+  });
+
+  t.appendChild(th);
+  t.appendChild(tb);
+  w.innerHTML = "";
+  w.appendChild(t);
+}
+
+/* ==========================================================
+   INTERACTIVE CALCULATOR & EXCEL EXPORT LOGIC
+   ========================================================== */
+let calcData = {};
+let calculatorEventsBound = false;
+
+function getCalcValue(sheetName, dateStr, durKey) {
+  return calcData[sheetName]?.[dateStr]?.[durKey] ?? null;
+}
+
+function updateCalculator() {
+  if (!calcData.stichtag) return;
+
+  const dateInput = document.getElementById('calc-date').value;
+  const durInput = parseFloat(document.getElementById('calc-duration').value) || 4;
+
+  if (!dateInput) return;
+
+  const dParts = dateInput.split("-");
+  const startYear = parseInt(dParts[0], 10);
+  const startMonth = parseInt(dParts[1], 10);
+
+  const tbody = document.getElementById('calc-tbody');
+  tbody.innerHTML = '';
+
+  const durKey = `${Math.round(durInput)} Jahre`;
+
+  for (let i = 0; i < 10; i++) {
+    const y = startYear + i;
+    const eomStr = getEndOfMonthStr(y, startMonth);
+
+    const avgCells = AVG_YEAR_KEYS.map(year => {
+      const value = getCalcValue(`z${year}`, eomStr, durKey);
+      return `<td>${pct(value)}</td>`;
+    }).join('');
+
+    const tr = document.createElement('tr');
+    if (i === 0) tr.classList.add("highlight-latest");
+
+    tr.innerHTML = `
+      <td>${fDE(eomStr)}</td>
+      <td>${durInput}</td>
+      <td>${pct(IAS_FIXED_RATE)}</td>
+      <td>${pct(getCalcValue('stichtag', eomStr, durKey))}</td>
+      ${avgCells}
+    `;
+
+    tbody.appendChild(tr);
+  }
+}
 
 function exportCalcToExcel() {
-  const numEntries = parseInt(document.getElementById('export-entries').value);
-  const typeIndex = parseInt(document.getElementById('export-type').value);
+  const numEntries = parseInt(document.getElementById('export-entries').value, 10);
+  const typeIndex = parseInt(document.getElementById('export-type').value, 10);
   const typeName = document.getElementById('export-type').options[document.getElementById('export-type').selectedIndex].text;
-  
+
   const sheet1Data = [["Ab_Monat", "Wert"]];
   const rows = document.querySelectorAll('#calc-tbody tr');
-  
-  for(let i = 0; i < numEntries; i++) {
+
+  for (let i = 0; i < numEntries; i++) {
     if (!rows[i]) break;
+
     const abMonat = (i === 0) ? -1000 : (i * 12);
     const rawText = rows[i].querySelectorAll('td')[typeIndex].innerText;
-    const numericValue = rawText === "–" ? null : parseFloat(rawText.replace(',', '.').replace('%', '')) / 100;
+    const numericValue = rawText === "–"
+      ? null
+      : parseFloat(rawText.replace(',', '.').replace('%', '')) / 100;
+
     sheet1Data.push([abMonat, numericValue]);
   }
 
-  // ECKDATEN Sheet
   const eckdatenData = [
     ["Parameter", "Wert"],
     ["Stichtag", document.getElementById('calc-date').value],
@@ -724,78 +825,117 @@ function exportCalcToExcel() {
   XLSX.writeFile(wb, "VALOG_Zinsermittlung_Export.xlsx");
 }
 
-    /* ==========================================================
-       INITIALIZATION (ON DEMAND LOADING)
-       ========================================================== */
-    function latest(rows) { const d = rows.map(r => r.date).filter(Boolean).sort(); return d.length ? d[d.length - 1] : null; }
+document.getElementById('calc-duration-type').addEventListener('change', (e) => {
+  const durInput = document.getElementById('calc-duration');
 
-    async function init() {
-      try {
-        const respMini = await fetch(MINI_DATA_FILE);
-        if (!respMini.ok) throw new Error(`MINI DATA HTTP ${respMini.status}`);
-        const wbMini = XLSX.read(await respMini.arrayBuffer(), { type: 'array' });
-        
-        const D = { ugb: readSheet(wbMini, 'UGB_Stichtagszins'), avg: readSheet(wbMini, 'UGB_Durchschnitt_15J'), ifrs: readSheet(wbMini, 'IFRS') };
-        const hl = latest(D.ugb) || latest(D.ifrs);
-        const st = hl ? `Stand: ${fMY(hl)}` : '';
-        ['stand-ugb', 'stand-avg', 'stand-ifrs', 'calc-stand'].forEach(id => document.getElementById(id).textContent = st);
-        
-        const dl5 = { "5":"5 Jahre", "10":"10 Jahre", "15":"15 Jahre", "20":"20 Jahre", "25":"25 Jahre" };
-        const lblAvg = { "Stichtagszins":"Stichtagszins", "5":"5J-DSZ", "6":"6J-DSZ", "7":"7J-DSZ", "8":"8J-DSZ", "9":"9J-DSZ", "10":"10J-DSZ" };
+  if (e.target.value === 'Pauschal') {
+    durInput.value = 15;
+    durInput.disabled = true;
+    durInput.style.backgroundColor = '#f0f0f0';
+    durInput.style.color = '#999';
+  } else {
+    durInput.disabled = false;
+    durInput.style.backgroundColor = '#fff';
+    durInput.style.color = 'var(--vdark)';
+  }
 
-        makeChart("chart-ugb", D.ugb, ["5","10","15","20","25"], P.ugb, dl5);
-        buildTable("table-ugb", D.ugb, ["5","10","15","20","25"], dl5, hl);
+  updateCalculator();
+});
 
-        makeChart("chart-avg", D.avg, ["Stichtagszins","5","6","7","8","9","10"], P.avg, lblAvg);
-        buildTable("table-avg", D.avg, ["Stichtagszins","5","6","7","8","9","10"], lblAvg, hl);
+/* ==========================================================
+   INITIALIZATION (ON DEMAND LOADING)
+   ========================================================== */
+async function init() {
+  try {
+    const respMini = await fetch(MINI_DATA_FILE);
+    if (!respMini.ok) throw new Error(`MINI DATA HTTP ${respMini.status}`);
 
-        makeChart("chart-ifrs", D.ifrs, ["5","10","15","20","25"], P.ifrs, dl5);
-        buildTable("table-ifrs", D.ifrs, ["5","10","15","20","25"], dl5, hl);
+    const wbMini = XLSX.read(await respMini.arrayBuffer(), { type: 'array' });
 
-        if(hl) document.getElementById('calc-date').value = hl;
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('content').style.display = 'block';
+    const D = {
+      ugb: readSheet(wbMini, 'UGB_Stichtagszins'),
+      avg: readSheet(wbMini, 'UGB_Durchschnitt_15J'),
+      ifrs: readSheet(wbMini, 'IFRS')
+    };
 
-        document.getElementById('btn-load-calc').addEventListener('click', loadFullData);
+    const hl = latest(D.ugb) || latest(D.ifrs);
+    const st = hl ? `Stand: ${fMY(hl)}` : '';
+    ['stand-ugb', 'stand-avg', 'stand-ifrs', 'calc-stand'].forEach(id => {
+      document.getElementById(id).textContent = st;
+    });
 
-      } catch (e) {
-        showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass <code>valog_zinssaetze_data.xlsx</code> hochgeladen ist.`);
-      }
+    const durationLabels = {
+      "5": "5 Jahre",
+      "10": "10 Jahre",
+      "15": "15 Jahre",
+      "20": "20 Jahre",
+      "25": "25 Jahre"
+    };
+
+    const avgLabels = {
+      "Stichtagszins": "Stichtagszins",
+      "5": "5J-DSZ",
+      "6": "6J-DSZ",
+      "7": "7J-DSZ",
+      "8": "8J-DSZ",
+      "9": "9J-DSZ",
+      "10": "10J-DSZ"
+    };
+
+    makeChart("chart-ugb", D.ugb, TERM_KEYS, P.ugb, durationLabels);
+    buildTable("table-ugb", D.ugb, TERM_KEYS, durationLabels, hl);
+
+    makeChart("chart-avg", D.avg, AVG_KEYS, P.avg, avgLabels);
+    buildTable("table-avg", D.avg, AVG_KEYS, avgLabels, hl);
+
+    makeChart("chart-ifrs", D.ifrs, TERM_KEYS, P.ifrs, durationLabels);
+    buildTable("table-ifrs", D.ifrs, TERM_KEYS, durationLabels, hl);
+
+    if (hl) document.getElementById('calc-date').value = hl;
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+
+    document.getElementById('btn-load-calc').addEventListener('click', loadFullData, { once: true });
+  } catch (e) {
+    showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass <code>valog_zinssaetze_data.xlsx</code> hochgeladen ist.`);
+  }
+}
+
+async function loadFullData() {
+  document.getElementById('calc-start-screen').style.display = 'none';
+  document.getElementById('calc-loading').style.display = 'block';
+
+  try {
+    const respFull = await fetch(FULL_DATA_FILE);
+    if (!respFull.ok) throw new Error(`HTTP ${respFull.status}`);
+
+    const wbFull = XLSX.read(await respFull.arrayBuffer(), { type: 'array' });
+
+    calcData = {
+      stichtag: parseFullSheetDict(wbFull, 'Stichtagszins')
+    };
+
+    for (let i = 5; i <= 10; i++) {
+      calcData[`z${i}`] = parseFullSheetDict(wbFull, `${i}J-Zins`);
     }
 
-    async function loadFullData() {
-      document.getElementById('calc-start-screen').style.display = 'none';
-      document.getElementById('calc-loading').style.display = 'block';
-
-      try {
-        const respFull = await fetch(FULL_DATA_FILE);
-        if (!respFull.ok) throw new Error(`HTTP ${respFull.status}`);
-        const wbFull = XLSX.read(await respFull.arrayBuffer(), { type: 'array' });
-        
-        calcData = {
-          stichtag: parseFullSheetDict(wbFull, 'Stichtagszins'),
-          z5: parseFullSheetDict(wbFull, '5J-Zins'),
-          z6: parseFullSheetDict(wbFull, '6J-Zins'),
-          z7: parseFullSheetDict(wbFull, '7J-Zins'),
-          z8: parseFullSheetDict(wbFull, '8J-Zins'),
-          z9: parseFullSheetDict(wbFull, '9J-Zins'),
-          z10: parseFullSheetDict(wbFull, '10J-Zins')
-        };
-
-        document.getElementById('calc-date').addEventListener('change', updateCalculator);
-        document.getElementById('calc-duration').addEventListener('input', updateCalculator);
-        
-        updateCalculator();
-
-        document.getElementById('calc-loading').style.display = 'none';
-        document.getElementById('calc-body-content').style.display = 'block';
-
-      } catch (e) {
-        document.getElementById('calc-loading').innerHTML = `<strong>Achtung:</strong> Die Datei <code>UGB_Zinssätze.xlsx</code> wurde nicht gefunden. Der Rechner kann nicht geladen werden.`;
-      }
+    if (!calculatorEventsBound) {
+      document.getElementById('calc-date').addEventListener('change', updateCalculator);
+      document.getElementById('calc-duration').addEventListener('input', updateCalculator);
+      calculatorEventsBound = true;
     }
 
-    init();
+    updateCalculator();
+
+    document.getElementById('calc-loading').style.display = 'none';
+    document.getElementById('calc-body-content').style.display = 'block';
+  } catch (e) {
+    document.getElementById('calc-loading').innerHTML = `<strong>Achtung:</strong> Die Datei <code>UGB_Zinssätze.xlsx</code> wurde nicht gefunden. Der Rechner kann nicht geladen werden.`;
+  }
+}
+
+init();
   </script>
 </body>
 </html>
