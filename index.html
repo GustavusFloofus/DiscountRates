@@ -68,8 +68,23 @@
 
     /* Hero */
     .hero { text-align: center; margin-bottom: 50px; }
-    .hero h1 { color: var(--vo); font-size: 2.4rem; margin-bottom: 15px; line-height: 1.2; }
-    .hero p { font-size: 1.1rem; color: var(--vdark); max-width: 850px; margin: 0 auto; }
+    .hero h1 {
+	  color: var(--vo);
+	  font-size: clamp(1.9rem, 7vw, 2.4rem);
+	  margin-bottom: 15px;
+	  line-height: 1.15;
+	  hyphens: auto;
+	  overflow-wrap: anywhere;
+	}
+
+	.hero p {
+	  font-size: clamp(1rem, 4.2vw, 1.1rem);
+	  color: var(--vdark);
+	  max-width: 850px;
+	  margin: 0 auto;
+	  overflow-wrap: break-word;
+	  hyphens: auto;
+	}
 
     /* Cards */
     .card {
@@ -78,9 +93,19 @@
     }
     .card-header { padding: 30px 40px 15px 40px; border-bottom: 1px solid var(--vlight); }
     .card-header h2 {
-      color: var(--vt); margin: 0 0 10px 0; font-size: 1.8rem;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
-    }
+	  color: var(--vt);
+	  margin: 0 0 10px 0;
+	  font-size: clamp(1.35rem, 6vw, 1.8rem);
+	  display: flex;
+	  justify-content: space-between;
+	  align-items: center;
+	  flex-wrap: wrap;
+	  gap: 15px;
+	  min-width: 0;
+	  line-height: 1.2;
+	  hyphens: auto;
+	  overflow-wrap: anywhere;
+	}
     .stand-badge { font-size: 0.95rem; background: var(--bg); padding: 6px 16px; border-radius: 20px; color: var(--vdark); border: 1px solid var(--vlight); font-weight: 600; }
     .card-header p { margin: 0; font-size: 0.95rem; }
     .card-body { padding: 30px 40px; }
@@ -153,12 +178,63 @@
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     @media (max-width: 768px) {
-      .card-header, .card-body { padding: 20px; }
-      .toolbar { justify-content: flex-start; }
-      .site-header { padding: 15px 0; }
-      .calc-toolbar { flex-direction: column; align-items: stretch; }
-      .btn-excel { width: 100%; }
-    }
+	  .container {
+		padding: 0 14px 40px 14px;
+	  }
+
+	  .card-header,
+	  .card-body {
+		padding: 18px 16px;
+	  }
+
+	  .toolbar {
+		justify-content: flex-start;
+	  }
+
+	  .site-header {
+		padding: 15px 0;
+	  }
+
+	  .calc-toolbar {
+		flex-direction: column;
+		align-items: stretch;
+	  }
+
+	  .btn-excel {
+		width: 100%;
+	  }
+
+	  .hero {
+		margin-bottom: 35px;
+	  }
+
+	  .hero h1 {
+		font-size: clamp(1.8rem, 8vw, 2.1rem);
+		line-height: 1.1;
+	  }
+
+	  .card-header h2 {
+		font-size: clamp(1.25rem, 7vw, 1.55rem);
+		line-height: 1.2;
+	  }
+
+	  .hero p,
+	  .card-header p,
+	  .faq-content,
+	  summary {
+		font-size: 0.98rem;
+	  }
+
+	  .stand-badge {
+		font-size: 0.82rem;
+		padding: 5px 12px;
+	  }
+
+	  .logo-svg {
+		height: 34px;
+		max-width: 100%;
+	  }
+	}
   </style>
 </head>
 <body>
