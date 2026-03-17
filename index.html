@@ -19,33 +19,11 @@
   <meta property="og:description" content="Aktuelle österreichische UGB-Stichtagszinsen, Durchschnittszinsen und IFRS-Zinsbandbreiten für die Bewertung von Personalrückstellungen."/>
   <meta property="og:url" content="https://valog.com/zinssaetze/"/>
 
-  <style>
-    /* LOCAL FONTS CONFIGURATION */
-    @font-face {
-      font-family: 'Open Sans';
-      src: url('fonts/OpenSans-Regular.woff2') format('woff2'),
-           url('fonts/OpenSans-Regular.ttf') format('truetype');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Open Sans';
-      src: url('fonts/OpenSans-SemiBold.woff2') format('woff2'),
-           url('fonts/OpenSans-SemiBold.ttf') format('truetype');
-      font-weight: 600;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Open Sans';
-      src: url('fonts/OpenSans-Bold.woff2') format('woff2'),
-           url('fonts/OpenSans-Bold.ttf') format('truetype');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <style>
     :root {
       /* VALOG Corporate Design */
       --vo: #D45D00; 
@@ -285,7 +263,11 @@
                 <label for="calc-duration">Duration (in Jahren):</label>
                 <input type="number" id="calc-duration" value="4" min="1" max="50" step="1">
               </div>
+              <div class="calc-input-group">
+                <label for="calc-ias">IAS 19 Zins (%):</label>
+                <input type="number" id="calc-ias" value="1.00" step="0.01">
               </div>
+            </div>
             
             <div class="calc-toolbar excel-toolbar">
               <div class="calc-input-group">
@@ -308,12 +290,12 @@
                 <select id="export-type">
                   <option value="2">IAS 19 Zins</option>
                   <option value="3">Stichtagszins UGB</option>
-                  <option value="4">5-Jahres-durchschnitts-zins</option>
-                  <option value="5">6-Jahres-durchschnitts-zins</option>
-                  <option value="6">7-Jahres-durchschnitts-zins</option>
-                  <option value="7">8-Jahres-durchschnitts-zins</option>
-                  <option value="8">9-Jahres-durchschnitts-zins</option>
-                  <option value="9">10-Jahres-durchschnitts-zins</option>
+                  <option value="4">5J-DSZ</option>
+                  <option value="5">6J-DSZ</option>
+                  <option value="6">7J-DSZ</option>
+                  <option value="7">8J-DSZ</option>
+                  <option value="8">9J-DSZ</option>
+                  <option value="9">10J-DSZ</option>
                 </select>
               </div>
               <div class="calc-input-group" style="justify-content: flex-end;">
@@ -340,12 +322,12 @@
                     <th class="th-input">Duration</th>
                     <th class="th-input">IAS 19 Zins</th>
                     <th>Stichtagszins UGB</th>
-                    <th>5-Jahres-<br>durchschnitts-<br>zins</th>
-                    <th>6-Jahres-<br>durchschnitts-<br>zins</th>
-                    <th>7-Jahres-<br>durchschnitts-<br>zins</th>
-                    <th>8-Jahres-<br>durchschnitts-<br>zins</th>
-                    <th>9-Jahres-<br>durchschnitts-<br>zins</th>
-                    <th>10-Jahres-<br>durchschnitts-<br>zins</th>
+                    <th>5J-DSZ</th>
+                    <th>6J-DSZ</th>
+                    <th>7J-DSZ</th>
+                    <th>8J-DSZ</th>
+                    <th>9J-DSZ</th>
+                    <th>10J-DSZ</th>
                   </tr>
                 </thead>
                 <tbody id="calc-tbody">
@@ -449,13 +431,13 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
     const MINI_DATA_FILE = './valog_zinssaetze_data.xlsx';
     const FULL_DATA_FILE = './UGB_Zinssätze.xlsx';
     
+    /* VALOG CD Palettes */
     const P = {
       ugb: { "5":"#D45D00", "10":"#575757", "15":"#00859B", "20":"#719949", "25":"#C69214" },
       avg: { "Stichtagszins":"#D45D00", "5":"#575757", "6":"#00859B", "7":"#719949", "8":"#EAAA00", "9":"#C69214", "10":"#963821" },
@@ -476,6 +458,9 @@
 
     const svgCopied = '<svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Kopiert';
 
+    /* ==========================================================
+       CHART EXPORT LOGIC
+       ========================================================== */
     async function exportChart(id, fn, type, btn) {
       const chart = Chart.getChart(id);
       const canvas = document.getElementById(id);
@@ -534,6 +519,9 @@
       }
     });
 
+    /* ==========================================================
+       DATA PARSERS
+       ========================================================== */
     function readSheet(wb, name) {
       const s = wb.Sheets[name];
       if (!s) throw new Error(`Sheet "${name}" nicht gefunden.`);
@@ -565,6 +553,9 @@
       return dict;
     }
 
+    /* ==========================================================
+       BUILDERS
+       ========================================================== */
     function makeChart(cid, rows, keys, pal, lbl) {
       const ctx = document.getElementById(cid).getContext("2d");
       const asc = [...rows].sort((a,b) => String(a.date).localeCompare(String(b.date)));
@@ -607,7 +598,7 @@
     }
 
     /* ==========================================================
-       INTERACTIVE CALCULATOR 
+       INTERACTIVE CALCULATOR & EXCEL EXPORT LOGIC
        ========================================================== */
     let calcData = {}; 
 
@@ -621,6 +612,7 @@
 
       const dateInput = document.getElementById('calc-date').value;
       const durInput = parseFloat(document.getElementById('calc-duration').value) || 4;
+      const iasInput = parseFloat(document.getElementById('calc-ias').value) || 1.0;
       
       if(!dateInput) return;
 
@@ -632,15 +624,12 @@
       tbody.innerHTML = '';
 
       const durKey = `${Math.round(durInput)} Jahre`;
-      // Support for numeric headers if standard strings aren't found
-      const numKey = Math.round(durInput);
 
       for(let i=0; i<10; i++) {
         const y = startYear + i;
         const eomStr = getEndOfMonthStr(y, startMonth);
 
         const stZinsRow = calcData.stichtag[eomStr] || {};
-        const iasRow = calcData.ias ? (calcData.ias[eomStr] || {}) : {};
         const zins5Row = calcData.z5[eomStr] || {};
         const zins6Row = calcData.z6[eomStr] || {};
         const zins7Row = calcData.z7[eomStr] || {};
@@ -650,30 +639,25 @@
 
         const tr = document.createElement('tr');
         if (i===0) tr.classList.add("highlight-latest");
-        
-        // Helper to grab value by string key ("5 Jahre") or numeric key (5)
-        const getV = (row) => row[durKey] !== undefined ? row[durKey] : row[numKey];
 
         tr.innerHTML = `
           <td>${fDE(eomStr)}</td>
           <td>${durInput}</td>
-          <td>${pct(getV(iasRow))}</td>
-          <td>${pct(getV(stZinsRow))}</td>
-          <td>${pct(getV(zins5Row))}</td>
-          <td>${pct(getV(zins6Row))}</td>
-          <td>${pct(getV(zins7Row))}</td>
-          <td>${pct(getV(zins8Row))}</td>
-          <td>${pct(getV(zins9Row))}</td>
-          <td>${pct(getV(zins10Row))}</td>
+          <td>${pct(iasInput)}</td>
+          <td>${pct(stZinsRow[durKey])}</td>
+          <td>${pct(zins5Row[durKey])}</td>
+          <td>${pct(zins6Row[durKey])}</td>
+          <td>${pct(zins7Row[durKey])}</td>
+          <td>${pct(zins8Row[durKey])}</td>
+          <td>${pct(zins9Row[durKey])}</td>
+          <td>${pct(zins10Row[durKey])}</td>
         `;
         tbody.appendChild(tr);
       }
     }
 
-    // ==========================================================
-    // EXCEL EXPORT (USING EXCELJS FOR ADVANCED FORMATTING)
-    // ==========================================================
-    async function exportCalcToExcel() {
+    // NEW FUNCTION: Generate the Excel File
+    function exportCalcToExcel() {
       const numEntries = parseInt(document.getElementById('export-entries').value);
       const typeIndex = parseInt(document.getElementById('export-type').value);
       
@@ -685,128 +669,44 @@
         return;
       }
 
-      const wb = new ExcelJS.Workbook();
-
-      const ws1 = wb.addWorksheet("Zinstabelle");
-      ws1.columns = [
-        { header: 'Ab_Monat', key: 'ab', width: 15 },
-        { header: 'Wert', key: 'wert', width: 15 }
-      ];
-
+      // --- SHEET 1: Custom Simple Table ---
+      const sheet1Data = [["Ab_Monat", "Wert"]];
+      
       for(let i = 0; i < numEntries; i++) {
         if (i >= rows.length) break;
         
+        // Calculate Ab_Monat (-1000 for row 1, then 12, 24, 36...)
         const abMonat = (i === 0) ? -1000 : (i * 12);
+        
+        // Extract the correct value based on user selection
         const cells = rows[i].querySelectorAll('td');
-        const rawText = cells[typeIndex].innerText;
+        const rawText = cells[typeIndex].innerText; // Looks like "2,50%" or "–"
         
         let numericValue = rawText;
         if (rawText !== "–") {
+            // Convert string "2,50%" to float 0.025
             numericValue = parseFloat(rawText.replace(',', '.').replace('%', '')) / 100;
-        } else {
-            numericValue = null;
         }
         
-        ws1.addRow({ ab: abMonat, wert: numericValue });
+        sheet1Data.push([abMonat, numericValue]);
       }
+      const ws1 = XLSX.utils.aoa_to_sheet(sheet1Data);
 
-      ws1.eachRow((row, rowNumber) => {
-        row.eachCell((cell, colNumber) => {
-          cell.font = { name: 'Segoe UI', size: 10, bold: rowNumber === 1 };
-          cell.alignment = { vertical: 'middle', horizontal: 'right' };
-          
-          if(colNumber === 1 && rowNumber === 1) {
-             cell.alignment.horizontal = 'left';
-          }
-          if (rowNumber > 1 && colNumber === 2 && typeof cell.value === 'number') {
-             cell.numFmt = '0.00%'; 
-          }
-        });
-      });
+      // --- SHEET 2: Full Table ---
+      const tableElement = document.getElementById('table-calc');
+      const ws2 = XLSX.utils.table_to_sheet(tableElement);
 
-      const ws2 = wb.addWorksheet("Alle Daten");
-      
-      ws2.columns = [
-        { width: 14 }, { width: 10 }, { width: 14 },
-        { width: 18 }, { width: 18 }, { width: 18 },
-        { width: 18 }, { width: 18 }, { width: 18 }, { width: 18 }
-      ];
+      // --- CREATE WORKBOOK & DOWNLOAD ---
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws1, "Zinstabelle");
+      XLSX.utils.book_append_sheet(wb, ws2, "Alle Daten");
 
-      const dateVal = document.getElementById('calc-date').value;
-      const formattedDate = dateVal ? fDE(dateVal) : '';
-      ws2.addRow(["Eingabe", "", "", `Ergebnis aus Sicht ${formattedDate}`]);
-      ws2.mergeCells('A1:C1');
-      ws2.mergeCells('D1:J1');
-
-      const headers = [
-         "Stichtag", "Duration", "IAS 19\nZins", "Stichtags-\nzins UGB",
-         "5-Jahres-\ndurchschnitts-\nzins", "6-Jahres-\ndurchschnitts-\nzins",
-         "7-Jahres-\ndurchschnitts-\nzins", "8-Jahres-\ndurchschnitts-\nzins",
-         "9-Jahres-\ndurchschnitts-\nzins", "10-Jahres-\ndurchschnitts-\nzins"
-      ];
-      ws2.addRow(headers);
-
-      for(let i = 0; i < rows.length; i++) {
-        const cells = Array.from(rows[i].querySelectorAll('td')).map(td => td.innerText);
-        const rowData = cells.map((val, idx) => {
-          if (idx === 0) return val;
-          if (idx === 1) return parseInt(val);
-          return val !== "–" ? parseFloat(val.replace(',', '.').replace('%', '')) / 100 : null;
-        });
-        ws2.addRow(rowData);
-      }
-
-      const borderThin = {
-        top: { style: 'thin', color: { argb: 'FF000000' } },
-        left: { style: 'thin', color: { argb: 'FF000000' } },
-        bottom: { style: 'thin', color: { argb: 'FF000000' } },
-        right: { style: 'thin', color: { argb: 'FF000000' } }
-      };
-      
-      const fillInput = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFDE9D9' } };
-      const fillOutput = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFDAEEF3' } };
-
-      ws2.eachRow((row, rowNumber) => {
-        if (rowNumber === 2) row.height = 45; 
-        else row.height = 18;
-
-        row.eachCell((cell, colNumber) => {
-          cell.font = { name: 'Segoe UI', size: 10 };
-          
-          if (rowNumber <= 2) {
-            cell.font = { name: 'Segoe UI', size: 10, bold: true };
-            cell.fill = (colNumber <= 3) ? fillInput : fillOutput;
-            
-            if (rowNumber === 1) {
-               cell.alignment = { vertical: 'middle', horizontal: 'left' };
-            } else if (rowNumber === 2) {
-               cell.border = borderThin;
-               cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
-            }
-          } else {
-             cell.border = borderThin;
-             cell.alignment = { vertical: 'middle', horizontal: colNumber === 1 ? 'left' : 'right' };
-             
-             if (colNumber >= 3 && typeof cell.value === 'number') {
-                 cell.numFmt = '0.00%';
-             } else if (colNumber === 2) {
-                 cell.numFmt = '0';
-             }
-          }
-        });
-      });
-
-      const buffer = await wb.xlsx.writeBuffer();
-      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'VALOG_Zinsermittlung_Export.xlsx';
-      link.click();
+      XLSX.writeFile(wb, "VALOG_Zinsermittlung_Export.xlsx");
     }
 
 
     /* ==========================================================
-       INITIALIZATION 
+       INITIALIZATION (ON DEMAND LOADING)
        ========================================================== */
     function latest(rows) { const d = rows.map(r => r.date).filter(Boolean).sort(); return d.length ? d[d.length - 1] : null; }
 
@@ -837,6 +737,7 @@
         document.getElementById('loading').style.display = 'none';
         document.getElementById('content').style.display = 'block';
 
+        // Add Listener for manual loading button
         document.getElementById('btn-load-calc').addEventListener('click', loadFullData);
 
       } catch (e) {
@@ -855,8 +756,6 @@
         
         calcData = {
           stichtag: parseFullSheetDict(wbFull, 'Stichtagszins'),
-          // Grab IAS/IFRS data dynamically from the uploaded Excel file
-          ias: parseFullSheetDict(wbFull, 'IFRS') || parseFullSheetDict(wbFull, 'IAS') || parseFullSheetDict(wbFull, 'IAS 19 Zins'),
           z5: parseFullSheetDict(wbFull, '5J-Zins'),
           z6: parseFullSheetDict(wbFull, '6J-Zins'),
           z7: parseFullSheetDict(wbFull, '7J-Zins'),
@@ -867,6 +766,7 @@
 
         document.getElementById('calc-date').addEventListener('change', updateCalculator);
         document.getElementById('calc-duration').addEventListener('input', updateCalculator);
+        document.getElementById('calc-ias').addEventListener('input', updateCalculator);
         
         updateCalculator();
 
