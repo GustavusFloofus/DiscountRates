@@ -62,74 +62,28 @@
       margin: 0 auto;
       padding: 0 20px;
     }
-    .logo-svg {
-      height: 45px;
-      width: auto;
-      display: block;
-    }
+    .logo-svg { height: 45px; width: auto; display: block; }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px 50px 20px;
-    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 50px 20px; }
 
     /* Hero */
-    .hero {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-    .hero h1 {
-      color: var(--vo);
-      font-size: 2.4rem;
-      margin-bottom: 15px;
-      line-height: 1.2;
-    }
-    .hero p {
-      font-size: 1.1rem;
-      color: var(--vdark);
-      max-width: 850px;
-      margin: 0 auto;
-    }
+    .hero { text-align: center; margin-bottom: 50px; }
+    .hero h1 { color: var(--vo); font-size: 2.4rem; margin-bottom: 15px; line-height: 1.2; }
+    .hero p { font-size: 1.1rem; color: var(--vdark); max-width: 850px; margin: 0 auto; }
 
     /* Cards */
     .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-      margin-bottom: 50px;
-      overflow: hidden;
+      background: var(--card); border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06); margin-bottom: 50px; overflow: hidden;
     }
-    .card-header {
-      padding: 30px 40px 15px 40px;
-      border-bottom: 1px solid var(--vlight);
-    }
+    .card-header { padding: 30px 40px 15px 40px; border-bottom: 1px solid var(--vlight); }
     .card-header h2 {
-      color: var(--vt);
-      margin: 0 0 10px 0;
-      font-size: 1.8rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
+      color: var(--vt); margin: 0 0 10px 0; font-size: 1.8rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
     }
-    .stand-badge {
-      font-size: 0.95rem;
-      background: var(--bg);
-      padding: 6px 16px;
-      border-radius: 20px;
-      color: var(--vdark);
-      border: 1px solid var(--vlight);
-      font-weight: 600;
-    }
-    .card-header p {
-      margin: 0;
-      font-size: 0.95rem;
-    }
-    .card-body {
-      padding: 30px 40px;
-    }
+    .stand-badge { font-size: 0.95rem; background: var(--bg); padding: 6px 16px; border-radius: 20px; color: var(--vdark); border: 1px solid var(--vlight); font-weight: 600; }
+    .card-header p { margin: 0; font-size: 0.95rem; }
+    .card-body { padding: 30px 40px; }
 
     /* FAQ / Accordion Section */
     .faq-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
@@ -144,42 +98,11 @@
     .faq-content li { margin-bottom: 8px; }
 
     /* Calculator (Zinsermittlung) */
-    .calc-toolbar {
-      display: flex;
-      gap: 20px;
-      background: var(--bg);
-      padding: 20px;
-      border-radius: 8px;
-      border: 1px solid var(--vlight);
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-    }
-    .calc-input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      flex: 1;
-      min-width: 200px;
-    }
-    .calc-input-group label {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--vt);
-    }
-    .calc-input-group input {
-      padding: 10px 14px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-family: var(--font);
-      font-size: 1rem;
-      color: var(--vdark);
-      transition: border-color 0.2s;
-    }
-    .calc-input-group input:focus {
-      outline: none;
-      border-color: var(--vo);
-      box-shadow: 0 0 0 3px rgba(212, 93, 0, 0.1);
-    }
+    .calc-toolbar { display: flex; gap: 20px; background: var(--bg); padding: 20px; border-radius: 8px; border: 1px solid var(--vlight); margin-bottom: 25px; flex-wrap: wrap; }
+    .calc-input-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 200px; }
+    .calc-input-group label { font-size: 0.9rem; font-weight: 600; color: var(--vt); }
+    .calc-input-group input { padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-family: var(--font); font-size: 1rem; color: var(--vdark); transition: border-color 0.2s; }
+    .calc-input-group input:focus { outline: none; border-color: var(--vo); box-shadow: 0 0 0 3px rgba(212, 93, 0, 0.1); }
 
     /* Charts */
     .chart-wrapper { position: relative; height: 450px; width: 100%; margin-bottom: 20px; }
@@ -190,20 +113,25 @@
     .btn:hover { background: var(--bg); border-color: var(--vdark); }
     .btn svg { width: 18px; height: 18px; fill: currentColor; }
     .btn.copied { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
+    
+    /* Primary Button Variant */
+    .btn-primary { background: var(--vo); color: #fff; border: none; padding: 12px 24px; font-size: 1.05rem; }
+    .btn-primary:hover { background: #B34E00; color: #fff; }
 
     /* Tables */
     .table-container { overflow-x: auto; border: 1px solid var(--vlight); border-radius: 8px; }
     table { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.95rem; }
-    th, td { padding: 14px 20px; border-bottom: 1px solid var(--vlight); }
+    th, td { padding: 14px 20px; border-bottom: 1px solid var(--vlight); white-space: nowrap; }
     th { background: var(--bg); font-weight: 700; position: sticky; top: 0; }
     th:first-child, td:first-child { text-align: left; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background-color: #FAFAFA; }
     tr.highlight-latest td { background-color: rgba(212, 93, 0, 0.05); font-weight: 600; }
+    
     .table-calc th { background: #DAEEF3; color: var(--vt); }
     .table-calc th.th-input { background: #FDE9D9; color: var(--vo); }
 
-    /* Methodik & Hintergrund Styles */
+    /* Methodik & Hintergrund */
     .method-title { color: var(--vt); font-size: 1.3rem; margin-bottom: 15px; }
     .method-steps-box { background: var(--bg); border: 1px solid var(--vlight); border-radius: 8px; padding: 25px 30px; margin-bottom: 40px; }
     .method-steps { margin: 0; padding-left: 20px; }
@@ -213,10 +141,11 @@
     .glossary-card h4 { margin: 0 0 10px 0; color: var(--vt); font-size: 1.05rem; }
     .glossary-card p { margin: 0; font-size: 0.9rem; }
 
-    /* State Boxes */
+    /* State Boxes & Spinners */
     #loading, #errorBox { text-align: center; padding: 60px 20px; font-size: 1.1rem; background: var(--card); border-radius: var(--radius); box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
     #errorBox { display: none; color: var(--vr); }
     .spinner { border: 4px solid var(--vlight); border-top: 4px solid var(--vo); border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 0 auto 20px auto; }
+    .spinner-small { border-width: 3px; width: 30px; height: 30px; margin: 0 auto 15px auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     @media (max-width: 768px) {
@@ -252,9 +181,8 @@
 
     <div id="loading">
       <div class="spinner"></div>
-      Daten werden geladen und aufbereitet...
+      Lade Dashboard...
     </div>
-    
     <div id="errorBox"></div>
 
     <div id="content" style="display: none;">
@@ -262,7 +190,7 @@
       <section class="card">
         <div class="card-header">
           <h2>Wissensbereich: Wie wir diese Zinsen berechnen</h2>
-          <p>Transparenz ist uns wichtig. Hier erklären wir einfach und kompakt, wie sich die Zinssätze für Ihre Bilanzierung zusammensetzen und woher die Daten stammen.</p>
+          <p>Transparenz ist uns wichtig. Hier erklären wir einfach und kompakt, wie sich die Zinssätze zusammensetzen.</p>
         </div>
         <div class="card-body faq-grid">
           <details>
@@ -287,7 +215,7 @@
           <details>
             <summary>Woher stammen die Daten für den 7- und 10-Jahres-Durchschnitt?</summary>
             <div class="faq-content">
-              Die Deutsche Bundesbank veröffentlicht jeden Monat hochoffizielle Durchschnittszinssätze (speziell für 7 und 10 Jahre). Da diese Werte extrem verlässlich sind, ziehen wir diese direkt als Basis für unsere Kurven heran. Das garantiert Ihnen höchste Prüfungssicherheit.
+              Die Deutsche Bundesbank veröffentlicht jeden Monat hochoffizielle Durchschnittszinssätze (speziell für 7 und 10 Jahre). Da diese Werte extrem verlässlich sind, ziehen wir diese direkt als Basis für unsere Kurven heran. Das garantiert höchste Prüfungssicherheit.
             </div>
           </details>
           <details>
@@ -302,52 +230,69 @@
       <section class="card" id="calculator">
         <div class="card-header">
           <h2>Interaktive Zinsermittlung <span class="stand-badge" id="calc-stand"></span></h2>
-          <p>Berechnen Sie stichtags- und laufzeitspezifische Rechnungszinssätze inkl. Prognosen für die nächsten 10 Jahre. Wählen Sie Datum und Laufzeit (Duration).</p>
+          <p>Berechnen Sie stichtags- und laufzeitspezifische Rechnungszinssätze inkl. Prognosen für die nächsten 10 Jahre.</p>
         </div>
-        <div class="card-body">
-          <div class="calc-toolbar">
-            <div class="calc-input-group">
-              <label for="calc-date">Stichtag:</label>
-              <input type="date" id="calc-date">
-            </div>
-            <div class="calc-input-group">
-              <label for="calc-duration">Duration (in Jahren):</label>
-              <input type="number" id="calc-duration" value="4" min="1" max="50" step="1">
-            </div>
-            <div class="calc-input-group">
-              <label for="calc-ias">IAS 19 Zins (%):</label>
-              <input type="number" id="calc-ias" value="1.00" step="0.01">
-            </div>
-          </div>
+        
+        <div class="card-body" style="position: relative; min-height: 200px;">
           
-          <div class="toolbar" style="margin-bottom:15px; padding-bottom:15px;">
-            <button class="btn" onclick="dlTbl('wrap-table-calc', 'VALOG_Zinsermittlung_Tabelle')">
-              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Tabelle herunterladen
-            </button>
-            <button class="btn" onclick="cpTbl('wrap-table-calc', this)">
-              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Tabelle kopieren
-            </button>
+          <div id="calc-start-screen" style="text-align:center; padding: 40px 20px;">
+             <p style="margin-bottom: 25px; color: var(--vdark); font-size: 1.05rem;">Um den interaktiven Rechner zu nutzen, müssen detaillierte historische Zinsdaten geladen werden.</p>
+             <button id="btn-load-calc" class="btn btn-primary">
+                Interaktiven Rechner starten
+             </button>
           </div>
 
-          <div class="table-container" id="wrap-table-calc">
-            <table class="table-calc" id="table-calc">
-              <thead>
-                <tr>
-                  <th class="th-input">Stichtag</th>
-                  <th class="th-input">Duration</th>
-                  <th class="th-input">IAS 19 Zins</th>
-                  <th>Stichtagszins UGB</th>
-                  <th>5-Jahres Durchschnitt</th>
-                  <th>6-Jahres Durchschnitt</th>
-                  <th>7-Jahres Durchschnitt</th>
-                  <th>8-Jahres Durchschnitt</th>
-                  <th>9-Jahres Durchschnitt</th>
-                  <th>10-Jahres Durchschnitt</th>
-                </tr>
-              </thead>
-              <tbody id="calc-tbody">
-                </tbody>
-            </table>
+          <div id="calc-loading" style="display:none; text-align:center; padding: 40px 20px; color: var(--vdark);">
+             <div class="spinner spinner-small"></div>
+             Lade detaillierte Hintergrunddaten für den Rechner...<br>
+             <span style="font-size: 0.85em; opacity: 0.7;">(Dieser Vorgang dauert abhängig von Ihrer Verbindung einen kurzen Moment)</span>
+          </div>
+
+          <div id="calc-body-content" style="display: none;">
+            <div class="calc-toolbar">
+              <div class="calc-input-group">
+                <label for="calc-date">Stichtag:</label>
+                <input type="date" id="calc-date">
+              </div>
+              <div class="calc-input-group">
+                <label for="calc-duration">Duration (in Jahren):</label>
+                <input type="number" id="calc-duration" value="4" min="1" max="50" step="1">
+              </div>
+              <div class="calc-input-group">
+                <label for="calc-ias">IAS 19 Zins (%):</label>
+                <input type="number" id="calc-ias" value="1.00" step="0.01">
+              </div>
+            </div>
+            
+            <div class="toolbar" style="margin-bottom:15px; padding-bottom:15px;">
+              <button class="btn" onclick="dlTbl('wrap-table-calc', 'VALOG_Zinsermittlung_Tabelle')">
+                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Tabelle herunterladen
+              </button>
+              <button class="btn" onclick="cpTbl('wrap-table-calc', this)">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Tabelle kopieren
+              </button>
+            </div>
+
+            <div class="table-container" id="wrap-table-calc">
+              <table class="table-calc" id="table-calc">
+                <thead>
+                  <tr>
+                    <th class="th-input">Stichtag</th>
+                    <th class="th-input">Duration</th>
+                    <th class="th-input">IAS 19 Zins</th>
+                    <th>Stichtagszins UGB</th>
+                    <th>5J-DSZ</th>
+                    <th>6J-DSZ</th>
+                    <th>7J-DSZ</th>
+                    <th>8J-DSZ</th>
+                    <th>9J-DSZ</th>
+                    <th>10J-DSZ</th>
+                  </tr>
+                </thead>
+                <tbody id="calc-tbody">
+                  </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -380,7 +325,7 @@
       <section class="card">
         <div class="card-header">
           <h2>UGB Durchschnittszins (15 Jahre Restlaufzeit) <span class="stand-badge" id="stand-avg"></span></h2>
-          <p>Um bilanzielle Volatilitäten zu glätten, erlaubt AFRAC 27 die Verwendung eines historischen Durchschnittszinssatzes. Hier dargestellt ist die Entwicklung für eine angenommene Restlaufzeit von 15 Jahren.</p>
+          <p>Um bilanzielle Volatilitäten zu glätten, erlaubt AFRAC 27 die Verwendung eines historischen Durchschnittszinssatzes.</p>
         </div>
         <div class="card-body">
           <div class="chart-wrapper"><canvas id="chart-avg"></canvas></div>
@@ -466,7 +411,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
-    // BOTH FILES MUST BE IN THE SAME DIRECTORY ON YOUR SERVER!
     const MINI_DATA_FILE = './valog_zinssaetze_data.xlsx';
     const FULL_DATA_FILE = './UGB_Zinssätze.xlsx';
     
@@ -570,7 +514,6 @@
       });
     }
 
-    // Advanced Parser for FULL Excel for the Calculator
     function parseFullSheetDict(wb, name) {
       const s = wb.Sheets[name];
       if (!s) return null;
@@ -634,11 +577,10 @@
     /* ==========================================================
        INTERACTIVE CALCULATOR LOGIC
        ========================================================== */
-    let calcData = {}; // Stores all full sheets
+    let calcData = {}; 
 
-    // Find the end-of-month date string (matches Excel Python logic)
     function getEndOfMonthStr(year, month) {
-      const d = new Date(year, month, 0); // month is 1-based here, 0 gives last day of prev month!
+      const d = new Date(year, month, 0); 
       return `${year}-${String(month).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     }
 
@@ -664,7 +606,6 @@
         const y = startYear + i;
         const eomStr = getEndOfMonthStr(y, startMonth);
 
-        // Fetch values from loaded dictionaries
         const stZinsRow = calcData.stichtag[eomStr] || {};
         const zins5Row = calcData.z5[eomStr] || {};
         const zins6Row = calcData.z6[eomStr] || {};
@@ -694,32 +635,24 @@
 
 
     /* ==========================================================
-       INITIALIZATION
+       INITIALIZATION (ON DEMAND LOADING)
        ========================================================== */
     function latest(rows) { const d = rows.map(r => r.date).filter(Boolean).sort(); return d.length ? d[d.length - 1] : null; }
 
     async function init() {
+      // 1. Lade NUR das kleine File sofort
       try {
-        // Fetch BOTH files simultaneously for speed
-        const [respMini, respFull] = await Promise.all([
-          fetch(MINI_DATA_FILE),
-          fetch(FULL_DATA_FILE)
-        ]);
-        
+        const respMini = await fetch(MINI_DATA_FILE);
         if (!respMini.ok) throw new Error(`MINI DATA HTTP ${respMini.status}`);
-        if (!respFull.ok) throw new Error(`FULL DATA HTTP ${respFull.status} (Bitte laden Sie UGB_Zinssätze.xlsx hoch)`);
-
         const wbMini = XLSX.read(await respMini.arrayBuffer(), { type: 'array' });
-        const wbFull = XLSX.read(await respFull.arrayBuffer(), { type: 'array' });
         
-        // 1. Setup Standard Dashboards (using Mini Data)
         const D = { ugb: readSheet(wbMini, 'UGB_Stichtagszins'), avg: readSheet(wbMini, 'UGB_Durchschnitt_15J'), ifrs: readSheet(wbMini, 'IFRS') };
         const hl = latest(D.ugb) || latest(D.ifrs);
         const st = hl ? `Stand: ${fMY(hl)}` : '';
         ['stand-ugb', 'stand-avg', 'stand-ifrs', 'calc-stand'].forEach(id => document.getElementById(id).textContent = st);
         
         const dl5 = { "5":"5 Jahre", "10":"10 Jahre", "15":"15 Jahre", "20":"20 Jahre", "25":"25 Jahre" };
-        const lblAvg = { "Stichtagszins":"Stichtagszins", "5":"5J-DS-Zins", "6":"6J-DS-Zins", "7":"7J-DS-Zins", "8":"8J-DS-Zins", "9":"9J-DS-Zins", "10":"10J-DS-Zins" };
+        const lblAvg = { "Stichtagszins":"Stichtagszins", "5":"5J-DSZ", "6":"6J-DSZ", "7":"7J-DSZ", "8":"8J-DSZ", "9":"9J-DSZ", "10":"10J-DSZ" };
 
         makeChart("chart-ugb", D.ugb, ["5","10","15","20","25"], P.ugb, dl5);
         buildTable("table-ugb", D.ugb, ["5","10","15","20","25"], dl5, hl);
@@ -730,7 +663,28 @@
         makeChart("chart-ifrs", D.ifrs, ["5","10","15","20","25"], P.ifrs, dl5);
         buildTable("table-ifrs", D.ifrs, ["5","10","15","20","25"], dl5, hl);
 
-        // 2. Setup Interactive Calculator (using Full Data)
+        if(hl) document.getElementById('calc-date').value = hl;
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+
+        // Event Listener für den Button hinzufügen
+        document.getElementById('btn-load-calc').addEventListener('click', loadFullData);
+
+      } catch (e) {
+        showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass <code>valog_zinssaetze_data.xlsx</code> hochgeladen ist.`);
+      }
+    }
+
+    async function loadFullData() {
+      // Zeige Lade-Ansicht
+      document.getElementById('calc-start-screen').style.display = 'none';
+      document.getElementById('calc-loading').style.display = 'block';
+
+      try {
+        const respFull = await fetch(FULL_DATA_FILE);
+        if (!respFull.ok) throw new Error(`HTTP ${respFull.status}`);
+        const wbFull = XLSX.read(await respFull.arrayBuffer(), { type: 'array' });
+        
         calcData = {
           stichtag: parseFullSheetDict(wbFull, 'Stichtagszins'),
           z5: parseFullSheetDict(wbFull, '5J-Zins'),
@@ -741,25 +695,24 @@
           z10: parseFullSheetDict(wbFull, '10J-Zins')
         };
 
-        // Initialize Calculator Inputs
-        if(hl) {
-            document.getElementById('calc-date').value = hl;
-        }
+        // Event Listeners für den Rechner
         document.getElementById('calc-date').addEventListener('change', updateCalculator);
         document.getElementById('calc-duration').addEventListener('input', updateCalculator);
         document.getElementById('calc-ias').addEventListener('input', updateCalculator);
         
-        // Run first calculation
+        // Erstes Berechnen durchführen
         updateCalculator();
 
-        // Show Page
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('content').style.display = 'block';
+        // Lade-Icon ausblenden & Rechner einblenden
+        document.getElementById('calc-loading').style.display = 'none';
+        document.getElementById('calc-body-content').style.display = 'block';
 
       } catch (e) {
-        showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass <code>valog_zinssaetze_data.xlsx</code> und <code>UGB_Zinssätze.xlsx</code> im selben Verzeichnis liegen.`);
+        document.getElementById('calc-loading').innerHTML = `<strong>Achtung:</strong> Die Datei <code>UGB_Zinssätze.xlsx</code> wurde nicht gefunden. Der Rechner kann nicht geladen werden.`;
       }
     }
+
+    // Start
     init();
   </script>
 </body>
