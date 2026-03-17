@@ -1,40 +1,818 @@
-<div id="calc-body-content" style="display: none;">
+<!DOCTYPE html>
+<html lang="de-AT">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   
-  <div class="calc-toolbar">
-    <div class="calc-input-group">
-      <label for="calc-date">Stichtag:</label>
-      <input type="date" id="calc-date">
+  <title>Zinssätze für Sozialkapitalbewertung | UGB & IFRS | VALOG GmbH</title>
+  <meta name="description" content="Aktuelle Rechnungszinssätze für die Sozialkapitalbewertung nach UGB (AFRAC 27) und IFRS (IAS 19) in Österreich. Interaktiver Rechner, Stichtagszinsen und Durchschnittszinsen."/>
+  <meta name="keywords" content="Rechnungszins, Sozialkapitalbewertung, UGB, IFRS, IAS 19, AFRAC 27, Stichtagszins, Durchschnittszins, Pensionsrückstellung, Abfertigungsrückstellung, Österreich, VALOG, Zinsswap"/>
+  <meta name="author" content="VALOG GmbH"/>
+  <meta name="robots" content="index, follow"/>
+  <meta name="theme-color" content="#D45D00"/>
+  <link rel="canonical" href="https://valog.com/zinssaetze/"/>
+  
+  <meta property="og:type" content="website"/>
+  <meta property="og:locale" content="de_AT"/>
+  <meta property="og:site_name" content="VALOG GmbH"/>
+  <meta property="og:title" content="Rechnungszinssätze für Sozialkapital | UGB & IFRS"/>
+  <meta property="og:description" content="Aktuelle österreichische UGB-Stichtagszinsen, Durchschnittszinsen und IFRS-Zinsbandbreiten für die Bewertung von Personalrückstellungen."/>
+  <meta property="og:url" content="https://valog.com/zinssaetze/"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* VALOG Corporate Design */
+      --vo: #D45D00; 
+      --vt: #00859B; 
+      --vg: #719949; 
+      --vy: #C69214; 
+      --vr: #963821; 
+      --vdark: #575757; 
+      --vlight: #E8E8E8; 
+      --bg: #F7F9FC; 
+      --card: #FFFFFF;
+      --radius: 12px;
+      --font: 'Open Sans', 'Segoe UI', Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--vdark);
+      font-family: var(--font);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Original VALOG Header Style */
+    .site-header {
+      background: #ffffff;
+      padding: 20px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      margin-bottom: 40px;
+    }
+    .site-header .header-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .logo-svg { height: 45px; width: auto; display: block; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 50px 20px; }
+
+    /* Hero */
+    .hero { text-align: center; margin-bottom: 50px; }
+    .hero h1 { color: var(--vo); font-size: 2.4rem; margin-bottom: 15px; line-height: 1.2; }
+    .hero p { font-size: 1.1rem; color: var(--vdark); max-width: 850px; margin: 0 auto; }
+
+    /* Cards */
+    .card {
+      background: var(--card); border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06); margin-bottom: 50px; overflow: hidden;
+    }
+    .card-header { padding: 30px 40px 15px 40px; border-bottom: 1px solid var(--vlight); }
+    .card-header h2 {
+      color: var(--vt); margin: 0 0 10px 0; font-size: 1.8rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+    }
+    .stand-badge { font-size: 0.95rem; background: var(--bg); padding: 6px 16px; border-radius: 20px; color: var(--vdark); border: 1px solid var(--vlight); font-weight: 600; }
+    .card-header p { margin: 0; font-size: 0.95rem; }
+    .card-body { padding: 30px 40px; }
+
+    /* FAQ / Accordion Section */
+    .faq-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+    details { background: var(--bg); border: 1px solid var(--vlight); border-radius: 8px; overflow: hidden; transition: all 0.3s ease; }
+    details[open] { box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-color: var(--vt); }
+    summary { padding: 18px 20px; font-weight: 600; color: var(--vt); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: '+'; font-size: 1.5rem; color: var(--vo); line-height: 1; transition: transform 0.3s ease; }
+    details[open] summary::after { content: '−'; transform: rotate(180deg); }
+    .faq-content { padding: 0 20px 20px 20px; font-size: 0.95rem; color: var(--vdark); }
+    .faq-content ul { margin-top: 10px; padding-left: 20px; }
+    .faq-content li { margin-bottom: 8px; }
+
+    /* Calculator (Zinsermittlung) */
+    .calc-toolbar { display: flex; gap: 20px; background: var(--bg); padding: 20px; border-radius: 8px; border: 1px solid var(--vlight); margin-bottom: 25px; flex-wrap: wrap; align-items: flex-end; }
+    .calc-input-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 180px; }
+    .calc-input-group label { font-size: 0.9rem; font-weight: 600; color: var(--vt); }
+    .calc-input-group input, .calc-input-group select { padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-family: var(--font); font-size: 1rem; color: var(--vdark); transition: border-color 0.2s; background: #fff; height: 44px; }
+    .calc-input-group input:focus, .calc-input-group select:focus { outline: none; border-color: var(--vo); box-shadow: 0 0 0 3px rgba(212, 93, 0, 0.1); }
+    
+    .excel-toolbar { background: #Edf4f6; border-color: #b3d4e0; }
+
+    /* Charts */
+    .chart-wrapper { position: relative; height: 450px; width: 100%; margin-bottom: 20px; }
+
+    /* Action Toolbar */
+    .toolbar { display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid var(--vlight); flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--vlight); background: var(--card); color: var(--vdark); border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-family: var(--font); height: 40px; }
+    .btn:hover { background: var(--bg); border-color: var(--vdark); }
+    .btn svg { width: 18px; height: 18px; fill: currentColor; }
+    .btn.copied { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
+    
+    /* Primary Button Variant */
+    .btn-primary { background: var(--vo); color: #fff; border: none; padding: 12px 24px; font-size: 1.05rem; height: auto; }
+    .btn-primary:hover { background: #B34E00; color: #fff; }
+    .btn-excel { background: #217346; color: #fff; border: none; height: 44px; padding: 0 18px; }
+    .btn-excel:hover { background: #175232; color: #fff; }
+
+    /* Tables */
+    .table-container { overflow-x: auto; border: 1px solid var(--vlight); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.95rem; }
+    th, td { padding: 14px 20px; border-bottom: 1px solid var(--vlight); white-space: nowrap; }
+    th { background: var(--bg); font-weight: 700; position: sticky; top: 0; }
+    th:first-child, td:first-child { text-align: left; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background-color: #FAFAFA; }
+    tr.highlight-latest td { background-color: rgba(212, 93, 0, 0.05); font-weight: 600; }
+    
+    .table-calc th { background: #DAEEF3; color: var(--vt); }
+    .table-calc th.th-input { background: #FDE9D9; color: var(--vo); }
+
+    /* Methodik & Hintergrund */
+    .method-title { color: var(--vt); font-size: 1.3rem; margin-bottom: 15px; }
+    .method-steps-box { background: var(--bg); border: 1px solid var(--vlight); border-radius: 8px; padding: 25px 30px; margin-bottom: 40px; }
+    .method-steps { margin: 0; padding-left: 20px; }
+    .method-steps li { margin-bottom: 12px; }
+    .glossary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .glossary-card { background: var(--bg); border: 1px solid var(--vlight); border-radius: 8px; padding: 20px; }
+    .glossary-card h4 { margin: 0 0 10px 0; color: var(--vt); font-size: 1.05rem; }
+    .glossary-card p { margin: 0; font-size: 0.9rem; }
+
+    /* State Boxes & Spinners */
+    #loading, #errorBox { text-align: center; padding: 60px 20px; font-size: 1.1rem; background: var(--card); border-radius: var(--radius); box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+    #errorBox { display: none; color: var(--vr); }
+    .spinner { border: 4px solid var(--vlight); border-top: 4px solid var(--vo); border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 0 auto 20px auto; }
+    .spinner-small { border-width: 3px; width: 30px; height: 30px; margin: 0 auto 15px auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    @media (max-width: 768px) {
+      .card-header, .card-body { padding: 20px; }
+      .toolbar { justify-content: flex-start; }
+      .site-header { padding: 15px 0; }
+      .calc-toolbar { flex-direction: column; align-items: stretch; }
+      .btn-excel { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-wrap">
+      <a href="https://valog.com" aria-label="VALOG GmbH">
+        <svg class="logo-svg" viewBox="140 250 550 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VALOG">
+          <path fill="#D45D00" d="M217.3,336.2l-51.5-77.1h20.3l38.1,58.6l37.3-58.6h19.8l-51,77.1H217.3z"/>
+          <path fill="#D45D00" d="M350.2,336.2l-37.3-58.7l-38.1,58.7h-19.9l51.3-77.1h13.1l51,77.1H350.2z"/>
+          <path fill="#575757" d="M383.2,336.2v-77.1h18.1v63.1h61v14H383.2z"/>
+          <path fill="#575757" d="M495.4,336.2c-18,0-24.7-7.6-24.7-18.6v-39.9c0-11.1,6.8-18.6,24.7-18.6h52.2c18,0,24.7,7.6,24.7,18.6v39.9c0,11.1-6.8,18.6-24.7,18.6H495.4z M554.5,277.5c0-3.1-2.4-4.5-6.9-4.5h-52.2c-4.5,0-6.9,1.4-6.9,4.5v40.2c0,3.2,2.4,4.5,6.9,4.5h52.2c4.5,0,6.9-1.3,6.9-4.5V277.5z"/>
+          <path fill="#575757" d="M610.2,336.2c-15.9,0-25.3-5.6-25.3-17.7v-40.1c0-13.7,9.4-19.3,25.3-19.3h64.7V273H610c-5.6,0-7.3,2.1-7.3,5.4v40c0,3,3.4,3.8,7.3,3.8h40.8c3.9,0,7.2-0.8,7.2-3.6v-24.4h18v24.4c0,13.7-8,17.6-25.2,17.6H610.2z"/>
+          <path fill="#D45D00" d="M533.9,290.1c0-1.2-0.9-1.7-2.6-1.7h-19.7c-1.7,0-2.6,0.5-2.6,1.7v15.2c0,1.2,0.9,1.7,2.6,1.7h19.7c1.7,0,2.6-0.5,2.6-1.7V290.1z"/>
+        </svg>
+      </a>
     </div>
-    <div class="calc-input-group">
-      <label for="calc-duration-type">Durationart:</label>
-      <select id="calc-duration-type">
-        <option value="Individual">Individual</option>
-        <option value="Pauschal">Pauschal</option>
-      </select>
+  </header>
+
+  <div class="container">
+    <div class="hero">
+      <h1>Zinssätze für die Sozialkapitalbewertung</h1>
+      <p>Aktuelle Zinssätze für die Sozialkapitalbewertung nach UGB und IFRS, berechnet aus der Null-Kupon-Euro-Swapkurve der Deutschen Bundesbank und dem iBoxx EUR Corporates AA Index.</p>
     </div>
-    <div class="calc-input-group">
-      <label for="calc-duration">Duration (in Jahren):</label>
-      <input type="number" id="calc-duration" value="4" min="1" max="50" step="1">
+
+    <div id="loading">
+      <div class="spinner"></div>
+      Lade Dashboard...
+    </div>
+    <div id="errorBox"></div>
+
+    <div id="content" style="display: none;">
+
+      <section class="card">
+        <div class="card-header">
+          <h2>Wissensbereich: Wie wir diese Zinsen berechnen</h2>
+          <p>Transparenz ist uns wichtig. Hier erklären wir einfach und kompakt, wie sich die Zinssätze zusammensetzen.</p>
+        </div>
+        <div class="card-body faq-grid">
+          <details>
+            <summary>Wie setzt sich der Rechnungszins grundsätzlich zusammen?</summary>
+            <div class="faq-content">
+              Der Rechnungszins besteht immer aus zwei Bausteinen:
+              <ul>
+                <li><strong>1. Dem risikolosen Basiszinssatz:</strong> Hierfür verwenden wir die "Null-Kupon-Euro-Swapkurve" der Deutschen Bundesbank.</li>
+                <li><strong>2. Dem Kreditrisikoaufschlag (Spread):</strong> Wir ermitteln diesen aus den Renditen erstklassiger europäischer Industrieanleihen (iBoxx EUR Corporates AA Index).</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>Was ist der Unterschied zwischen Stichtagszins (IFRS) und Durchschnittszins (UGB)?</summary>
+            <div class="faq-content">
+              <ul>
+                <li><strong>IFRS (International):</strong> Internationale Richtlinien verlangen eine strenge Marktbewertung am exakten Bilanzstichtag (Stichtagszins).</li>
+                <li><strong>UGB (Österreich):</strong> Um Schwankungen zu vermeiden, empfiehlt AFRAC 27 die Glättung der Zinsen über einen <em>Durchschnitt</em> der letzten 5 bis 10 Jahre. Das bringt Stabilität in Ihre Unternehmensbilanz.</li>
+              </ul>
+            </div>
+          </details>
+          <details>
+            <summary>Woher stammen die Daten für den 7- und 10-Jahres-Durchschnitt?</summary>
+            <div class="faq-content">
+              Die Deutsche Bundesbank veröffentlicht jeden Monat hochoffizielle Durchschnittszinssätze (speziell für 7 und 10 Jahre). Da diese Werte extrem verlässlich sind, ziehen wir diese direkt als Basis für unsere Kurven heran. Das garantiert höchste Prüfungssicherheit.
+            </div>
+          </details>
+          <details>
+            <summary>Was passiert bei zukünftigen Laufzeiten (Extrapolation)?</summary>
+            <div class="faq-content">
+              Manchmal benötigt man Zinsen für Laufzeiten in der weiten Zukunft, für die der Markt aktuell keine Daten mehr liefert. In diesem Fall nutzt unsere Software ein finanzmathematisches <strong>Extrapolationsverfahren</strong> und schreibt die Kurve in die Zukunft fort.
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="card" id="calculator">
+        <div class="card-header">
+          <h2>Interaktive Zinsermittlung <span class="stand-badge" id="calc-stand"></span></h2>
+          <p>Berechnen Sie stichtags- und laufzeitspezifische Rechnungszinssätze inkl. Prognosen für die nächsten 10 Jahre.</p>
+        </div>
+        
+        <div class="card-body" style="position: relative; min-height: 200px;">
+          
+          <div id="calc-start-screen" style="text-align:center; padding: 40px 20px;">
+             <p style="margin-bottom: 25px; color: var(--vdark); font-size: 1.05rem;">Um den interaktiven Rechner zu nutzen, müssen detaillierte historische Zinsdaten geladen werden.</p>
+             <button id="btn-load-calc" class="btn btn-primary">
+                Interaktiven Rechner starten
+             </button>
+          </div>
+
+          <div id="calc-loading" style="display:none; text-align:center; padding: 40px 20px; color: var(--vdark);">
+             <div class="spinner spinner-small"></div>
+             Lade detaillierte Hintergrunddaten für den Rechner...<br>
+             <span style="font-size: 0.85em; opacity: 0.7;">(Dieser Vorgang dauert abhängig von Ihrer Verbindung einen kurzen Moment)</span>
+          </div>
+
+          <div id="calc-body-content" style="display: none;">
+  
+	  <div class="calc-toolbar">
+		<div class="calc-input-group">
+		  <label for="calc-date">Stichtag:</label>
+		  <input type="date" id="calc-date">
+		</div>
+		<div class="calc-input-group">
+		  <label for="calc-duration-type">Durationart:</label>
+		  <select id="calc-duration-type">
+			<option value="Individual">Individual</option>
+			<option value="Pauschal">Pauschal</option>
+		  </select>
+		</div>
+		<div class="calc-input-group">
+		  <label for="calc-duration">Duration (in Jahren):</label>
+		  <input type="number" id="calc-duration" value="4" min="1" max="50" step="1">
+		</div>
+	  </div>
+	  
+	  <div class="calc-toolbar excel-toolbar">
+		<div class="calc-input-group" style="justify-content: flex-end;">
+		  <button class="btn btn-excel" onclick="exportCalcToExcel()">
+			<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> Excel generieren
+		  </button>
+		</div>
+	  </div>
+	  
+	  <div class="toolbar" style="margin-bottom:15px; padding-bottom:15px; border-bottom: none;">
+		<button class="btn" onclick="alert('iBoxx-Chart Feature folgt in Kürze')">
+		  <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg> iBoxx-Chart Generieren
+		</button>
+		<button class="btn" onclick="document.getElementById('import-excel').click()">
+		  <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg> Excel mit Import Updaten
+		</button>
+		<input type="file" id="import-excel" style="display:none" accept=".xlsx">
+		<button class="btn" id="btn-copy-disclaimer" onclick="copyDisclaimer(this)">
+		  <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Disclaimer kopieren
+		</button>
+	  </div>
+
+            <div class="table-container" id="wrap-table-calc">
+              <table class="table-calc" id="table-calc">
+                <thead>
+                  <tr>
+                    <th class="th-input">Stichtag</th>
+                    <th class="th-input">Duration</th>
+                    <th class="th-input">IAS 19 Zins</th>
+                    <th>Stichtagszins UGB</th>
+                    <th>5J-DSZ</th>
+                    <th>6J-DSZ</th>
+                    <th>7J-DSZ</th>
+                    <th>8J-DSZ</th>
+                    <th>9J-DSZ</th>
+                    <th>10J-DSZ</th>
+                  </tr>
+                </thead>
+                <tbody id="calc-tbody">
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>UGB Stichtagszinssatz <span class="stand-badge" id="stand-ugb"></span></h2>
+          <p>Der Stichtagszins spiegelt das exakte Zinsniveau am Bilanzstichtag wider. Er eignet sich für eine punktgenaue Marktbewertung.</p>
+        </div>
+        <div class="card-body">
+          <div class="chart-wrapper"><canvas id="chart-ugb"></canvas></div>
+          <div class="toolbar">
+            <button class="btn" onclick="exportChart('chart-ugb', 'VALOG_UGB_Stichtagszins', 'download', this)">
+              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Grafik herunterladen
+            </button>
+            <button class="btn" onclick="exportChart('chart-ugb', 'VALOG_UGB_Stichtagszins', 'copy', this)">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
+            </button>
+          </div>
+          <div class="table-container" id="wrap-table-ugb"><div id="table-ugb"></div></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>UGB Durchschnittszins (15 Jahre Restlaufzeit) <span class="stand-badge" id="stand-avg"></span></h2>
+          <p>Um bilanzielle Volatilitäten zu glätten, erlaubt AFRAC 27 die Verwendung eines historischen Durchschnittszinssatzes.</p>
+        </div>
+        <div class="card-body">
+          <div class="chart-wrapper"><canvas id="chart-avg"></canvas></div>
+          <div class="toolbar">
+            <button class="btn" onclick="exportChart('chart-avg', 'VALOG_UGB_Durchschnittszins', 'download', this)">
+              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Grafik herunterladen
+            </button>
+            <button class="btn" onclick="exportChart('chart-avg', 'VALOG_UGB_Durchschnittszins', 'copy', this)">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
+            </button>
+          </div>
+          <div class="table-container" id="wrap-table-avg"><div id="table-avg"></div></div>
+        </div>
+      </section>
+
+      <section class="card" id="ifrs">
+        <div class="card-header">
+          <h2>Zinsbandbreite für Sozialkapitalbewertung nach IFRS <span class="stand-badge" id="stand-ifrs"></span></h2>
+          <p>Zinsbandbreite gemäß IAS 19 für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für Restlaufzeiten zwischen 5 und 25 Jahren.</p>
+        </div>
+        <div class="card-body">
+          <div class="chart-wrapper"><canvas id="chart-ifrs"></canvas></div>
+          <div class="toolbar">
+            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinssaetze', 'download', this)">
+              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Grafik herunterladen
+            </button>
+            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinssaetze', 'copy', this)">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
+            </button>
+          </div>
+          <div class="table-container" id="wrap-table-ifrs"><div id="table-ifrs"></div></div>
+        </div>
+      </section>
+
+      <section class="card" id="methodik">
+        <div class="card-header">
+          <h2>Methodik & Hintergrund</h2>
+          <p>Die dargestellten Zinssätze basieren auf einer standardisierten, versicherungsmathematischen Herleitung aus Marktdaten.</p>
+        </div>
+        <div class="card-body">
+          <h3 class="method-title">Berechnungsweg der UGB-Zinssätze</h3>
+          <div class="method-steps-box">
+            <ol class="method-steps">
+              <li><strong>Null-Kupon-Euro-Swapkurve:</strong> Monatliche Abrufe der Null-Kupon-Euro-Zinsswapkurve der Deutschen Bundesbank für 50 Laufzeiten (1–50 Jahre).</li>
+              <li><strong>iBoxx EUR Corporates AA:</strong> Monatliche Rendite und Modified Duration des iBoxx-EUR-Corporates-AA-Index.</li>
+              <li><strong>Credit Spread:</strong> Die Differenz zwischen iBoxx-AA-Rendite und dem interpolierten Swapsatz ergibt den Aufschlag.</li>
+              <li><strong>Stichtagszins:</strong> Addition des Stichtags-Spreads auf die aktuelle Swapkurve.</li>
+              <li><strong>Durchschnittszins:</strong> Gleitende Mittelwerte (5–10 Jahre) der Swapkurve und des iBoxx.</li>
+            </ol>
+          </div>
+          
+          <h3 class="method-title">Glossar</h3>
+          <div class="glossary-grid">
+            <div class="glossary-card"><h4>Zinsswap</h4><p>Finanzderivat zum Tausch von Zinszahlungen. Bildet die risikofreie Zinsstruktur im Euro-Raum ab.</p></div>
+            <div class="glossary-card"><h4>Rendite (Yield)</h4><p>Effektive Verzinsung einer Anleihe unter Berücksichtigung von Kupon, Kurs und Restlaufzeit.</p></div>
+            <div class="glossary-card"><h4>Modified Duration</h4><p>Zinssensitivität einer Anleihe und Näherung für die gewichtete Restlaufzeit.</p></div>
+            <div class="glossary-card"><h4>Credit Spread</h4><p>Differenz zwischen Unternehmensanleihenrendite und risikofreiem Swapsatz. Kompensiert für Ausfallrisiko.</p></div>
+            <div class="glossary-card"><h4>iBoxx EUR Corporates AA</h4><p>Anleihenindex für liquide Euro-Unternehmensanleihen mit Mindestrating AA.</p></div>
+            <div class="glossary-card"><h4>UGB Durchschnittszins</h4><p>Gemäß AFRAC 27 als gleitender Mittelwert über bis zu 10 Jahre ermittelt.</p></div>
+            <div class="glossary-card"><h4>IAS 19</h4><p>Regelt die Bilanzierung nach IFRS. Abzinsungssatz = Rendite erstrangiger Unternehmensanleihen am Stichtag.</p></div>
+            <div class="glossary-card"><h4>Null-Kupon-Kurve</h4><p>Zinsstrukturkurve für kuponlose Anleihen. Grundlage für laufzeitgenaue Diskontierung.</p></div>
+          </div>
+        </div>
+      </section>
+
     </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <script>
+    const MINI_DATA_FILE = './valog_zinssaetze_data.xlsx';
+    const FULL_DATA_FILE = './UGB_Zinssätze.xlsx';
+    
+    /* VALOG CD Palettes */
+    const P = {
+      ugb: { "5":"#D45D00", "10":"#575757", "15":"#00859B", "20":"#719949", "25":"#C69214" },
+      avg: { "Stichtagszins":"#D45D00", "5":"#575757", "6":"#00859B", "7":"#719949", "8":"#EAAA00", "9":"#C69214", "10":"#963821" },
+      ifrs: { "5":"#D45D00", "10":"#575757", "15":"#00859B", "20":"#719949", "25":"#C69214" }
+    };
+
+    const MO = ['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+    
+    const fDE = d => { const [y, m, dd] = String(d).split("-"); return `${dd}.${m}.${y}`; };
+    const fMY = d => { const [y, m] = String(d).split("-"); return `${MO[parseInt(m, 10) - 1]} ${y}`; };
+    const pct = v => (v == null || Number.isNaN(v)) ? "–" : Number(v).toFixed(2).replace(".", ",") + "%";
+
+    const showErr = m => {
+      document.getElementById('loading').style.display = 'none';
+      const b = document.getElementById('errorBox');
+      b.style.display = 'block'; b.innerHTML = m;
+    };
+
+    const svgCopied = '<svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Kopiert';
+
+    /* ==========================================================
+       CHART EXPORT LOGIC
+       ========================================================== */
+    async function exportChart(id, fn, type, btn) {
+      const chart = Chart.getChart(id);
+      const canvas = document.getElementById(id);
+      const origHtml = btn ? btn.innerHTML : '';
+      
+      const origFilter = chart.options.plugins.legend.labels.filter || null;
+      chart.options.plugins.legend.labels.filter = function(item, data) {
+        return chart.isDatasetVisible(item.datasetIndex);
+      };
+      chart.update('none'); 
+      await new Promise(r => setTimeout(r, 50));
+      
+      try {
+        if (type === 'download') {
+          const a = document.createElement('a'); a.download = fn + '.png'; a.href = canvas.toDataURL('image/png', 1.0); a.click();
+        } else if (type === 'copy') {
+          const blob = await new Promise(r => canvas.toBlob(r, 'image/png', 1.0));
+          await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+          if (btn) {
+            btn.classList.add('copied'); btn.innerHTML = svgCopied;
+            setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = origHtml; }, 2000);
+          }
+        }
+      } catch (e) { alert('Export fehlgeschlagen. Bitte verwenden Sie den Download.'); }
+      
+      if (origFilter) chart.options.plugins.legend.labels.filter = origFilter;
+      else delete chart.options.plugins.legend.labels.filter;
+      chart.update('none');
+    }
+
+    function dlTbl(id, fn) {
+      html2canvas(document.getElementById(id), { scale: 2, backgroundColor: '#ffffff' }).then(c => {
+        const a = document.createElement('a'); a.download = fn + '.png'; a.href = c.toDataURL('image/png'); a.click();
+      });
+    }
+
+    function cpTbl(id, btn) {
+      const origHtml = btn.innerHTML;
+      html2canvas(document.getElementById(id), { scale: 2, backgroundColor: '#ffffff' }).then(c => {
+        c.toBlob(async b => {
+          try {
+            await navigator.clipboard.write([new ClipboardItem({'image/png': b})]);
+            btn.classList.add('copied'); btn.innerHTML = svgCopied;
+            setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = origHtml; }, 2000);
+          } catch (e) { alert('Kopieren fehlgeschlagen.'); }
+        }, 'image/png');
+      });
+    }
+
+    function copyDisclaimer(btn) {
+      const disclaimer = "Bitte beachten Sie, dass es sich bei den genannten Parametern um einen unverbindlichen Vorschlag der VALOG GmbH handelt. Die Auswahl der Parameter liegt letztlich in Ihrer Verantwortung. Wir empfehlen Ihnen daher, diese vorab mit Ihrem Wirtschaftsprüfer abzusprechen.";
+      const origHtml = btn.innerHTML;
+      
+      navigator.clipboard.writeText(disclaimer).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = svgCopied;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = origHtml;
+        }, 2000);
+      }).catch(err => {
+        alert('Fehler beim Kopieren.');
+      });
+    }
+
+    Chart.register({
+      id: 'customCanvasBackgroundColor',
+      beforeDraw: (chart, args, options) => {
+        const {ctx} = chart;
+        ctx.save(); ctx.globalCompositeOperation = 'destination-over';
+        ctx.fillStyle = options.color || '#ffffff'; ctx.fillRect(0, 0, chart.width, chart.height); ctx.restore();
+      }
+    });
+
+    /* ==========================================================
+       DATA PARSERS
+       ========================================================== */
+    function readSheet(wb, name) {
+      const s = wb.Sheets[name];
+      if (!s) throw new Error(`Sheet "${name}" nicht gefunden.`);
+      return XLSX.utils.sheet_to_json(s, {defval: null}).map(r => {
+        const o = {};
+        Object.keys(r).forEach(k => {
+          if (k === 'Stichtag') {
+            const v = r[k];
+            o.date = typeof v === 'number' ? (d => `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`)(XLSX.SSF.parse_date_code(v)) : String(v).slice(0, 10);
+          } else o[String(k)] = (r[k] == null || r[k] === "") ? null : Number(r[k]);
+        });
+        return o;
+      });
+    }
+
+    function parseFullSheetDict(wb, name) {
+      const s = wb.Sheets[name];
+      if (!s) return null;
+      const rows = XLSX.utils.sheet_to_json(s, {defval: null});
+      const dict = {};
+      rows.forEach(r => {
+        let dateStr = "";
+        if (typeof r['Stichtag'] === 'number') {
+          const d = XLSX.SSF.parse_date_code(r['Stichtag']);
+          dateStr = `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`;
+        } else dateStr = String(r['Stichtag']).slice(0, 10);
+        dict[dateStr] = r;
+      });
+      return dict;
+    }
+
+    /* ==========================================================
+       BUILDERS
+       ========================================================== */
+    function makeChart(cid, rows, keys, pal, lbl) {
+      const ctx = document.getElementById(cid).getContext("2d");
+      const asc = [...rows].sort((a,b) => String(a.date).localeCompare(String(b.date)));
+      let mx = 0; keys.forEach(k => asc.forEach(r => { if(r[k] != null && r[k] > mx) mx = r[k]; }));
+      const yMax = Math.ceil((mx + 0.5) * 2) / 2;
+
+      return new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: asc.map(r => fDE(r.date)),
+          datasets: keys.map(k => ({ label: lbl?.[k] || `${k} Jahre`, data: asc.map(r => r[k]), borderColor: pal[k], backgroundColor: pal[k], borderWidth: 2.5, tension: 0.15, pointRadius: 0, pointHoverRadius: 6 }))
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, interaction: { mode: "index", intersect: false },
+          plugins: { customCanvasBackgroundColor: { color: 'white' }, legend: { display: true, position: 'top', labels: { usePointStyle: true, pointStyle: 'rectRounded', padding: 20, color: '#575757', font: { family: "'Open Sans', sans-serif", size: 14, weight: '600' } } }, tooltip: { backgroundColor: 'rgba(87, 87, 87, 0.95)', padding: 12, callbacks: { label: c => ` ${c.dataset.label}: ${pct(c.parsed.y)}` } } },
+          scales: { x: { grid: { color: "rgba(87,87,87,0.08)", drawBorder: false }, ticks: { color: "#797979", maxRotation: 45, autoSkip: true, maxTicksLimit: 12 } }, y: { min: 0, max: yMax, grid: { color: "rgba(87,87,87,0.08)", drawBorder: false }, ticks: { color: "#797979", callback: v => Number(v).toFixed(2).replace(".",",")+"%", stepSize: 0.5 } } }
+        }
+      });
+    }
+
+    function buildTable(id, rows, keys, lbl, hl) {
+      const w = document.getElementById(id);
+      const desc = [...rows].sort((a,b) => String(b.date).localeCompare(String(a.date)));
+      const t = document.createElement("table");
+      const th = document.createElement("thead"), tb = document.createElement("tbody"), hr = document.createElement("tr");
+      
+      const h0 = document.createElement("th"); h0.textContent = "Stichtag"; hr.appendChild(h0);
+      keys.forEach(k => { const h = document.createElement("th"); h.textContent = lbl?.[k] || `${k} Jahre`; hr.appendChild(h); });
+      th.appendChild(hr);
+      
+      desc.forEach(r => {
+        const tr = document.createElement("tr");
+        if(hl && r.date === hl) tr.classList.add("highlight-latest");
+        const td0 = document.createElement("td"); td0.textContent = fDE(r.date); tr.appendChild(td0);
+        keys.forEach(k => { const td = document.createElement("td"); td.textContent = pct(r[k]); tr.appendChild(td); });
+        tb.appendChild(tr);
+      });
+      t.appendChild(th); t.appendChild(tb);
+      w.innerHTML = ""; w.appendChild(t);
+    }
+
+    /* ==========================================================
+       INTERACTIVE CALCULATOR & EXCEL EXPORT LOGIC
+       ========================================================== */
+    let calcData = {}; 
+
+    function getEndOfMonthStr(year, month) {
+      const d = new Date(year, month, 0); 
+      return `${year}-${String(month).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    function updateCalculator() {
+      if(!calcData.stichtag) return;
+
+      const dateInput = document.getElementById('calc-date').value;
+      const durInput = parseFloat(document.getElementById('calc-duration').value) || 4;
+      // Fixed value for IFRS data as requested
+      const iasFixed = 1.0;
+      
+      if(!dateInput) return;
+
+      const dParts = dateInput.split("-");
+      const startYear = parseInt(dParts[0]);
+      const startMonth = parseInt(dParts[1]);
+
+      const tbody = document.getElementById('calc-tbody');
+      tbody.innerHTML = '';
+
+      const durKey = `${Math.round(durInput)} Jahre`;
+
+      for(let i=0; i<10; i++) {
+        const y = startYear + i;
+        const eomStr = getEndOfMonthStr(y, startMonth);
+
+        const stZinsRow = calcData.stichtag[eomStr] || {};
+        const zins5Row = calcData.z5[eomStr] || {};
+        const zins6Row = calcData.z6[eomStr] || {};
+        const zins7Row = calcData.z7[eomStr] || {};
+        const zins8Row = calcData.z8[eomStr] || {};
+        const zins9Row = calcData.z9[eomStr] || {};
+        const zins10Row = calcData.z10[eomStr] || {};
+
+        const tr = document.createElement('tr');
+        if (i===0) tr.classList.add("highlight-latest");
+
+        tr.innerHTML = `
+          <td>${fDE(eomStr)}</td>
+          <td>${durInput}</td>
+          <td>${pct(iasFixed)}</td>
+          <td>${pct(stZinsRow[durKey])}</td>
+          <td>${pct(zins5Row[durKey])}</td>
+          <td>${pct(zins6Row[durKey])}</td>
+          <td>${pct(zins7Row[durKey])}</td>
+          <td>${pct(zins8Row[durKey])}</td>
+          <td>${pct(zins9Row[durKey])}</td>
+          <td>${pct(zins10Row[durKey])}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+
+document.getElementById('calc-duration-type').addEventListener('change', (e) => {
+  const durInput = document.getElementById('calc-duration');
+  if (e.target.value === 'Pauschal') {
+    durInput.value = 15;
+    durInput.disabled = true;
+    durInput.style.backgroundColor = '#f0f0f0';
+    durInput.style.color = '#999';
+  } else {
+    durInput.disabled = false;
+    durInput.style.backgroundColor = '#fff';
+    durInput.style.color = 'var(--vdark)';
+  }
+  updateCalculator();
+});
+
+
+    function exportCalcToExcel() {
+  const numEntries = parseInt(document.getElementById('export-entries').value);
+  const typeIndex = parseInt(document.getElementById('export-type').value);
+  const typeName = document.getElementById('export-type').options[document.getElementById('export-type').selectedIndex].text;
   
-  <div class="calc-toolbar excel-toolbar">
-    <div class="calc-input-group" style="justify-content: flex-end;">
-      <button class="btn btn-excel" onclick="exportCalcToExcel()">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> Excel generieren
-      </button>
-    </div>
-  </div>
+  const sheet1Data = [["Ab_Monat", "Wert"]];
+  const rows = document.querySelectorAll('#calc-tbody tr');
   
-  <div class="toolbar" style="margin-bottom:15px; padding-bottom:15px; border-bottom: none;">
-    <button class="btn" onclick="alert('iBoxx-Chart Feature folgt in Kürze')">
-      <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg> iBoxx-Chart Generieren
-    </button>
-    <button class="btn" onclick="document.getElementById('import-excel').click()">
-      <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg> Excel mit Import Updaten
-    </button>
-    <input type="file" id="import-excel" style="display:none" accept=".xlsx">
-    <button class="btn" id="btn-copy-disclaimer" onclick="copyDisclaimer(this)">
-      <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Disclaimer kopieren
-    </button>
-  </div>
+  for(let i = 0; i < numEntries; i++) {
+    if (!rows[i]) break;
+    const abMonat = (i === 0) ? -1000 : (i * 12);
+    const rawText = rows[i].querySelectorAll('td')[typeIndex].innerText;
+    const numericValue = rawText === "–" ? null : parseFloat(rawText.replace(',', '.').replace('%', '')) / 100;
+    sheet1Data.push([abMonat, numericValue]);
+  }
+
+  // ECKDATEN Sheet
+  const eckdatenData = [
+    ["Parameter", "Wert"],
+    ["Stichtag", document.getElementById('calc-date').value],
+    ["Zinstyp", typeName],
+    ["Durationart", document.getElementById('calc-duration-type').value],
+    ["Durationjahre", document.getElementById('calc-duration').value]
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sheet1Data), "Zinstabelle");
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(eckdatenData), "Eckdaten");
+  XLSX.writeFile(wb, "VALOG_Zinsermittlung_Export.xlsx");
+}
+
+document.getElementById('import-excel').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const data = await file.arrayBuffer();
+  const wb = XLSX.read(data, { type: 'array' });
+  
+  if (!wb.Sheets["Eckdaten"]) {
+    alert("Fehler: Das 'Eckdaten' Sheet wurde in der Datei nicht gefunden.");
+    return;
+  }
+
+  const eckRows = XLSX.utils.sheet_to_json(wb.Sheets["Eckdaten"]);
+  const params = {};
+  eckRows.forEach(row => params[row.Parameter] = row.Wert);
+
+  // Increment Year
+  const oldDate = new Date(params.Stichtag);
+  oldDate.setFullYear(oldDate.getFullYear() + 1);
+  const newDateStr = oldDate.toISOString().split('T')[0];
+
+  // Logic for Duration
+  let newDur = parseInt(params.Durationjahre);
+  if (params.Durationart === "Individual") {
+    newDur = Math.max(1, newDur - 1);
+  }
+
+  // Update UI
+  document.getElementById('calc-date').value = newDateStr;
+  document.getElementById('calc-duration-type').value = params.Durationart;
+  document.getElementById('calc-duration').value = newDur;
+  
+  // Trigger UI effects (disabling input if pauschal)
+  document.getElementById('calc-duration-type').dispatchEvent(new Event('change'));
+  
+  // Refresh and Auto-Export the new values
+  updateCalculator();
+  setTimeout(() => exportCalcToExcel(), 500);
+});
+
+    /* ==========================================================
+       INITIALIZATION (ON DEMAND LOADING)
+       ========================================================== */
+    function latest(rows) { const d = rows.map(r => r.date).filter(Boolean).sort(); return d.length ? d[d.length - 1] : null; }
+
+    async function init() {
+      try {
+        const respMini = await fetch(MINI_DATA_FILE);
+        if (!respMini.ok) throw new Error(`MINI DATA HTTP ${respMini.status}`);
+        const wbMini = XLSX.read(await respMini.arrayBuffer(), { type: 'array' });
+        
+        const D = { ugb: readSheet(wbMini, 'UGB_Stichtagszins'), avg: readSheet(wbMini, 'UGB_Durchschnitt_15J'), ifrs: readSheet(wbMini, 'IFRS') };
+        const hl = latest(D.ugb) || latest(D.ifrs);
+        const st = hl ? `Stand: ${fMY(hl)}` : '';
+        ['stand-ugb', 'stand-avg', 'stand-ifrs', 'calc-stand'].forEach(id => document.getElementById(id).textContent = st);
+        
+        const dl5 = { "5":"5 Jahre", "10":"10 Jahre", "15":"15 Jahre", "20":"20 Jahre", "25":"25 Jahre" };
+        const lblAvg = { "Stichtagszins":"Stichtagszins", "5":"5J-DSZ", "6":"6J-DSZ", "7":"7J-DSZ", "8":"8J-DSZ", "9":"9J-DSZ", "10":"10J-DSZ" };
+
+        makeChart("chart-ugb", D.ugb, ["5","10","15","20","25"], P.ugb, dl5);
+        buildTable("table-ugb", D.ugb, ["5","10","15","20","25"], dl5, hl);
+
+        makeChart("chart-avg", D.avg, ["Stichtagszins","5","6","7","8","9","10"], P.avg, lblAvg);
+        buildTable("table-avg", D.avg, ["Stichtagszins","5","6","7","8","9","10"], lblAvg, hl);
+
+        makeChart("chart-ifrs", D.ifrs, ["5","10","15","20","25"], P.ifrs, dl5);
+        buildTable("table-ifrs", D.ifrs, ["5","10","15","20","25"], dl5, hl);
+
+        if(hl) document.getElementById('calc-date').value = hl;
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+
+        document.getElementById('btn-load-calc').addEventListener('click', loadFullData);
+
+      } catch (e) {
+        showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass <code>valog_zinssaetze_data.xlsx</code> hochgeladen ist.`);
+      }
+    }
+
+    async function loadFullData() {
+      document.getElementById('calc-start-screen').style.display = 'none';
+      document.getElementById('calc-loading').style.display = 'block';
+
+      try {
+        const respFull = await fetch(FULL_DATA_FILE);
+        if (!respFull.ok) throw new Error(`HTTP ${respFull.status}`);
+        const wbFull = XLSX.read(await respFull.arrayBuffer(), { type: 'array' });
+        
+        calcData = {
+          stichtag: parseFullSheetDict(wbFull, 'Stichtagszins'),
+          z5: parseFullSheetDict(wbFull, '5J-Zins'),
+          z6: parseFullSheetDict(wbFull, '6J-Zins'),
+          z7: parseFullSheetDict(wbFull, '7J-Zins'),
+          z8: parseFullSheetDict(wbFull, '8J-Zins'),
+          z9: parseFullSheetDict(wbFull, '9J-Zins'),
+          z10: parseFullSheetDict(wbFull, '10J-Zins')
+        };
+
+        document.getElementById('calc-date').addEventListener('change', updateCalculator);
+        document.getElementById('calc-duration').addEventListener('input', updateCalculator);
+        
+        updateCalculator();
+
+        document.getElementById('calc-loading').style.display = 'none';
+        document.getElementById('calc-body-content').style.display = 'block';
+
+      } catch (e) {
+        document.getElementById('calc-loading').innerHTML = `<strong>Achtung:</strong> Die Datei <code>UGB_Zinssätze.xlsx</code> wurde nicht gefunden. Der Rechner kann nicht geladen werden.`;
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
