@@ -277,18 +277,30 @@
               <div class="calc-input-group">
                 <label for="export-entries">Einträge für Excel:</label>
                 <select id="export-entries">
-                  <option value="1">1</option>
-                  <option value="5">5</option>
-                  <option value="10" selected>10</option>
-                </select>
+				  <option value="1">1</option>
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				  <option value="4">4</option>
+				  <option value="5">5</option>
+				  <option value="6">6</option>
+				  <option value="7">7</option>
+				  <option value="8">8</option>
+				  <option value="9">9</option>
+				  <option value="10" selected>10</option>
+				</select>
               </div>
               <div class="calc-input-group">
                 <label for="export-type">Zinstyp für Excel:</label>
                 <select id="export-type">
-                  <option value="2">IAS 19 Zins</option>
-                  <option value="3">Stichtagszins UGB</option>
-                  <option value="9">10J-DSZ</option>
-                </select>
+				  <option value="2">IAS 19 Zins</option>
+				  <option value="3">Stichtagszins UGB</option>
+				  <option value="4">5J-DSZ</option>
+				  <option value="5">6J-DSZ</option>
+				  <option value="6">7J-DSZ</option>
+				  <option value="7">8J-DSZ</option>
+				  <option value="8">9J-DSZ</option>
+				  <option value="9">10J-DSZ</option>
+				</select>
               </div>
               <div class="calc-input-group" style="justify-content: flex-end;">
                 <button class="btn btn-excel" onclick="exportCalcToExcel()">
@@ -298,17 +310,13 @@
             </div>
           
             <div class="toolbar" style="margin-bottom:15px; padding-bottom:15px; border-bottom: none;">
-              <button class="btn" onclick="alert('iBoxx-Chart Feature folgt in Kürze')">
-                <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg> iBoxx-Chart Generieren
-              </button>
-              <button class="btn" onclick="document.getElementById('import-excel').click()">
-                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg> Excel mit Import Updaten
-              </button>
-              <input type="file" id="import-excel" style="display:none" accept=".xlsx">
-              <button class="btn" id="btn-copy-disclaimer" onclick="copyDisclaimer(this)">
-                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Disclaimer kopieren
-              </button>
-            </div>
+			  <button class="btn" onclick="alert('iBoxx-Chart Feature folgt in Kürze')">
+				<svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg> iBoxx-Chart Generieren
+			  </button>
+			  <button class="btn" id="btn-copy-disclaimer" onclick="copyDisclaimer(this)">
+				<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Disclaimer kopieren
+			  </button>
+			</div>
 
             <div class="table-container" id="wrap-table-calc">
               <table class="table-calc" id="table-calc">
@@ -715,46 +723,6 @@ function exportCalcToExcel() {
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(eckdatenData), "Eckdaten");
   XLSX.writeFile(wb, "VALOG_Zinsermittlung_Export.xlsx");
 }
-
-document.getElementById('import-excel').addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const data = await file.arrayBuffer();
-  const wb = XLSX.read(data, { type: 'array' });
-  
-  if (!wb.Sheets["Eckdaten"]) {
-    alert("Fehler: Das 'Eckdaten' Sheet wurde in der Datei nicht gefunden.");
-    return;
-  }
-
-  const eckRows = XLSX.utils.sheet_to_json(wb.Sheets["Eckdaten"]);
-  const params = {};
-  eckRows.forEach(row => params[row.Parameter] = row.Wert);
-
-  // Increment Year
-  const oldDate = new Date(params.Stichtag);
-  oldDate.setFullYear(oldDate.getFullYear() + 1);
-  const newDateStr = oldDate.toISOString().split('T')[0];
-
-  // Logic for Duration
-  let newDur = parseInt(params.Durationjahre);
-  if (params.Durationart === "Individual") {
-    newDur = Math.max(1, newDur - 1);
-  }
-
-  // Update UI
-  document.getElementById('calc-date').value = newDateStr;
-  document.getElementById('calc-duration-type').value = params.Durationart;
-  document.getElementById('calc-duration').value = newDur;
-  
-  // Trigger UI effects (disabling input if pauschal)
-  document.getElementById('calc-duration-type').dispatchEvent(new Event('change'));
-  
-  // Refresh and Auto-Export the new values
-  updateCalculator();
-  setTimeout(() => exportCalcToExcel(), 500);
-});
 
     /* ==========================================================
        INITIALIZATION (ON DEMAND LOADING)
