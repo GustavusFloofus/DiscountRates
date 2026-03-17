@@ -98,10 +98,10 @@
     .faq-content li { margin-bottom: 8px; }
 
     /* Calculator (Zinsermittlung) */
-    .calc-toolbar { display: flex; gap: 20px; background: var(--bg); padding: 20px; border-radius: 8px; border: 1px solid var(--vlight); margin-bottom: 25px; flex-wrap: wrap; }
+    .calc-toolbar { display: flex; gap: 20px; background: var(--bg); padding: 20px; border-radius: 8px; border: 1px solid var(--vlight); margin-bottom: 25px; flex-wrap: wrap; align-items: flex-end; }
     .calc-input-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 180px; }
     .calc-input-group label { font-size: 0.9rem; font-weight: 600; color: var(--vt); }
-    .calc-input-group input, .calc-input-group select { padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-family: var(--font); font-size: 1rem; color: var(--vdark); transition: border-color 0.2s; background: #fff; }
+    .calc-input-group input, .calc-input-group select { padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-family: var(--font); font-size: 1rem; color: var(--vdark); transition: border-color 0.2s; background: #fff; height: 44px; }
     .calc-input-group input:focus, .calc-input-group select:focus { outline: none; border-color: var(--vo); box-shadow: 0 0 0 3px rgba(212, 93, 0, 0.1); }
     
     .excel-toolbar { background: #Edf4f6; border-color: #b3d4e0; }
@@ -111,15 +111,15 @@
 
     /* Action Toolbar */
     .toolbar { display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid var(--vlight); flex-wrap: wrap; }
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--vlight); background: var(--card); color: var(--vdark); border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-family: var(--font); }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--vlight); background: var(--card); color: var(--vdark); border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-family: var(--font); height: 40px; }
     .btn:hover { background: var(--bg); border-color: var(--vdark); }
     .btn svg { width: 18px; height: 18px; fill: currentColor; }
     .btn.copied { background: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
     
     /* Primary Button Variant */
-    .btn-primary { background: var(--vo); color: #fff; border: none; padding: 12px 24px; font-size: 1.05rem; }
+    .btn-primary { background: var(--vo); color: #fff; border: none; padding: 12px 24px; font-size: 1.05rem; height: auto; }
     .btn-primary:hover { background: #B34E00; color: #fff; }
-    .btn-excel { background: #217346; color: #fff; border: none; }
+    .btn-excel { background: #217346; color: #fff; border: none; height: 44px; padding: 0 18px; }
     .btn-excel:hover { background: #175232; color: #fff; }
 
     /* Tables */
@@ -156,7 +156,8 @@
       .card-header, .card-body { padding: 20px; }
       .toolbar { justify-content: flex-start; }
       .site-header { padding: 15px 0; }
-      .calc-toolbar { flex-direction: column; }
+      .calc-toolbar { flex-direction: column; align-items: stretch; }
+      .btn-excel { width: 100%; }
     }
   </style>
 </head>
@@ -263,10 +264,6 @@
                 <label for="calc-duration">Duration (in Jahren):</label>
                 <input type="number" id="calc-duration" value="4" min="1" max="50" step="1">
               </div>
-              <div class="calc-input-group">
-                <label for="calc-ias">IAS 19 Zins (%):</label>
-                <input type="number" id="calc-ias" value="1.00" step="0.01">
-              </div>
             </div>
             
             <div class="calc-toolbar excel-toolbar">
@@ -299,7 +296,7 @@
                 </select>
               </div>
               <div class="calc-input-group" style="justify-content: flex-end;">
-                <button class="btn btn-excel" onclick="exportCalcToExcel()" style="margin-top: auto; padding: 10px 18px;">
+                <button class="btn btn-excel" onclick="exportCalcToExcel()">
                   <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> Excel generieren
                 </button>
               </div>
@@ -311,6 +308,9 @@
               </button>
               <button class="btn" onclick="cpTbl('wrap-table-calc', this)">
                 <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Bild kopieren
+              </button>
+              <button class="btn" id="btn-copy-disclaimer" onclick="copyDisclaimer(this)">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Disclaimer kopieren
               </button>
             </div>
 
@@ -510,6 +510,22 @@
       });
     }
 
+    function copyDisclaimer(btn) {
+      const disclaimer = "Bitte beachten Sie, dass es sich bei den genannten Parametern um einen unverbindlichen Vorschlag der VALOG GmbH handelt. Die Auswahl der Parameter liegt letztlich in Ihrer Verantwortung. Wir empfehlen Ihnen daher, diese vorab mit Ihrem Wirtschaftsprüfer abzusprechen.";
+      const origHtml = btn.innerHTML;
+      
+      navigator.clipboard.writeText(disclaimer).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = svgCopied;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = origHtml;
+        }, 2000);
+      }).catch(err => {
+        alert('Fehler beim Kopieren.');
+      });
+    }
+
     Chart.register({
       id: 'customCanvasBackgroundColor',
       beforeDraw: (chart, args, options) => {
@@ -612,7 +628,8 @@
 
       const dateInput = document.getElementById('calc-date').value;
       const durInput = parseFloat(document.getElementById('calc-duration').value) || 4;
-      const iasInput = parseFloat(document.getElementById('calc-ias').value) || 1.0;
+      // Fixed value for IFRS data as requested
+      const iasFixed = 1.0;
       
       if(!dateInput) return;
 
@@ -643,7 +660,7 @@
         tr.innerHTML = `
           <td>${fDE(eomStr)}</td>
           <td>${durInput}</td>
-          <td>${pct(iasInput)}</td>
+          <td>${pct(iasFixed)}</td>
           <td>${pct(stZinsRow[durKey])}</td>
           <td>${pct(zins5Row[durKey])}</td>
           <td>${pct(zins6Row[durKey])}</td>
@@ -656,7 +673,6 @@
       }
     }
 
-    // NEW FUNCTION: Generate the Excel File
     function exportCalcToExcel() {
       const numEntries = parseInt(document.getElementById('export-entries').value);
       const typeIndex = parseInt(document.getElementById('export-type').value);
@@ -669,22 +685,16 @@
         return;
       }
 
-      // --- SHEET 1: Custom Simple Table ---
       const sheet1Data = [["Ab_Monat", "Wert"]];
       
       for(let i = 0; i < numEntries; i++) {
         if (i >= rows.length) break;
-        
-        // Calculate Ab_Monat (-1000 for row 1, then 12, 24, 36...)
         const abMonat = (i === 0) ? -1000 : (i * 12);
-        
-        // Extract the correct value based on user selection
         const cells = rows[i].querySelectorAll('td');
-        const rawText = cells[typeIndex].innerText; // Looks like "2,50%" or "–"
+        const rawText = cells[typeIndex].innerText; 
         
         let numericValue = rawText;
         if (rawText !== "–") {
-            // Convert string "2,50%" to float 0.025
             numericValue = parseFloat(rawText.replace(',', '.').replace('%', '')) / 100;
         }
         
@@ -692,18 +702,15 @@
       }
       const ws1 = XLSX.utils.aoa_to_sheet(sheet1Data);
 
-      // --- SHEET 2: Full Table ---
       const tableElement = document.getElementById('table-calc');
       const ws2 = XLSX.utils.table_to_sheet(tableElement);
 
-      // --- CREATE WORKBOOK & DOWNLOAD ---
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws1, "Zinstabelle");
       XLSX.utils.book_append_sheet(wb, ws2, "Alle Daten");
 
       XLSX.writeFile(wb, "VALOG_Zinsermittlung_Export.xlsx");
     }
-
 
     /* ==========================================================
        INITIALIZATION (ON DEMAND LOADING)
@@ -737,7 +744,6 @@
         document.getElementById('loading').style.display = 'none';
         document.getElementById('content').style.display = 'block';
 
-        // Add Listener for manual loading button
         document.getElementById('btn-load-calc').addEventListener('click', loadFullData);
 
       } catch (e) {
@@ -766,7 +772,6 @@
 
         document.getElementById('calc-date').addEventListener('change', updateCalculator);
         document.getElementById('calc-duration').addEventListener('input', updateCalculator);
-        document.getElementById('calc-ias').addEventListener('input', updateCalculator);
         
         updateCalculator();
 
