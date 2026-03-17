@@ -19,11 +19,33 @@
   <meta property="og:description" content="Aktuelle österreichische UGB-Stichtagszinsen, Durchschnittszinsen und IFRS-Zinsbandbreiten für die Bewertung von Personalrückstellungen."/>
   <meta property="og:url" content="https://valog.com/zinssaetze/"/>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-
   <style>
+    /* LOCAL FONTS CONFIGURATION */
+    @font-face {
+      font-family: 'Open Sans';
+      src: url('fonts/OpenSans-Regular.woff2') format('woff2'),
+           url('fonts/OpenSans-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Open Sans';
+      src: url('fonts/OpenSans-SemiBold.woff2') format('woff2'),
+           url('fonts/OpenSans-SemiBold.ttf') format('truetype');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Open Sans';
+      src: url('fonts/OpenSans-Bold.woff2') format('woff2'),
+           url('fonts/OpenSans-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root {
       /* VALOG Corporate Design */
       --vo: #D45D00; 
@@ -263,11 +285,7 @@
                 <label for="calc-duration">Duration (in Jahren):</label>
                 <input type="number" id="calc-duration" value="4" min="1" max="50" step="1">
               </div>
-              <div class="calc-input-group">
-                <label for="calc-ias">IAS 19 Zins (%):</label>
-                <input type="number" id="calc-ias" value="1.00" step="0.01">
               </div>
-            </div>
             
             <div class="calc-toolbar excel-toolbar">
               <div class="calc-input-group">
@@ -603,7 +621,6 @@
 
       const dateInput = document.getElementById('calc-date').value;
       const durInput = parseFloat(document.getElementById('calc-duration').value) || 4;
-      const iasInput = parseFloat(document.getElementById('calc-ias').value) || 1.0;
       
       if(!dateInput) return;
 
@@ -615,12 +632,15 @@
       tbody.innerHTML = '';
 
       const durKey = `${Math.round(durInput)} Jahre`;
+      // Support for numeric headers if standard strings aren't found
+      const numKey = Math.round(durInput);
 
       for(let i=0; i<10; i++) {
         const y = startYear + i;
         const eomStr = getEndOfMonthStr(y, startMonth);
 
         const stZinsRow = calcData.stichtag[eomStr] || {};
+        const iasRow = calcData.ias ? (calcData.ias[eomStr] || {}) : {};
         const zins5Row = calcData.z5[eomStr] || {};
         const zins6Row = calcData.z6[eomStr] || {};
         const zins7Row = calcData.z7[eomStr] || {};
@@ -630,18 +650,21 @@
 
         const tr = document.createElement('tr');
         if (i===0) tr.classList.add("highlight-latest");
+        
+        // Helper to grab value by string key ("5 Jahre") or numeric key (5)
+        const getV = (row) => row[durKey] !== undefined ? row[durKey] : row[numKey];
 
         tr.innerHTML = `
           <td>${fDE(eomStr)}</td>
           <td>${durInput}</td>
-          <td>${pct(iasInput)}</td>
-          <td>${pct(stZinsRow[durKey])}</td>
-          <td>${pct(zins5Row[durKey])}</td>
-          <td>${pct(zins6Row[durKey])}</td>
-          <td>${pct(zins7Row[durKey])}</td>
-          <td>${pct(zins8Row[durKey])}</td>
-          <td>${pct(zins9Row[durKey])}</td>
-          <td>${pct(zins10Row[durKey])}</td>
+          <td>${pct(getV(iasRow))}</td>
+          <td>${pct(getV(stZinsRow))}</td>
+          <td>${pct(getV(zins5Row))}</td>
+          <td>${pct(getV(zins6Row))}</td>
+          <td>${pct(getV(zins7Row))}</td>
+          <td>${pct(getV(zins8Row))}</td>
+          <td>${pct(getV(zins9Row))}</td>
+          <td>${pct(getV(zins10Row))}</td>
         `;
         tbody.appendChild(tr);
       }
@@ -662,12 +685,8 @@
         return;
       }
 
-      // Initialize ExcelJS Workbook
       const wb = new ExcelJS.Workbook();
 
-      // --------------------------------------------------------
-      // SHEET 1: Zinstabelle (Clean & Simple, Segoe UI 10)
-      // --------------------------------------------------------
       const ws1 = wb.addWorksheet("Zinstabelle");
       ws1.columns = [
         { header: 'Ab_Monat', key: 'ab', width: 15 },
@@ -691,7 +710,6 @@
         ws1.addRow({ ab: abMonat, wert: numericValue });
       }
 
-      // Format Sheet 1 (Segoe UI, Size 10 everywhere)
       ws1.eachRow((row, rowNumber) => {
         row.eachCell((cell, colNumber) => {
           cell.font = { name: 'Segoe UI', size: 10, bold: rowNumber === 1 };
@@ -701,31 +719,25 @@
              cell.alignment.horizontal = 'left';
           }
           if (rowNumber > 1 && colNumber === 2 && typeof cell.value === 'number') {
-             cell.numFmt = '0.00%'; // Native Excel Percent format
+             cell.numFmt = '0.00%'; 
           }
         });
       });
 
-      // --------------------------------------------------------
-      // SHEET 2: Alle Daten (Exact replica of "Zinsermittlung")
-      // --------------------------------------------------------
       const ws2 = wb.addWorksheet("Alle Daten");
       
-      // Set precise column widths
       ws2.columns = [
         { width: 14 }, { width: 10 }, { width: 14 },
         { width: 18 }, { width: 18 }, { width: 18 },
         { width: 18 }, { width: 18 }, { width: 18 }, { width: 18 }
       ];
 
-      // Row 1: Orange/Blue Subheadings
       const dateVal = document.getElementById('calc-date').value;
       const formattedDate = dateVal ? fDE(dateVal) : '';
       ws2.addRow(["Eingabe", "", "", `Ergebnis aus Sicht ${formattedDate}`]);
       ws2.mergeCells('A1:C1');
       ws2.mergeCells('D1:J1');
 
-      // Row 2: Headers (Pulling the exact names used in the HTML table)
       const headers = [
          "Stichtag", "Duration", "IAS 19\nZins", "Stichtags-\nzins UGB",
          "5-Jahres-\ndurchschnitts-\nzins", "6-Jahres-\ndurchschnitts-\nzins",
@@ -734,7 +746,6 @@
       ];
       ws2.addRow(headers);
 
-      // Extract and Insert Data Rows
       for(let i = 0; i < rows.length; i++) {
         const cells = Array.from(rows[i].querySelectorAll('td')).map(td => td.innerText);
         const rowData = cells.map((val, idx) => {
@@ -745,7 +756,6 @@
         ws2.addRow(rowData);
       }
 
-      // Styling Data for Sheet 2
       const borderThin = {
         top: { style: 'thin', color: { argb: 'FF000000' } },
         left: { style: 'thin', color: { argb: 'FF000000' } },
@@ -757,16 +767,13 @@
       const fillOutput = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFDAEEF3' } };
 
       ws2.eachRow((row, rowNumber) => {
-        // Give some breathing room for wrapped header text
         if (rowNumber === 2) row.height = 45; 
         else row.height = 18;
 
         row.eachCell((cell, colNumber) => {
-          // Global Font setting for the entire sheet
           cell.font = { name: 'Segoe UI', size: 10 };
           
           if (rowNumber <= 2) {
-            // Header Styles
             cell.font = { name: 'Segoe UI', size: 10, bold: true };
             cell.fill = (colNumber <= 3) ? fillInput : fillOutput;
             
@@ -774,11 +781,9 @@
                cell.alignment = { vertical: 'middle', horizontal: 'left' };
             } else if (rowNumber === 2) {
                cell.border = borderThin;
-               // Wrap text specifically enabled for row 2 to mimic the design
                cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
             }
           } else {
-             // Data Styles
              cell.border = borderThin;
              cell.alignment = { vertical: 'middle', horizontal: colNumber === 1 ? 'left' : 'right' };
              
@@ -791,7 +796,6 @@
         });
       });
 
-      // Execute Download
       const buffer = await wb.xlsx.writeBuffer();
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const link = document.createElement('a');
@@ -851,6 +855,8 @@
         
         calcData = {
           stichtag: parseFullSheetDict(wbFull, 'Stichtagszins'),
+          // Grab IAS/IFRS data dynamically from the uploaded Excel file
+          ias: parseFullSheetDict(wbFull, 'IFRS') || parseFullSheetDict(wbFull, 'IAS') || parseFullSheetDict(wbFull, 'IAS 19 Zins'),
           z5: parseFullSheetDict(wbFull, '5J-Zins'),
           z6: parseFullSheetDict(wbFull, '6J-Zins'),
           z7: parseFullSheetDict(wbFull, '7J-Zins'),
@@ -861,7 +867,6 @@
 
         document.getElementById('calc-date').addEventListener('change', updateCalculator);
         document.getElementById('calc-duration').addEventListener('input', updateCalculator);
-        document.getElementById('calc-ias').addEventListener('input', updateCalculator);
         
         updateCalculator();
 
