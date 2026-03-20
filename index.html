@@ -147,44 +147,6 @@
     .btn-excel { background: #217346; color: #fff; border: none; height: 44px; padding: 0 18px; }
     .btn-excel:hover { background: #175232; color: #fff; }
 
-    .launch-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
-    .launch-card-item {
-      border: 1px solid var(--vlight);
-      border-radius: 12px;
-      background: #fff;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      min-height: 220px;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.04);
-    }
-    .launch-card-item h3 {
-      margin: 0;
-      font-size: 1.2rem;
-      color: var(--vt);
-    }
-    .launch-card-item p {
-      margin: 0;
-      color: var(--vdark);
-      line-height: 1.65;
-      font-size: 0.95rem;
-      flex: 1;
-    }
-    .launch-btn {
-      justify-content: center;
-      min-height: 64px;
-      padding: 16px 18px;
-      text-align: center;
-      line-height: 1.35;
-      width: 100%;
-    }
-    .lazy-section { display: none; }
-
     /* Tables */
     .table-container { overflow-x: auto; border: 1px solid var(--vlight); border-radius: 8px; }
     table { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.95rem; }
@@ -481,33 +443,7 @@
         </div>
       </section>
 
-      <section class="card" id="graphs-launcher">
-        <div class="card-header">
-          <h2>Grafiken & Tabellen</h2>
-          <p>Die folgenden Bereiche werden bei Bedarf geladen. Für alle drei Auswertungen werden jeweils die letzten 18 Monate bis zum aktuellen Stand aus der Datei <strong>Zinssaetze.xlsx</strong> dargestellt.</p>
-        </div>
-        <div class="card-body">
-          <div class="launch-grid">
-            <div class="launch-card-item">
-              <h3>UGB Stichtagszinssatz</h3>
-              <p>Zeigt den exakten Marktzins zum jeweiligen Bilanzstichtag. Nach dem Klick werden die Grafik und die zugehörige Tabelle für die letzten 18 Monate geladen.</p>
-              <button id="btn-load-ugb" class="btn btn-primary launch-btn">UGB Stichtagszinssatz<br>Grafik &amp; Tabelle laden</button>
-            </div>
-            <div class="launch-card-item">
-              <h3>UGB Durchschnittszinssätze</h3>
-              <p>Zeigt die geglätteten historischen Durchschnittszinsen gemäß AFRAC 27. Nach dem Klick werden die Grafik und die zugehörige Tabelle für die letzten 18 Monate geladen.</p>
-              <button id="btn-load-avg" class="btn btn-primary launch-btn">UGB Durchschnittszinssätze<br>Grafik &amp; Tabelle laden</button>
-            </div>
-            <div class="launch-card-item">
-              <h3>IFRS Zinsbandbreite</h3>
-              <p>Zeigt die IFRS-Zinsbandbreite auf Basis der Daten aus <strong>Zinssaetze.xlsx</strong>. Die Grafik stellt das Band zwischen Duration 5 und Duration 25 dar; zusätzlich wird die Tabelle mit den Standard-Durations geladen.</p>
-              <button id="btn-load-ifrs" class="btn btn-primary launch-btn">IFRS Zinsbandbreite<br>Grafik &amp; Tabelle laden</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="card lazy-section" id="section-ugb">
+      <section class="card">
         <div class="card-header">
           <h2>UGB Stichtagszinssatz <span class="stand-badge" id="stand-ugb"></span></h2>
           <p>Der Stichtagszins spiegelt das exakte Zinsniveau am Bilanzstichtag wider. Er eignet sich für eine punktgenaue Marktbewertung.</p>
@@ -526,7 +462,7 @@
         </div>
       </section>
 
-      <section class="card lazy-section" id="section-avg">
+      <section class="card">
         <div class="card-header">
           <h2>UGB Durchschnittszins (15 Jahre Restlaufzeit) <span class="stand-badge" id="stand-avg"></span></h2>
           <p>Um bilanzielle Volatilitäten zu glätten, erlaubt AFRAC 27 die Verwendung eines historischen Durchschnittszinssatzes.</p>
@@ -545,18 +481,18 @@
         </div>
       </section>
 
-      <section class="card lazy-section" id="section-ifrs">
+      <section class="card" id="ifrs">
         <div class="card-header">
           <h2>Zinsbandbreite für Sozialkapitalbewertung nach IFRS <span class="stand-badge" id="stand-ifrs"></span></h2>
-          <p>Zinsbandbreite gemäß IAS 19 für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für Restlaufzeiten zwischen 5 und 25 Jahren. Die Grafik zeigt das Band zwischen Duration 5 und Duration 25; die Tabelle zeigt zusätzlich die Standard-Durations 5, 10, 15, 20 und 25.</p>
+          <p>Zinsbandbreite gemäß IAS 19 für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für Restlaufzeiten zwischen 5 und 25 Jahren.</p>
         </div>
         <div class="card-body">
           <div class="chart-wrapper"><canvas id="chart-ifrs"></canvas></div>
           <div class="toolbar">
-            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinsbandbreite', 'download', this)">
+            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinssaetze', 'download', this)">
               <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Grafik herunterladen
             </button>
-            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinsbandbreite', 'copy', this)">
+            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinssaetze', 'copy', this)">
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
             </button>
           </div>
@@ -641,9 +577,6 @@ let calcDeltaSchedule = Array(CALC_ROW_COUNT).fill(0);
 let calculatorEventsBound = false;
 let fullWorkbookCache = null;
 let fullDerivedDataCache = null;
-let dashboardChartsCache = null;
-const renderedSections = { ugb: false, avg: false, ifrs: false };
-const LAST_18_MONTHS_COUNT = 18;
 
 const fDE = d => {
   const [y, m, dd] = String(d).split("-");
@@ -729,72 +662,6 @@ function normalizeToMonthEnd(dateStr) {
   const [y, m] = String(dateStr).split('-').map(Number);
   if (!y || !m) return '';
   return getEndOfMonthStr(y, m);
-}
-
-function parseLooseIsoDate(v) {
-  if (v == null || v === '') return null;
-
-  if (typeof v === 'number' || v instanceof Date) {
-    const iso = toIsoDate(v);
-    return iso ? normalizeToMonthEnd(iso) : null;
-  }
-
-  const s = String(v).trim();
-  if (!s) return null;
-
-  let m = s.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
-  if (m) {
-    return normalizeToMonthEnd(`${m[3]}-${String(m[2]).padStart(2, '0')}-${String(m[1]).padStart(2, '0')}`);
-  }
-
-  m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
-  if (m) {
-    return normalizeToMonthEnd(`${m[1]}-${String(m[2]).padStart(2, '0')}-${String(m[3]).padStart(2, '0')}`);
-  }
-
-  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-  if (m) {
-    return normalizeToMonthEnd(`${m[3]}-${String(m[2]).padStart(2, '0')}-${String(m[1]).padStart(2, '0')}`);
-  }
-
-  return null;
-}
-
-function getPreviousMonthEndIso() {
-  const now = new Date();
-  const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
-  return `${prevMonthEnd.getFullYear()}-${String(prevMonthEnd.getMonth() + 1).padStart(2, '0')}-${String(prevMonthEnd.getDate()).padStart(2, '0')}`;
-}
-
-function getReferenceDateFromFirstSheet(wb, allowedDates = []) {
-  const firstSheetName = wb?.SheetNames?.[0];
-  if (!firstSheetName) return null;
-
-  const allowedSet = new Set((allowedDates || []).map(d => normalizeToMonthEnd(d)).filter(Boolean));
-  const matrix = sheetToMatrix(wb, firstSheetName);
-  const candidates = [];
-
-  matrix.forEach(row => {
-    (row || []).forEach(cell => {
-      const iso = parseLooseIsoDate(cell);
-      if (!iso) return;
-      if (allowedSet.size && !allowedSet.has(iso)) return;
-      candidates.push(iso);
-    });
-  });
-
-  if (!candidates.length) return null;
-  candidates.sort();
-  return candidates[candidates.length - 1];
-}
-
-function getReferenceDateFallback(allowedDates = []) {
-  const normalized = [...new Set((allowedDates || []).map(d => normalizeToMonthEnd(d)).filter(Boolean))].sort();
-  if (!normalized.length) return null;
-
-  const previousMonthEnd = getPreviousMonthEndIso();
-  const historical = normalized.filter(d => d <= previousMonthEnd);
-  return historical.length ? historical[historical.length - 1] : normalized[normalized.length - 1];
 }
 
 function rowsToDict(rows) {
@@ -909,18 +776,13 @@ function buildDashboardDataFromFullWorkbook(wb) {
     "10": avgDicts.z10[r.date]?.["15 Jahre"] ?? null
   })).filter(r => AVG_KEYS.some(k => r[k] != null));
 
-  const timeline = stichtagRows.map(r => r.date).filter(Boolean).sort();
-  const referenceDate = getReferenceDateFromFirstSheet(wb, timeline) || getReferenceDateFallback(timeline);
-
   return {
-    referenceDate,
     charts: {
       ugb: ugbChartRows,
       avg: avgChartRows,
       ifrs: ifrsChartRows
     },
     calc: {
-      referenceDate,
       ifrs: rowsToDict(ifrsRows),
       stichtag: stichtagDict,
       z5: avgDicts.z5,
@@ -929,7 +791,7 @@ function buildDashboardDataFromFullWorkbook(wb) {
       z8: avgDicts.z8,
       z9: avgDicts.z9,
       z10: avgDicts.z10,
-      timeline
+      timeline: stichtagRows.map(r => r.date).filter(Boolean).sort()
     }
   };
 }
@@ -1284,168 +1146,6 @@ function buildTable(id, rows, keys, lbl, hl) {
   w.appendChild(t);
 }
 
-function getLastMonths(rows, count = LAST_18_MONTHS_COUNT, endDate = null) {
-  const asc = [...rows].sort((a, b) => String(a.date).localeCompare(String(b.date)));
-  const filtered = endDate ? asc.filter(r => r.date && r.date <= endDate) : asc;
-  return filtered.slice(Math.max(filtered.length - count, 0));
-}
-
-function makeIFRSBandChart(cid, rows) {
-  const ctx = document.getElementById(cid).getContext("2d");
-  const asc = [...rows].sort((a, b) => String(a.date).localeCompare(String(b.date)));
-  const maxValues = asc.map(r => r["25"]);
-  const minValues = asc.map(r => r["5"]);
-
-  let mx = 0;
-  [maxValues, minValues].forEach(series => series.forEach(v => {
-    if (v != null && v > mx) mx = v;
-  }));
-
-  const yMax = Math.ceil((mx + 0.5) * 2) / 2;
-
-  return new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: asc.map(r => fDE(r.date)),
-      datasets: [
-        {
-          label: "Duration 25",
-          data: maxValues,
-          borderColor: "#D45D00",
-          backgroundColor: "#D45D00",
-          borderWidth: 2.5,
-          tension: 0.15,
-          pointRadius: 0,
-          pointHoverRadius: 6
-        },
-        {
-          label: "Duration 5",
-          data: minValues,
-          borderColor: "#00859B",
-          backgroundColor: "rgba(212, 93, 0, 0.18)",
-          fill: '-1',
-          borderWidth: 2.5,
-          tension: 0.15,
-          pointRadius: 0,
-          pointHoverRadius: 6
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: "index", intersect: false },
-      plugins: {
-        customCanvasBackgroundColor: { color: 'white' },
-        legend: {
-          display: true,
-          position: 'top',
-          labels: {
-            usePointStyle: true,
-            pointStyle: 'rectRounded',
-            padding: 20,
-            color: '#575757',
-            font: { family: "'Open Sans', sans-serif", size: 14, weight: '600' }
-          }
-        },
-        tooltip: {
-          backgroundColor: 'rgba(87, 87, 87, 0.95)',
-          padding: 12,
-          callbacks: {
-            label: c => ` ${c.dataset.label}: ${pct(c.parsed.y)}`
-          }
-        }
-      },
-      scales: {
-        x: {
-          grid: { color: "rgba(87,87,87,0.08)", drawBorder: false },
-          ticks: { color: "#797979", maxRotation: 45, autoSkip: true, maxTicksLimit: 12 }
-        },
-        y: {
-          min: 0,
-          max: yMax,
-          grid: { color: "rgba(87,87,87,0.08)", drawBorder: false },
-          ticks: {
-            color: "#797979",
-            callback: v => Number(v).toFixed(2).replace(".", ",") + "%",
-            stepSize: 0.5
-          }
-        }
-      }
-    }
-  });
-}
-
-function renderDashboardSection(sectionKey) {
-  if (!dashboardChartsCache) return;
-
-  const section = document.getElementById(`section-${sectionKey}`);
-  if (section) {
-    section.style.display = 'block';
-  }
-
-  const durationLabels = {
-    "5": "Duration 5",
-    "10": "Duration 10",
-    "15": "Duration 15",
-    "20": "Duration 20",
-    "25": "Duration 25"
-  };
-
-  const avgLabels = {
-    "Stichtagszins": "Stichtagszins",
-    "5": "5J-DSZ",
-    "6": "6J-DSZ",
-    "7": "7J-DSZ",
-    "8": "8J-DSZ",
-    "9": "9J-DSZ",
-    "10": "10J-DSZ"
-  };
-
-  if (sectionKey === 'ugb' && !renderedSections.ugb) {
-    const rows = getLastMonths(dashboardChartsCache.ugb, LAST_18_MONTHS_COUNT, dashboardReferenceDate);
-    const hl = latest(rows);
-    makeChart("chart-ugb", rows, TERM_KEYS, P.ugb, durationLabels);
-    buildTable("table-ugb", rows, TERM_KEYS, durationLabels, hl);
-    renderedSections.ugb = true;
-  }
-
-  if (sectionKey === 'avg' && !renderedSections.avg) {
-    const rows = getLastMonths(dashboardChartsCache.avg, LAST_18_MONTHS_COUNT, dashboardReferenceDate);
-    const hl = latest(rows);
-    makeChart("chart-avg", rows, AVG_KEYS, P.avg, avgLabels);
-    buildTable("table-avg", rows, AVG_KEYS, avgLabels, hl);
-    renderedSections.avg = true;
-  }
-
-  if (sectionKey === 'ifrs' && !renderedSections.ifrs) {
-    const rows = getLastMonths(dashboardChartsCache.ifrs, LAST_18_MONTHS_COUNT, dashboardReferenceDate);
-    const hl = latest(rows);
-    makeIFRSBandChart("chart-ifrs", rows);
-    buildTable("table-ifrs", rows, TERM_KEYS, durationLabels, hl);
-    renderedSections.ifrs = true;
-  }
-
-  if (section) {
-    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-}
-
-function bindDashboardLaunchers() {
-  const buttonMap = {
-    'btn-load-ugb': 'ugb',
-    'btn-load-avg': 'avg',
-    'btn-load-ifrs': 'ifrs'
-  };
-
-  Object.entries(buttonMap).forEach(([buttonId, sectionKey]) => {
-    const btn = document.getElementById(buttonId);
-    if (!btn) return;
-
-    btn.addEventListener('click', () => renderDashboardSection(sectionKey));
-  });
-}
-
 /* ==========================================================
    INTERACTIVE CALCULATOR & EXCEL EXPORT LOGIC
    ========================================================== */
@@ -1659,9 +1359,9 @@ function hydrateCalculatorData(derivedData) {
   calcTimeline = derivedData.calc.timeline || [];
   bindCalculatorControls();
 
-  const preferredCalcDate = derivedData.calc.referenceDate || calcTimeline[calcTimeline.length - 1];
-  if (preferredCalcDate && !document.getElementById('calc-date').value) {
-    document.getElementById('calc-date').value = preferredCalcDate;
+  const latestCalcDate = calcTimeline[calcTimeline.length - 1];
+  if (latestCalcDate && !document.getElementById('calc-date').value) {
+    document.getElementById('calc-date').value = latestCalcDate;
   }
 
   updateCalculator();
@@ -1672,29 +1372,60 @@ function hydrateCalculatorData(derivedData) {
    ========================================================== */
 async function init() {
   try {
-    const { workbook } = await fetchWorkbookFromCandidates(FULL_DATA_FILES);
-    fullWorkbookCache = workbook;
-    fullDerivedDataCache = buildDashboardDataFromFullWorkbook(workbook);
-    const derivedData = fullDerivedDataCache;
+    let derivedData = null;
+
+    try {
+      const { workbook } = await fetchWorkbookFromCandidates(MINI_DATA_FILES);
+      derivedData = buildDashboardDataFromMiniWorkbook(workbook);
+    } catch (miniError) {
+      const { workbook } = await fetchWorkbookFromCandidates(FULL_DATA_FILES);
+      fullWorkbookCache = workbook;
+      fullDerivedDataCache = buildDashboardDataFromFullWorkbook(workbook);
+      derivedData = fullDerivedDataCache;
+    }
 
     const D = derivedData.charts;
-    dashboardChartsCache = D;
-    dashboardReferenceDate = derivedData.referenceDate || derivedData.calc?.referenceDate || latest(D.ugb) || latest(D.ifrs);
-
-    const st = dashboardReferenceDate ? `Stand: ${fMY(dashboardReferenceDate)}` : '';
+    const hl = latest(D.ugb) || latest(D.ifrs);
+    const st = hl ? `Stand: ${fMY(hl)}` : '';
     ['stand-ugb', 'stand-avg', 'stand-ifrs', 'calc-stand'].forEach(id => {
       document.getElementById(id).textContent = st;
     });
 
-    if (dashboardReferenceDate) document.getElementById('calc-date').value = dashboardReferenceDate;
+    const durationLabels = {
+      "5": "5 Jahre",
+      "10": "10 Jahre",
+      "15": "15 Jahre",
+      "20": "20 Jahre",
+      "25": "25 Jahre"
+    };
+
+    const avgLabels = {
+      "Stichtagszins": "Stichtagszins",
+      "5": "5J-DSZ",
+      "6": "6J-DSZ",
+      "7": "7J-DSZ",
+      "8": "8J-DSZ",
+      "9": "9J-DSZ",
+      "10": "10J-DSZ"
+    };
+
+    makeChart("chart-ugb", D.ugb, TERM_KEYS, P.ugb, durationLabels);
+    buildTable("table-ugb", D.ugb, TERM_KEYS, durationLabels, hl);
+
+    makeChart("chart-avg", D.avg, AVG_KEYS, P.avg, avgLabels);
+    buildTable("table-avg", D.avg, AVG_KEYS, avgLabels, hl);
+
+    makeChart("chart-ifrs", D.ifrs, TERM_KEYS, P.ifrs, durationLabels);
+    buildTable("table-ifrs", D.ifrs, TERM_KEYS, durationLabels, hl);
+
+    if (hl) document.getElementById('calc-date').value = hl;
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('content').style.display = 'block';
 
-    bindDashboardLaunchers();
     document.getElementById('btn-load-calc').addEventListener('click', loadFullData, { once: true });
   } catch (e) {
-    showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass eine der Dateien <code>Zinssaetze.xlsx</code>, <code>UGB_Zinssätze.xlsx</code> oder <code>UGB_Zinssaetze.xlsx</code> verfügbar ist.`);
+    showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass eine der Dateien <code>valog_zinssaetze_data.xlsx</code>, <code>Zinssaetze.xlsx</code> oder <code>UGB_Zinssätze.xlsx</code> verfügbar ist.`);
   }
 }
 
@@ -1710,11 +1441,6 @@ async function loadFullData() {
     }
 
     hydrateCalculatorData(fullDerivedDataCache);
-
-    if (fullDerivedDataCache?.calc?.referenceDate) {
-      document.getElementById('calc-date').value = fullDerivedDataCache.calc.referenceDate;
-      updateCalculator();
-    }
 
     document.getElementById('calc-loading').style.display = 'none';
     document.getElementById('calc-body-content').style.display = 'block';
