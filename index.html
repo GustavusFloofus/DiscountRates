@@ -147,6 +147,20 @@
     .btn-excel { background: #217346; color: #fff; border: none; height: 44px; padding: 0 18px; }
     .btn-excel:hover { background: #175232; color: #fff; }
 
+    .launch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .launch-btn {
+      justify-content: center;
+      min-height: 64px;
+      padding: 16px 18px;
+      text-align: center;
+      line-height: 1.35;
+    }
+    .lazy-section { display: none; }
+
     /* Tables */
     .table-container { overflow-x: auto; border: 1px solid var(--vlight); border-radius: 8px; }
     table { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.95rem; }
@@ -443,7 +457,21 @@
         </div>
       </section>
 
-      <section class="card">
+      <section class="card" id="graphs-launcher">
+        <div class="card-header">
+          <h2>Grafiken & Tabellen</h2>
+          <p>Die folgenden Bereiche werden bei Bedarf geladen. Für die UGB-Auswertungen werden jeweils die letzten 18 Monate bis zum aktuellen Stand dargestellt. Die IFRS-Zinsbandbreite wird als Band zwischen Duration 5 und Duration 25 angezeigt.</p>
+        </div>
+        <div class="card-body">
+          <div class="launch-grid">
+            <button id="btn-load-ugb" class="btn btn-primary launch-btn">UGB Stichtagszinssatz<br>Grafik &amp; Tabelle laden</button>
+            <button id="btn-load-avg" class="btn btn-primary launch-btn">UGB Durchschnittszins<br>Grafik &amp; Tabelle laden</button>
+            <button id="btn-load-ifrs" class="btn btn-primary launch-btn">IFRS Zinsbandbreite<br>Grafik laden</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card lazy-section" id="section-ugb">
         <div class="card-header">
           <h2>UGB Stichtagszinssatz <span class="stand-badge" id="stand-ugb"></span></h2>
           <p>Der Stichtagszins spiegelt das exakte Zinsniveau am Bilanzstichtag wider. Er eignet sich für eine punktgenaue Marktbewertung.</p>
@@ -462,7 +490,7 @@
         </div>
       </section>
 
-      <section class="card">
+      <section class="card lazy-section" id="section-avg">
         <div class="card-header">
           <h2>UGB Durchschnittszins (15 Jahre Restlaufzeit) <span class="stand-badge" id="stand-avg"></span></h2>
           <p>Um bilanzielle Volatilitäten zu glätten, erlaubt AFRAC 27 die Verwendung eines historischen Durchschnittszinssatzes.</p>
@@ -481,22 +509,21 @@
         </div>
       </section>
 
-      <section class="card" id="ifrs">
+      <section class="card lazy-section" id="section-ifrs">
         <div class="card-header">
           <h2>Zinsbandbreite für Sozialkapitalbewertung nach IFRS <span class="stand-badge" id="stand-ifrs"></span></h2>
-          <p>Zinsbandbreite gemäß IAS 19 für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für Restlaufzeiten zwischen 5 und 25 Jahren.</p>
+          <p>Zinsbandbreite gemäß IAS 19 für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für Restlaufzeiten zwischen 5 und 25 Jahren. Das Band zeigt die Spanne zwischen Duration 5 und Duration 25.</p>
         </div>
         <div class="card-body">
           <div class="chart-wrapper"><canvas id="chart-ifrs"></canvas></div>
           <div class="toolbar">
-            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinssaetze', 'download', this)">
+            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinsbandbreite', 'download', this)">
               <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Grafik herunterladen
             </button>
-            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinssaetze', 'copy', this)">
+            <button class="btn" onclick="exportChart('chart-ifrs', 'VALOG_IFRS_Zinsbandbreite', 'copy', this)">
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
             </button>
           </div>
-          <div class="table-container" id="wrap-table-ifrs"><div id="table-ifrs"></div></div>
         </div>
       </section>
 
@@ -577,6 +604,9 @@ let calcDeltaSchedule = Array(CALC_ROW_COUNT).fill(0);
 let calculatorEventsBound = false;
 let fullWorkbookCache = null;
 let fullDerivedDataCache = null;
+let dashboardChartsCache = null;
+const renderedSections = { ugb: false, avg: false, ifrs: false };
+const LAST_18_MONTHS_COUNT = 18;
 
 const fDE = d => {
   const [y, m, dd] = String(d).split("-");
@@ -1146,6 +1176,165 @@ function buildTable(id, rows, keys, lbl, hl) {
   w.appendChild(t);
 }
 
+function getLastMonths(rows, count = LAST_18_MONTHS_COUNT) {
+  const asc = [...rows].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  return asc.slice(Math.max(asc.length - count, 0));
+}
+
+function makeIFRSBandChart(cid, rows) {
+  const ctx = document.getElementById(cid).getContext("2d");
+  const asc = [...rows].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const maxValues = asc.map(r => r["25"]);
+  const minValues = asc.map(r => r["5"]);
+
+  let mx = 0;
+  [maxValues, minValues].forEach(series => series.forEach(v => {
+    if (v != null && v > mx) mx = v;
+  }));
+
+  const yMax = Math.ceil((mx + 0.5) * 2) / 2;
+
+  return new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: asc.map(r => fDE(r.date)),
+      datasets: [
+        {
+          label: "Duration 25",
+          data: maxValues,
+          borderColor: "#D45D00",
+          backgroundColor: "#D45D00",
+          borderWidth: 2.5,
+          tension: 0.15,
+          pointRadius: 0,
+          pointHoverRadius: 6
+        },
+        {
+          label: "Duration 5",
+          data: minValues,
+          borderColor: "#00859B",
+          backgroundColor: "rgba(212, 93, 0, 0.18)",
+          fill: '-1',
+          borderWidth: 2.5,
+          tension: 0.15,
+          pointRadius: 0,
+          pointHoverRadius: 6
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        customCanvasBackgroundColor: { color: 'white' },
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            usePointStyle: true,
+            pointStyle: 'rectRounded',
+            padding: 20,
+            color: '#575757',
+            font: { family: "'Open Sans', sans-serif", size: 14, weight: '600' }
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(87, 87, 87, 0.95)',
+          padding: 12,
+          callbacks: {
+            label: c => ` ${c.dataset.label}: ${pct(c.parsed.y)}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: "rgba(87,87,87,0.08)", drawBorder: false },
+          ticks: { color: "#797979", maxRotation: 45, autoSkip: true, maxTicksLimit: 12 }
+        },
+        y: {
+          min: 0,
+          max: yMax,
+          grid: { color: "rgba(87,87,87,0.08)", drawBorder: false },
+          ticks: {
+            color: "#797979",
+            callback: v => Number(v).toFixed(2).replace(".", ",") + "%",
+            stepSize: 0.5
+          }
+        }
+      }
+    }
+  });
+}
+
+function renderDashboardSection(sectionKey) {
+  if (!dashboardChartsCache) return;
+
+  const section = document.getElementById(`section-${sectionKey}`);
+  if (section) {
+    section.style.display = 'block';
+  }
+
+  const durationLabels = {
+    "5": "Duration 5",
+    "10": "Duration 10",
+    "15": "Duration 15",
+    "20": "Duration 20",
+    "25": "Duration 25"
+  };
+
+  const avgLabels = {
+    "Stichtagszins": "Stichtagszins",
+    "5": "5J-DSZ",
+    "6": "6J-DSZ",
+    "7": "7J-DSZ",
+    "8": "8J-DSZ",
+    "9": "9J-DSZ",
+    "10": "10J-DSZ"
+  };
+
+  if (sectionKey === 'ugb' && !renderedSections.ugb) {
+    const rows = getLastMonths(dashboardChartsCache.ugb);
+    const hl = latest(rows);
+    makeChart("chart-ugb", rows, TERM_KEYS, P.ugb, durationLabels);
+    buildTable("table-ugb", rows, TERM_KEYS, durationLabels, hl);
+    renderedSections.ugb = true;
+  }
+
+  if (sectionKey === 'avg' && !renderedSections.avg) {
+    const rows = getLastMonths(dashboardChartsCache.avg);
+    const hl = latest(rows);
+    makeChart("chart-avg", rows, AVG_KEYS, P.avg, avgLabels);
+    buildTable("table-avg", rows, AVG_KEYS, avgLabels, hl);
+    renderedSections.avg = true;
+  }
+
+  if (sectionKey === 'ifrs' && !renderedSections.ifrs) {
+    const rows = getLastMonths(dashboardChartsCache.ifrs);
+    makeIFRSBandChart("chart-ifrs", rows);
+    renderedSections.ifrs = true;
+  }
+
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function bindDashboardLaunchers() {
+  const buttonMap = {
+    'btn-load-ugb': 'ugb',
+    'btn-load-avg': 'avg',
+    'btn-load-ifrs': 'ifrs'
+  };
+
+  Object.entries(buttonMap).forEach(([buttonId, sectionKey]) => {
+    const btn = document.getElementById(buttonId);
+    if (!btn) return;
+
+    btn.addEventListener('click', () => renderDashboardSection(sectionKey));
+  });
+}
+
 /* ==========================================================
    INTERACTIVE CALCULATOR & EXCEL EXPORT LOGIC
    ========================================================== */
@@ -1385,44 +1574,20 @@ async function init() {
     }
 
     const D = derivedData.charts;
+    dashboardChartsCache = D;
+
     const hl = latest(D.ugb) || latest(D.ifrs);
     const st = hl ? `Stand: ${fMY(hl)}` : '';
     ['stand-ugb', 'stand-avg', 'stand-ifrs', 'calc-stand'].forEach(id => {
       document.getElementById(id).textContent = st;
     });
 
-    const durationLabels = {
-      "5": "5 Jahre",
-      "10": "10 Jahre",
-      "15": "15 Jahre",
-      "20": "20 Jahre",
-      "25": "25 Jahre"
-    };
-
-    const avgLabels = {
-      "Stichtagszins": "Stichtagszins",
-      "5": "5J-DSZ",
-      "6": "6J-DSZ",
-      "7": "7J-DSZ",
-      "8": "8J-DSZ",
-      "9": "9J-DSZ",
-      "10": "10J-DSZ"
-    };
-
-    makeChart("chart-ugb", D.ugb, TERM_KEYS, P.ugb, durationLabels);
-    buildTable("table-ugb", D.ugb, TERM_KEYS, durationLabels, hl);
-
-    makeChart("chart-avg", D.avg, AVG_KEYS, P.avg, avgLabels);
-    buildTable("table-avg", D.avg, AVG_KEYS, avgLabels, hl);
-
-    makeChart("chart-ifrs", D.ifrs, TERM_KEYS, P.ifrs, durationLabels);
-    buildTable("table-ifrs", D.ifrs, TERM_KEYS, durationLabels, hl);
-
     if (hl) document.getElementById('calc-date').value = hl;
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('content').style.display = 'block';
 
+    bindDashboardLaunchers();
     document.getElementById('btn-load-calc').addEventListener('click', loadFullData, { once: true });
   } catch (e) {
     showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass eine der Dateien <code>valog_zinssaetze_data.xlsx</code>, <code>Zinssaetze.xlsx</code> oder <code>UGB_Zinssätze.xlsx</code> verfügbar ist.`);
