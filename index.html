@@ -159,29 +159,6 @@
     
     .table-calc th { background: #DAEEF3; color: var(--vt); }
     .table-calc th.th-input { background: #FDE9D9; color: var(--vo); }
-    .zinsdelta-cell { min-width: 130px; }
-    .zinsdelta-input {
-      width: 100%;
-      min-width: 90px;
-      padding: 8px 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-family: var(--font);
-      font-size: 0.95rem;
-      text-align: right;
-      background: #fff;
-      color: var(--vdark);
-    }
-    .zinsdelta-input:focus {
-      outline: none;
-      border-color: var(--vo);
-      box-shadow: 0 0 0 3px rgba(212, 93, 0, 0.1);
-    }
-    .calc-note {
-      margin-top: 14px;
-      font-size: 0.9rem;
-      color: var(--vdark);
-    }
 
     /* Methodik & Hintergrund */
     .method-title { color: var(--vt); font-size: 1.3rem; margin-bottom: 15px; }
@@ -284,8 +261,14 @@
     </div>
 
     <div id="loading">
-      <div class="spinner"></div>
-      Lade Dashboard...
+      <div id="dashboard-init-screen">
+        <p style="margin-bottom: 20px; color: var(--vdark);">Die Diagramme werden erst nach Klick auf die Initialisierung geladen.</p>
+        <button id="btn-init-dashboard" class="btn btn-primary">Dashboard initialisieren</button>
+      </div>
+      <div id="dashboard-loading-state" style="display:none;">
+        <div class="spinner"></div>
+        Lade Dashboard...
+      </div>
     </div>
     <div id="errorBox"></div>
 
@@ -334,7 +317,7 @@
       <section class="card" id="calculator">
         <div class="card-header">
           <h2>Interaktive Zinsermittlung <span class="stand-badge" id="calc-stand"></span></h2>
-          <p>Berechnen Sie stichtags- und laufzeitspezifische Rechnungszinssätze inkl. Prognosen für die nächsten 10 Jahre und optionalen Zinsdeltas.</p>
+          <p>Berechnen Sie stichtags- und laufzeitspezifische Rechnungszinssätze inkl. Prognosen für die nächsten 10 Jahre.</p>
         </div>
         
         <div class="card-body" style="position: relative; min-height: 200px;">
@@ -385,21 +368,20 @@
 				  <option value="7">7</option>
 				  <option value="8">8</option>
 				  <option value="9">9</option>
-				  <option value="10">10</option>
-				  <option value="11" selected>11</option>
+				  <option value="10" selected>10</option>
 				</select>
               </div>
               <div class="calc-input-group">
                 <label for="export-type">Zinstyp für Excel:</label>
                 <select id="export-type">
-				  <option value="3">IAS 19 Zins</option>
-				  <option value="4">Stichtagszins UGB</option>
-				  <option value="5">5J-DSZ</option>
-				  <option value="6">6J-DSZ</option>
-				  <option value="7">7J-DSZ</option>
-				  <option value="8">8J-DSZ</option>
-				  <option value="9">9J-DSZ</option>
-				  <option value="10">10J-DSZ</option>
+				  <option value="2">IAS 19 Zins</option>
+				  <option value="3">Stichtagszins UGB</option>
+				  <option value="4">5J-DSZ</option>
+				  <option value="5">6J-DSZ</option>
+				  <option value="6">7J-DSZ</option>
+				  <option value="7">8J-DSZ</option>
+				  <option value="8">9J-DSZ</option>
+				  <option value="9">10J-DSZ</option>
 				</select>
               </div>
               <div class="calc-input-group" style="justify-content: flex-end;">
@@ -410,7 +392,7 @@
             </div>
           
             <div class="toolbar" style="margin-bottom:15px; padding-bottom:15px; border-bottom: none;">
-			  <button class="btn" id="btn-copy-iboxx" onclick="copyIboxxChartBlock(this)">
+			  <button class="btn" onclick="alert('iBoxx-Chart Feature folgt in Kürze')">
 				<svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg> iBoxx-Chart Generieren
 			  </button>
 			  <button class="btn" id="btn-copy-disclaimer" onclick="copyDisclaimer(this)">
@@ -424,8 +406,7 @@
                   <tr>
                     <th class="th-input">Stichtag</th>
                     <th class="th-input">Duration</th>
-                    <th class="th-input zinsdelta-cell">Zinsdelta (%)</th>
-                    <th>IAS 19 Zins</th>
+                    <th class="th-input">IAS 19 Zins</th>
                     <th>Stichtagszins UGB</th>
                     <th>5J-DSZ</th>
                     <th>6J-DSZ</th>
@@ -438,7 +419,6 @@
                 <tbody id="calc-tbody"></tbody>
               </table>
             </div>
-            <p class="calc-note">Ein Zinsdelta wird als parallele Verschiebung in %-Punkten interpretiert und über 12 Monate linear eingearbeitet.</p>
           </div>
         </div>
       </section>
@@ -496,7 +476,7 @@
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
             </button>
           </div>
-          <div class="table-container" id="wrap-table-ifrs"><div id="table-ifrs"></div></div>
+          <div class="table-container" id="wrap-table-ifrs" style="display:none;"><div id="table-ifrs"></div></div>
         </div>
       </section>
 
@@ -538,9 +518,9 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
   <script>
-const MINI_DATA_FILES = ['./valog_zinssaetze_data.xlsx'];
-const FULL_DATA_FILES = ['./Zinssaetze.xlsx', './UGB_Zinssätze.xlsx', './UGB_Zinssaetze.xlsx'];
-const CALC_ROW_COUNT = 11;
+const FULL_DATA_FILE = './Zinssaetze.xlsx';
+let fullWorkbookCache = null;
+let fullDerivedDataCache = null;
 
 /* VALOG CD Palettes */
 const DURATION_PALETTE = {
@@ -571,13 +551,6 @@ const AVG_YEAR_KEYS = [5, 6, 7, 8, 9, 10];
 
 const MO = ['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 
-let calcData = {};
-let calcTimeline = [];
-let calcDeltaSchedule = Array(CALC_ROW_COUNT).fill(0);
-let calculatorEventsBound = false;
-let fullWorkbookCache = null;
-let fullDerivedDataCache = null;
-
 const fDE = d => {
   const [y, m, dd] = String(d).split("-");
   return `${dd}.${m}.${y}`;
@@ -603,17 +576,10 @@ const svgCopied = '<svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41
    HELPERS
    ========================================================== */
 function toIsoDate(v) {
-  if (v == null || v === "") return null;
-
   if (typeof v === 'number') {
     const d = XLSX.SSF.parse_date_code(v);
     return `${d.y}-${String(d.m).padStart(2, '0')}-${String(d.d).padStart(2, '0')}`;
   }
-
-  if (v instanceof Date) {
-    return `${v.getFullYear()}-${String(v.getMonth() + 1).padStart(2, '0')}-${String(v.getDate()).padStart(2, '0')}`;
-  }
-
   return String(v).slice(0, 10);
 }
 
@@ -625,196 +591,6 @@ function latest(rows) {
 function getEndOfMonthStr(year, month) {
   const d = new Date(year, month, 0);
   return `${year}-${String(month).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-
-function escapeHtml(s) {
-  return String(s)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;');
-}
-
-async function copyRichToClipboard(html, plainText) {
-  const item = new ClipboardItem({
-    'text/html': new Blob([html], { type: 'text/html' }),
-    'text/plain': new Blob([plainText], { type: 'text/plain' })
-  });
-  await navigator.clipboard.write([item]);
-}
-
-function setCopiedState(btn, originalHtml) {
-  if (!btn) return;
-
-  const restoreHtml = originalHtml ?? btn.innerHTML;
-
-  btn.classList.add('copied');
-  btn.innerHTML = svgCopied;
-
-  setTimeout(() => {
-    btn.classList.remove('copied');
-    btn.innerHTML = restoreHtml;
-  }, 2000);
-}
-
-function normalizeToMonthEnd(dateStr) {
-  if (!dateStr) return '';
-  const [y, m] = String(dateStr).split('-').map(Number);
-  if (!y || !m) return '';
-  return getEndOfMonthStr(y, m);
-}
-
-function rowsToDict(rows) {
-  const dict = {};
-  rows.forEach(r => {
-    if (r.date) dict[r.date] = r;
-  });
-  return dict;
-}
-
-function sheetToMatrix(wb, name) {
-  const s = wb.Sheets[name];
-  if (!s) throw new Error(`Sheet "${name}" nicht gefunden.`);
-  return XLSX.utils.sheet_to_json(s, { header: 1, raw: true, defval: null });
-}
-
-function parseStandardDurationSheet(wb, name) {
-  const matrix = sheetToMatrix(wb, name);
-  const header = matrix[0] || [];
-
-  return matrix.slice(1).map(row => {
-    const date = toIsoDate(row[0]);
-    if (!date) return null;
-
-    const out = { date };
-
-    for (let c = 1; c < header.length; c++) {
-      const key = String(header[c] ?? '').trim();
-      if (!key) continue;
-
-      const raw = row[c];
-      const num = Number(raw);
-      out[key] = (raw == null || raw === "") ? null : (Number.isNaN(num) ? raw : num);
-    }
-
-    return out;
-  }).filter(Boolean);
-}
-
-function parseIFRSDurationSheet(wb, name) {
-  const matrix = sheetToMatrix(wb, name);
-
-  return matrix.slice(2).map(row => {
-    const date = toIsoDate(row[0]);
-    if (!date) return null;
-
-    const out = { date };
-
-    for (let duration = 1; duration <= 50; duration++) {
-      const raw = row[69 + (duration - 1)];
-      const num = Number(raw);
-      out[`${duration} Jahre`] = (raw == null || raw === "") ? null : (Number.isNaN(num) ? raw : num);
-    }
-
-    return out;
-  }).filter(r => r && Object.keys(r).some(k => k !== 'date' && r[k] != null));
-}
-
-function buildDashboardDataFromMiniWorkbook(wb) {
-  const ugb = readSheet(wb, 'UGB_Stichtagszins');
-  const avg = readSheet(wb, 'UGB_Durchschnitt_15J');
-  const ifrs = readSheet(wb, 'IFRS');
-
-  return {
-    charts: { ugb, avg, ifrs },
-    calc: null
-  };
-}
-
-function buildDashboardDataFromFullWorkbook(wb) {
-  const stichtagRows = parseStandardDurationSheet(wb, 'Stichtag-UGB');
-  const ifrsRows = parseIFRSDurationSheet(wb, 'iBoxx Data');
-  const avgRowsByYear = {};
-
-  for (let i = 5; i <= 10; i++) {
-    avgRowsByYear[`z${i}`] = parseStandardDurationSheet(wb, `${i}J-Daten`);
-  }
-
-  const stichtagDict = rowsToDict(stichtagRows);
-
-  const ugbChartRows = stichtagRows.filter(r => TERM_KEYS.some(k => r[`${k} Jahre`] != null)).map(r => ({
-    date: r.date,
-    "5": r["5 Jahre"],
-    "10": r["10 Jahre"],
-    "15": r["15 Jahre"],
-    "20": r["20 Jahre"],
-    "25": r["25 Jahre"]
-  }));
-
-  const ifrsChartRows = ifrsRows.filter(r => TERM_KEYS.some(k => r[`${k} Jahre`] != null)).map(r => ({
-    date: r.date,
-    "5": r["5 Jahre"],
-    "10": r["10 Jahre"],
-    "15": r["15 Jahre"],
-    "20": r["20 Jahre"],
-    "25": r["25 Jahre"]
-  }));
-
-  const avgDicts = {};
-  Object.keys(avgRowsByYear).forEach(key => {
-    avgDicts[key] = rowsToDict(avgRowsByYear[key]);
-  });
-
-  const avgChartRows = stichtagRows.map(r => ({
-    date: r.date,
-    "Stichtagszins": r["15 Jahre"],
-    "5": avgDicts.z5[r.date]?.["15 Jahre"] ?? null,
-    "6": avgDicts.z6[r.date]?.["15 Jahre"] ?? null,
-    "7": avgDicts.z7[r.date]?.["15 Jahre"] ?? null,
-    "8": avgDicts.z8[r.date]?.["15 Jahre"] ?? null,
-    "9": avgDicts.z9[r.date]?.["15 Jahre"] ?? null,
-    "10": avgDicts.z10[r.date]?.["15 Jahre"] ?? null
-  })).filter(r => AVG_KEYS.some(k => r[k] != null));
-
-  return {
-    charts: {
-      ugb: ugbChartRows,
-      avg: avgChartRows,
-      ifrs: ifrsChartRows
-    },
-    calc: {
-      ifrs: rowsToDict(ifrsRows),
-      stichtag: stichtagDict,
-      z5: avgDicts.z5,
-      z6: avgDicts.z6,
-      z7: avgDicts.z7,
-      z8: avgDicts.z8,
-      z9: avgDicts.z9,
-      z10: avgDicts.z10,
-      timeline: stichtagRows.map(r => r.date).filter(Boolean).sort()
-    }
-  };
-}
-
-async function fetchWorkbookFromCandidates(candidates) {
-  const errors = [];
-
-  for (const file of candidates) {
-    try {
-      const resp = await fetch(file);
-      if (!resp.ok) {
-        errors.push(`${file}: HTTP ${resp.status}`);
-        continue;
-      }
-
-      const workbook = XLSX.read(await resp.arrayBuffer(), { type: 'array' });
-      return { workbook, file };
-    } catch (e) {
-      errors.push(`${file}: ${e.message}`);
-    }
-  }
-
-  throw new Error(errors.join(' | '));
 }
 
 /* ==========================================================
@@ -865,135 +641,20 @@ async function exportChart(id, fn, type, btn) {
   chart.update('none');
 }
 
-async function copyDisclaimer(btn) {
+function copyDisclaimer(btn) {
   const disclaimer = "Bitte beachten Sie, dass es sich bei den genannten Parametern um einen unverbindlichen Vorschlag der VALOG GmbH handelt. Die Auswahl der Parameter liegt letztlich in Ihrer Verantwortung. Wir empfehlen Ihnen daher, diese vorab mit Ihrem Wirtschaftsprüfer abzusprechen.";
   const origHtml = btn.innerHTML;
 
-  const html = `
-    <div style="font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; color:#000;">
-      <i>${escapeHtml(disclaimer)}</i>
-    </div>
-  `;
-
-  try {
-    await copyRichToClipboard(html, disclaimer);
-    setCopiedState(btn, origHtml);
-  } catch (e) {
+  navigator.clipboard.writeText(disclaimer).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = svgCopied;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = origHtml;
+    }, 2000);
+  }).catch(() => {
     alert('Fehler beim Kopieren.');
-  }
-}
-
-function buildIboxxChartClipboardRows(dateIso) {
-  const ifrsRow = calcData?.ifrs?.[dateIso];
-  if (!ifrsRow) {
-    throw new Error(`Für den Stichtag ${fDE(dateIso)} wurden keine IFRS-Daten gefunden.`);
-  }
-
-  const dateLabel = fDE(dateIso);
-  const rows = [
-    [dateLabel, '', `Rendite-Chart ${dateLabel}`],
-    ['Restlaufzeit', 'Zinssatz', 'Quelle: iBoxx € Corporates AA']
-  ];
-
-  TERM_KEYS.forEach(term => {
-    rows.push([`${term} Jahre`, pct(ifrsRow[`${term} Jahre`]), '']);
   });
-
-  return rows;
-}
-
-function rowsToTabSeparatedText(rows) {
-  return rows.map(row => row.join('\t')).join('\r\n');
-}
-
-function rowsToHtmlTable(rows) {
-  const esc = s => String(s ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-
-  const dataRows = rows.slice(2).map(row => `
-    <tr>
-      <td style="border:1px solid #000; padding:3px 6px; font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; font-weight:400; text-align:left; white-space:nowrap;">
-        ${esc(row[0])}
-      </td>
-      <td style="border:1px solid #000; padding:3px 6px; font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; font-weight:400; text-align:right; white-space:nowrap;">
-        ${esc(row[1])}
-      </td>
-      <td style="border:none; padding:3px 0 3px 10px; font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; font-weight:400; text-align:left; white-space:nowrap;"></td>
-    </tr>
-  `).join('');
-
-  return `
-    <table style="border-collapse:collapse; font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; color:#000;">
-      <tbody>
-        <tr>
-          <td colspan="2" style="border:1px solid #000; padding:3px 6px; text-align:center; vertical-align:middle; font-weight:700; white-space:nowrap;">
-            ${esc(rows[0][0])}
-          </td>
-          <td style="border:none; padding:3px 0 3px 10px; text-align:left; vertical-align:middle; font-weight:400; white-space:nowrap;">
-            ${esc(rows[0][2])}
-          </td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #000; padding:3px 6px; text-align:left; font-weight:400; white-space:nowrap;">
-            ${esc(rows[1][0])}
-          </td>
-          <td style="border:1px solid #000; padding:3px 6px; text-align:right; font-weight:400; white-space:nowrap;">
-            ${esc(rows[1][1])}
-          </td>
-          <td style="border:none; padding:3px 0 3px 10px; text-align:left; font-weight:400; white-space:nowrap;">
-            ${esc(rows[1][2])}
-          </td>
-        </tr>
-        ${dataRows}
-      </tbody>
-    </table>
-  `;
-}
-
-function fallbackCopyText(text) {
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.setAttribute('readonly', '');
-  ta.style.position = 'fixed';
-  ta.style.left = '-9999px';
-  document.body.appendChild(ta);
-  ta.select();
-  document.execCommand('copy');
-  document.body.removeChild(ta);
-}
-
-async function copyIboxxChartBlock(btn) {
-  const origHtml = btn ? btn.innerHTML : '';
-
-  try {
-    const dateIso = normalizeToMonthEnd(document.getElementById('calc-date').value);
-    if (!dateIso) {
-      throw new Error('Bitte wählen Sie zuerst einen Stichtag aus.');
-    }
-
-    const rows = buildIboxxChartClipboardRows(dateIso);
-    const plainText = rowsToTabSeparatedText(rows);
-    const htmlTable = rowsToHtmlTable(rows);
-
-    if (navigator.clipboard && window.ClipboardItem) {
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          'text/plain': new Blob([plainText], { type: 'text/plain' }),
-          'text/html': new Blob([htmlTable], { type: 'text/html' })
-        })
-      ]);
-    } else if (navigator.clipboard && navigator.clipboard.writeText) {
-      await navigator.clipboard.writeText(plainText);
-    } else {
-      fallbackCopyText(plainText);
-    }
-
-    setCopiedState(btn, origHtml);
-  } catch (e) {
-    alert(e.message || 'iBoxx-Chart konnte nicht in die Zwischenablage kopiert werden.');
-  }
 }
 
 Chart.register({
@@ -1009,7 +670,7 @@ Chart.register({
 });
 
 /* ==========================================================
-   DATA PARSERS FOR MINI WORKBOOK
+   DATA PARSERS
    ========================================================== */
 function readSheet(wb, name) {
   const s = wb.Sheets[name];
@@ -1027,6 +688,96 @@ function readSheet(wb, name) {
     });
     return o;
   });
+}
+
+function parseFullSheetDict(wb, name) {
+  const s = wb.Sheets[name];
+  if (!s) return {};
+
+  const rows = XLSX.utils.sheet_to_json(s, { defval: null });
+  const dict = {};
+
+  rows.forEach(r => {
+    const dateStr = toIsoDate(r['Stichtag']);
+    dict[dateStr] = r;
+  });
+
+  return dict;
+}
+
+function pickTermPoints(dict, dateStr) {
+  const r = dict?.[dateStr] || {};
+  return {
+    date: dateStr,
+    "5": r["5 Jahre"] == null ? null : Number(r["5 Jahre"]),
+    "10": r["10 Jahre"] == null ? null : Number(r["10 Jahre"]),
+    "15": r["15 Jahre"] == null ? null : Number(r["15 Jahre"]),
+    "20": r["20 Jahre"] == null ? null : Number(r["20 Jahre"]),
+    "25": r["25 Jahre"] == null ? null : Number(r["25 Jahre"])
+  };
+}
+
+function parseFullIFRSRows(wb) {
+  const s = wb.Sheets['iBoxx Data'];
+  if (!s) return [];
+
+  const aoa = XLSX.utils.sheet_to_json(s, { header: 1, defval: null });
+  const colMap = { "5": 73, "10": 78, "15": 83, "20": 88, "25": 93 };
+
+  return aoa.slice(2).map(r => ({
+    date: toIsoDate(r[0]),
+    "5": r[colMap["5"]] == null ? null : Number(r[colMap["5"]]),
+    "10": r[colMap["10"]] == null ? null : Number(r[colMap["10"]]),
+    "15": r[colMap["15"]] == null ? null : Number(r[colMap["15"]]),
+    "20": r[colMap["20"]] == null ? null : Number(r[colMap["20"]]),
+    "25": r[colMap["25"]] == null ? null : Number(r[colMap["25"]])
+  })).filter(r => r.date && [r["5"], r["10"], r["15"], r["20"], r["25"]].some(v => v != null));
+}
+
+function parseFullIFRSDict(wb) {
+  const dict = {};
+  parseFullIFRSRows(wb).forEach(r => {
+    dict[r.date] = {
+      "5 Jahre": r["5"],
+      "10 Jahre": r["10"],
+      "15 Jahre": r["15"],
+      "20 Jahre": r["20"],
+      "25 Jahre": r["25"]
+    };
+  });
+  return dict;
+}
+
+function buildDashboardDataFromFullWorkbook(wb) {
+  const stichtag = parseFullSheetDict(wb, 'Stichtag-UGB');
+  const z5 = parseFullSheetDict(wb, '5J-Daten');
+  const z6 = parseFullSheetDict(wb, '6J-Daten');
+  const z7 = parseFullSheetDict(wb, '7J-Daten');
+  const z8 = parseFullSheetDict(wb, '8J-Daten');
+  const z9 = parseFullSheetDict(wb, '9J-Daten');
+  const z10 = parseFullSheetDict(wb, '10J-Daten');
+  const ifrs = parseFullIFRSDict(wb);
+
+  const timeline = Object.keys(stichtag).sort();
+  const ugb = timeline.map(date => pickTermPoints(stichtag, date));
+
+  const avg = timeline.map(date => ({
+    date,
+    "Stichtagszins": stichtag[date]?.["15 Jahre"] == null ? null : Number(stichtag[date]["15 Jahre"]),
+    "5": z5[date]?.["15 Jahre"] == null ? null : Number(z5[date]["15 Jahre"]),
+    "6": z6[date]?.["15 Jahre"] == null ? null : Number(z6[date]["15 Jahre"]),
+    "7": z7[date]?.["15 Jahre"] == null ? null : Number(z7[date]["15 Jahre"]),
+    "8": z8[date]?.["15 Jahre"] == null ? null : Number(z8[date]["15 Jahre"]),
+    "9": z9[date]?.["15 Jahre"] == null ? null : Number(z9[date]["15 Jahre"]),
+    "10": z10[date]?.["15 Jahre"] == null ? null : Number(z10[date]["15 Jahre"])
+  }));
+
+  const ifrsRows = parseFullIFRSRows(wb);
+
+  return {
+    charts: { ugb, avg, ifrs: ifrsRows },
+    calc: { ifrs, stichtag, z5, z6, z7, z8, z9, z10, timeline }
+  };
 }
 
 /* ==========================================================
@@ -1057,6 +808,89 @@ function makeChart(cid, rows, keys, pal, lbl) {
         pointRadius: 0,
         pointHoverRadius: 6
       }))
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        customCanvasBackgroundColor: { color: 'white' },
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            usePointStyle: true,
+            pointStyle: 'rectRounded',
+            padding: 20,
+            color: '#575757',
+            font: { family: "'Open Sans', sans-serif", size: 14, weight: '600' }
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(87, 87, 87, 0.95)',
+          padding: 12,
+          callbacks: {
+            label: c => ` ${c.dataset.label}: ${pct(c.parsed.y)}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: "rgba(87,87,87,0.08)", drawBorder: false },
+          ticks: { color: "#797979", maxRotation: 45, autoSkip: true, maxTicksLimit: 12 }
+        },
+        y: {
+          min: 0,
+          max: yMax,
+          grid: { color: "rgba(87,87,87,0.08)", drawBorder: false },
+          ticks: {
+            color: "#797979",
+            callback: v => Number(v).toFixed(2).replace(".", ",") + "%",
+            stepSize: 0.5
+          }
+        }
+      }
+    }
+  });
+}
+
+function makeIFRSBandChart(cid, rows) {
+  const ctx = document.getElementById(cid).getContext("2d");
+  const asc = [...rows].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const maxValue = Math.max(...asc.flatMap(r => [Number(r["25"]) || 0, Number(r["5"]) || 0]));
+  const yMax = Math.ceil((maxValue + 0.5) * 2) / 2;
+
+  return new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: asc.map(r => fDE(r.date)),
+      datasets: [
+        {
+          label: "Duration 25",
+          data: asc.map(r => r["25"]),
+          borderColor: P.ifrs["25"],
+          backgroundColor: P.ifrs["25"],
+          borderWidth: 2.5,
+          tension: 0.15,
+          pointRadius: 0,
+          pointHoverRadius: 6
+        },
+        {
+          label: "Duration 5",
+          data: asc.map(r => r["5"]),
+          borderColor: P.ifrs["5"],
+          backgroundColor: P.ifrs["5"],
+          borderWidth: 2.5,
+          tension: 0.15,
+          pointRadius: 0,
+          pointHoverRadius: 6,
+          fill: {
+            target: '-1',
+            above: '#F6DFCC',
+            below: '#F6DFCC'
+          }
+        }
+      ]
     },
     options: {
       responsive: true,
@@ -1149,241 +983,124 @@ function buildTable(id, rows, keys, lbl, hl) {
 /* ==========================================================
    INTERACTIVE CALCULATOR & EXCEL EXPORT LOGIC
    ========================================================== */
+let calcData = {};
+let calculatorEventsBound = false;
+
 function getCalcValue(sheetName, dateStr, durKey) {
   return calcData[sheetName]?.[dateStr]?.[durKey] ?? null;
 }
 
-function getProjectionRows() {
-  const normalizedDate = normalizeToMonthEnd(document.getElementById('calc-date').value);
-  if (!normalizedDate) return [];
-
-  if (document.getElementById('calc-date').value !== normalizedDate) {
-    document.getElementById('calc-date').value = normalizedDate;
-  }
-
-  const duration = parseFloat(document.getElementById('calc-duration').value) || 15;
-  const [startYear, startMonth] = normalizedDate.split('-').map(Number);
-
-  return Array.from({ length: CALC_ROW_COUNT }, (_, i) => ({
-    date: getEndOfMonthStr(startYear + i, startMonth),
-    duration,
-    delta: Number(calcDeltaSchedule[i]) || 0
-  }));
-}
-
-function monthDiff(startIso, endIso) {
-  const [sy, sm] = String(startIso).split('-').map(Number);
-  const [ey, em] = String(endIso).split('-').map(Number);
-  return (ey - sy) * 12 + (em - sm);
-}
-
-function getRampContribution(startIso, targetIso, deltaPct) {
-  const m = monthDiff(startIso, targetIso);
-  const monthsApplied = Math.max(0, Math.min(m, 12));
-  return (Number(deltaPct) || 0) * monthsApplied / 12;
-}
-
-function getTotalShiftAt(targetIso, deltaRows) {
-  return deltaRows.reduce((sum, row) => sum + getRampContribution(row.date, targetIso, row.delta), 0);
-}
-
-function getAverageShiftAt(targetIso, months, deltaRows) {
-  const idx = calcTimeline.indexOf(targetIso);
-  if (idx < 0) return 0;
-
-  const startIdx = Math.max(0, idx - months + 1);
-  const dates = calcTimeline.slice(startIdx, idx + 1);
-
-  if (!dates.length) return 0;
-  const total = dates.reduce((sum, date) => sum + getTotalShiftAt(date, deltaRows), 0);
-  return total / dates.length;
-}
-
-function addShift(baseValue, shiftValue) {
-  return (baseValue == null || Number.isNaN(Number(baseValue))) ? null : Number(baseValue) + Number(shiftValue || 0);
-}
-
-function formatDeltaForInput(v) {
-  return (v == null || Number.isNaN(Number(v)) || Number(v) === 0) ? '' : String(Number(v));
-}
-
-function collectRateValue(row, durKey, typeIndex, deltaRows) {
-  const pointShift = getTotalShiftAt(row.date, deltaRows);
-
-  switch (typeIndex) {
-    case 3: return addShift(getCalcValue('ifrs', row.date, durKey), pointShift);
-    case 4: return addShift(getCalcValue('stichtag', row.date, durKey), pointShift);
-    case 5: return addShift(getCalcValue('z5', row.date, durKey), getAverageShiftAt(row.date, 60, deltaRows));
-    case 6: return addShift(getCalcValue('z6', row.date, durKey), getAverageShiftAt(row.date, 72, deltaRows));
-    case 7: return addShift(getCalcValue('z7', row.date, durKey), getAverageShiftAt(row.date, 84, deltaRows));
-    case 8: return addShift(getCalcValue('z8', row.date, durKey), getAverageShiftAt(row.date, 96, deltaRows));
-    case 9: return addShift(getCalcValue('z9', row.date, durKey), getAverageShiftAt(row.date, 108, deltaRows));
-    case 10: return addShift(getCalcValue('z10', row.date, durKey), getAverageShiftAt(row.date, 120, deltaRows));
-    default: return null;
-  }
-}
-
 function updateCalculator() {
-  if (!calcData.stichtag || !calcData.ifrs || !calcTimeline.length) return;
+  if (!calcData.stichtag) return;
 
-  const rows = getProjectionRows();
-  if (!rows.length) return;
+  const dateInput = document.getElementById('calc-date').value;
+  const durInput = parseFloat(document.getElementById('calc-duration').value) || 4;
+
+  if (!dateInput) return;
+
+  const dParts = dateInput.split("-");
+  const startYear = parseInt(dParts[0], 10);
+  const startMonth = parseInt(dParts[1], 10);
 
   const tbody = document.getElementById('calc-tbody');
   tbody.innerHTML = '';
 
-  const durKey = `${Math.round(rows[0].duration)} Jahre`;
+  const durKey = `${Math.round(durInput)} Jahre`;
 
-  rows.forEach((row, i) => {
-    const pointShift = getTotalShiftAt(row.date, rows);
+  for (let i = 0; i < 10; i++) {
+    const y = startYear + i;
+    const eomStr = getEndOfMonthStr(y, startMonth);
+
+    const avgCells = AVG_YEAR_KEYS.map(year => {
+      const value = getCalcValue(`z${year}`, eomStr, durKey);
+      return `<td>${pct(value)}</td>`;
+    }).join('');
 
     const tr = document.createElement('tr');
     if (i === 0) tr.classList.add("highlight-latest");
 
     tr.innerHTML = `
-      <td>${fDE(row.date)}</td>
-      <td>${row.duration}</td>
-      <td class="zinsdelta-cell">
-        <input
-          type="number"
-          class="zinsdelta-input"
-          data-row="${i}"
-          step="0.01"
-          placeholder="0,00"
-          value="${formatDeltaForInput(row.delta)}"
-        >
-      </td>
-      <td>${pct(addShift(getCalcValue('ifrs', row.date, durKey), pointShift))}</td>
-      <td>${pct(addShift(getCalcValue('stichtag', row.date, durKey), pointShift))}</td>
-      <td>${pct(addShift(getCalcValue('z5', row.date, durKey), getAverageShiftAt(row.date, 60, rows)))}</td>
-      <td>${pct(addShift(getCalcValue('z6', row.date, durKey), getAverageShiftAt(row.date, 72, rows)))}</td>
-      <td>${pct(addShift(getCalcValue('z7', row.date, durKey), getAverageShiftAt(row.date, 84, rows)))}</td>
-      <td>${pct(addShift(getCalcValue('z8', row.date, durKey), getAverageShiftAt(row.date, 96, rows)))}</td>
-      <td>${pct(addShift(getCalcValue('z9', row.date, durKey), getAverageShiftAt(row.date, 108, rows)))}</td>
-      <td>${pct(addShift(getCalcValue('z10', row.date, durKey), getAverageShiftAt(row.date, 120, rows)))}</td>
+      <td>${fDE(eomStr)}</td>
+      <td>${durInput}</td>
+      <td>${pct(getCalcValue('ifrs', eomStr, durKey))}</td>
+      <td>${pct(getCalcValue('stichtag', eomStr, durKey))}</td>
+      ${avgCells}
     `;
 
     tbody.appendChild(tr);
-  });
+  }
 }
 
 function exportCalcToExcel() {
   const numEntries = parseInt(document.getElementById('export-entries').value, 10);
   const typeIndex = parseInt(document.getElementById('export-type').value, 10);
   const typeName = document.getElementById('export-type').options[document.getElementById('export-type').selectedIndex].text;
-  const rows = getProjectionRows();
-  if (!rows.length) return;
 
-  const durKey = `${Math.round(rows[0].duration)} Jahre`;
   const sheet1Data = [["Ab_Monat", "Wert"]];
+  const rows = document.querySelectorAll('#calc-tbody tr');
 
-  rows.slice(0, numEntries).forEach((row, idx) => {
-    const abMonat = (idx === 0) ? -1000 : (idx * 12);
-    const value = collectRateValue(row, durKey, typeIndex, rows);
-    sheet1Data.push([abMonat, value == null ? null : value / 100]);
-  });
+  for (let i = 0; i < numEntries; i++) {
+    if (!rows[i]) break;
+
+    const abMonat = (i === 0) ? -1000 : (i * 12);
+    const rawText = rows[i].querySelectorAll('td')[typeIndex].innerText;
+    const numericValue = rawText === "–"
+      ? null
+      : parseFloat(rawText.replace(',', '.').replace('%', '')) / 100;
+
+    sheet1Data.push([abMonat, numericValue]);
+  }
 
   const eckdatenData = [
     ["Parameter", "Wert"],
-    ["Stichtag", normalizeToMonthEnd(document.getElementById('calc-date').value)],
+    ["Stichtag", document.getElementById('calc-date').value],
     ["Zinstyp", typeName],
     ["Durationart", document.getElementById('calc-duration-type').value],
     ["Durationjahre", document.getElementById('calc-duration').value]
   ];
 
-  const deltaPlanData = [["Stichtag", "Duration", "Zinsdelta"]];
-  rows.slice(0, numEntries).forEach(row => {
-    deltaPlanData.push([row.date, row.duration, (Number(row.delta) || 0) / 100]);
-  });
-
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sheet1Data), "Zinstabelle");
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(eckdatenData), "Eckdaten");
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(deltaPlanData), "Zinsdelta-Plan");
   XLSX.writeFile(wb, "VALOG_Zinsermittlung_Export.xlsx");
 }
 
-function bindCalculatorControls() {
-  if (calculatorEventsBound) return;
+document.getElementById('calc-duration-type').addEventListener('change', (e) => {
+  const durInput = document.getElementById('calc-duration');
 
-  document.getElementById('calc-date').addEventListener('change', () => {
-    document.getElementById('calc-date').value = normalizeToMonthEnd(document.getElementById('calc-date').value);
-    updateCalculator();
-  });
-
-  document.getElementById('calc-duration').addEventListener('input', updateCalculator);
-
-  document.getElementById('calc-duration-type').addEventListener('change', (e) => {
-    const durInput = document.getElementById('calc-duration');
-
-    if (e.target.value === 'Pauschal') {
-      durInput.value = 15;
-      durInput.disabled = true;
-      durInput.style.backgroundColor = '#f0f0f0';
-      durInput.style.color = '#999';
-    } else {
-      durInput.disabled = false;
-      durInput.style.backgroundColor = '#fff';
-      durInput.style.color = 'var(--vdark)';
-    }
-
-    updateCalculator();
-  });
-
-  document.getElementById('calc-tbody').addEventListener('change', (e) => {
-    if (!e.target.classList.contains('zinsdelta-input')) return;
-
-    const rowIndex = Number(e.target.dataset.row);
-    calcDeltaSchedule[rowIndex] = Number(e.target.value || 0);
-    updateCalculator();
-  });
-
-  calculatorEventsBound = true;
-}
-
-function hydrateCalculatorData(derivedData) {
-  if (!derivedData?.calc) throw new Error('Keine vollständigen Rechnerdaten gefunden.');
-
-  calcData = {
-    ifrs: derivedData.calc.ifrs,
-    stichtag: derivedData.calc.stichtag,
-    z5: derivedData.calc.z5,
-    z6: derivedData.calc.z6,
-    z7: derivedData.calc.z7,
-    z8: derivedData.calc.z8,
-    z9: derivedData.calc.z9,
-    z10: derivedData.calc.z10
-  };
-
-  calcTimeline = derivedData.calc.timeline || [];
-  bindCalculatorControls();
-
-  const latestCalcDate = calcTimeline[calcTimeline.length - 1];
-  if (latestCalcDate && !document.getElementById('calc-date').value) {
-    document.getElementById('calc-date').value = latestCalcDate;
+  if (e.target.value === 'Pauschal') {
+    durInput.value = 15;
+    durInput.disabled = true;
+    durInput.style.backgroundColor = '#f0f0f0';
+    durInput.style.color = '#999';
+  } else {
+    durInput.disabled = false;
+    durInput.style.backgroundColor = '#fff';
+    durInput.style.color = 'var(--vdark)';
   }
 
   updateCalculator();
-}
+});
 
 /* ==========================================================
-   INITIALIZATION (MINI WITH FULL FALLBACK)
+   INITIALIZATION (ON DEMAND LOADING)
    ========================================================== */
 async function init() {
+  const initScreen = document.getElementById('dashboard-init-screen');
+  const loadingState = document.getElementById('dashboard-loading-state');
+
+  if (initScreen) initScreen.style.display = 'none';
+  if (loadingState) loadingState.style.display = 'block';
+
   try {
-    let derivedData = null;
+    const respFull = await fetch(FULL_DATA_FILE);
+    if (!respFull.ok) throw new Error(`HTTP ${respFull.status}`);
 
-    try {
-      const { workbook } = await fetchWorkbookFromCandidates(MINI_DATA_FILES);
-      derivedData = buildDashboardDataFromMiniWorkbook(workbook);
-    } catch (miniError) {
-      const { workbook } = await fetchWorkbookFromCandidates(FULL_DATA_FILES);
-      fullWorkbookCache = workbook;
-      fullDerivedDataCache = buildDashboardDataFromFullWorkbook(workbook);
-      derivedData = fullDerivedDataCache;
-    }
+    const wbFull = XLSX.read(await respFull.arrayBuffer(), { type: 'array' });
+    fullWorkbookCache = wbFull;
+    fullDerivedDataCache = buildDashboardDataFromFullWorkbook(wbFull);
 
-    const D = derivedData.charts;
+    const D = fullDerivedDataCache.charts;
     const hl = latest(D.ugb) || latest(D.ifrs);
     const st = hl ? `Stand: ${fMY(hl)}` : '';
     ['stand-ugb', 'stand-avg', 'stand-ifrs', 'calc-stand'].forEach(id => {
@@ -1391,11 +1108,11 @@ async function init() {
     });
 
     const durationLabels = {
-      "5": "5 Jahre",
-      "10": "10 Jahre",
-      "15": "15 Jahre",
-      "20": "20 Jahre",
-      "25": "25 Jahre"
+      "5": "Duration 5",
+      "10": "Duration 10",
+      "15": "Duration 15",
+      "20": "Duration 20",
+      "25": "Duration 25"
     };
 
     const avgLabels = {
@@ -1414,8 +1131,8 @@ async function init() {
     makeChart("chart-avg", D.avg, AVG_KEYS, P.avg, avgLabels);
     buildTable("table-avg", D.avg, AVG_KEYS, avgLabels, hl);
 
-    makeChart("chart-ifrs", D.ifrs, TERM_KEYS, P.ifrs, durationLabels);
-    buildTable("table-ifrs", D.ifrs, TERM_KEYS, durationLabels, hl);
+    makeIFRSBandChart("chart-ifrs", D.ifrs);
+    document.getElementById('wrap-table-ifrs').style.display = 'none';
 
     if (hl) document.getElementById('calc-date').value = hl;
 
@@ -1424,7 +1141,9 @@ async function init() {
 
     document.getElementById('btn-load-calc').addEventListener('click', loadFullData, { once: true });
   } catch (e) {
-    showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass eine der Dateien <code>valog_zinssaetze_data.xlsx</code>, <code>Zinssaetze.xlsx</code> oder <code>UGB_Zinssätze.xlsx</code> verfügbar ist.`);
+    if (loadingState) loadingState.style.display = 'none';
+    if (initScreen) initScreen.style.display = 'block';
+    showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass <code>Zinssaetze.xlsx</code> hochgeladen ist.`);
   }
 }
 
@@ -1434,21 +1153,39 @@ async function loadFullData() {
 
   try {
     if (!fullDerivedDataCache) {
-      const { workbook } = await fetchWorkbookFromCandidates(FULL_DATA_FILES);
-      fullWorkbookCache = workbook;
-      fullDerivedDataCache = buildDashboardDataFromFullWorkbook(workbook);
+      const respFull = await fetch(FULL_DATA_FILE);
+      if (!respFull.ok) throw new Error(`HTTP ${respFull.status}`);
+      const wbFull = XLSX.read(await respFull.arrayBuffer(), { type: 'array' });
+      fullWorkbookCache = wbFull;
+      fullDerivedDataCache = buildDashboardDataFromFullWorkbook(wbFull);
     }
 
-    hydrateCalculatorData(fullDerivedDataCache);
+    calcData = {
+      ifrs: fullDerivedDataCache.calc.ifrs,
+      stichtag: fullDerivedDataCache.calc.stichtag,
+      z5: fullDerivedDataCache.calc.z5,
+      z6: fullDerivedDataCache.calc.z6,
+      z7: fullDerivedDataCache.calc.z7,
+      z8: fullDerivedDataCache.calc.z8,
+      z9: fullDerivedDataCache.calc.z9,
+      z10: fullDerivedDataCache.calc.z10
+    };
+
+    if (!calculatorEventsBound) {
+      document.getElementById('calc-date').addEventListener('change', updateCalculator);
+      document.getElementById('calc-duration').addEventListener('input', updateCalculator);
+      calculatorEventsBound = true;
+    }
+
+    updateCalculator();
 
     document.getElementById('calc-loading').style.display = 'none';
     document.getElementById('calc-body-content').style.display = 'block';
   } catch (e) {
-    document.getElementById('calc-loading').innerHTML = `<strong>Achtung:</strong> Es konnte keine vollständige Zinsdatei geladen werden. Erwartet wurde eine der Dateien <code>Zinssaetze.xlsx</code>, <code>UGB_Zinssätze.xlsx</code> oder <code>UGB_Zinssaetze.xlsx</code>.`;
+    document.getElementById('calc-loading').innerHTML = `<strong>Achtung:</strong> Die Datei <code>Zinssaetze.xlsx</code> wurde nicht gefunden. Der Rechner kann nicht geladen werden.`;
   }
 }
-
-init();
+document.getElementById('btn-init-dashboard').addEventListener('click', init, { once: true });
   </script>
 </body>
 </html>
