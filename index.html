@@ -149,8 +149,31 @@
 
     .launch-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+    .launch-card-item {
+      border: 1px solid var(--vlight);
+      border-radius: 12px;
+      background: #fff;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 220px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.04);
+    }
+    .launch-card-item h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: var(--vt);
+    }
+    .launch-card-item p {
+      margin: 0;
+      color: var(--vdark);
+      line-height: 1.65;
+      font-size: 0.95rem;
+      flex: 1;
     }
     .launch-btn {
       justify-content: center;
@@ -158,6 +181,7 @@
       padding: 16px 18px;
       text-align: center;
       line-height: 1.35;
+      width: 100%;
     }
     .lazy-section { display: none; }
 
@@ -460,13 +484,25 @@
       <section class="card" id="graphs-launcher">
         <div class="card-header">
           <h2>Grafiken & Tabellen</h2>
-          <p>Die folgenden Bereiche werden bei Bedarf geladen. Für die UGB-Auswertungen werden jeweils die letzten 18 Monate bis zum aktuellen Stand dargestellt. Die IFRS-Zinsbandbreite wird als Band zwischen Duration 5 und Duration 25 angezeigt.</p>
+          <p>Die folgenden Bereiche werden bei Bedarf geladen. Für alle drei Auswertungen werden jeweils die letzten 18 Monate bis zum aktuellen Stand aus der Datei <strong>Zinssaetze.xlsx</strong> dargestellt.</p>
         </div>
         <div class="card-body">
           <div class="launch-grid">
-            <button id="btn-load-ugb" class="btn btn-primary launch-btn">UGB Stichtagszinssatz<br>Grafik &amp; Tabelle laden</button>
-            <button id="btn-load-avg" class="btn btn-primary launch-btn">UGB Durchschnittszins<br>Grafik &amp; Tabelle laden</button>
-            <button id="btn-load-ifrs" class="btn btn-primary launch-btn">IFRS Zinsbandbreite<br>Grafik laden</button>
+            <div class="launch-card-item">
+              <h3>UGB Stichtagszinssatz</h3>
+              <p>Zeigt den exakten Marktzins zum jeweiligen Bilanzstichtag. Nach dem Klick werden die Grafik und die zugehörige Tabelle für die letzten 18 Monate geladen.</p>
+              <button id="btn-load-ugb" class="btn btn-primary launch-btn">UGB Stichtagszinssatz<br>Grafik &amp; Tabelle laden</button>
+            </div>
+            <div class="launch-card-item">
+              <h3>UGB Durchschnittszinssätze</h3>
+              <p>Zeigt die geglätteten historischen Durchschnittszinsen gemäß AFRAC 27. Nach dem Klick werden die Grafik und die zugehörige Tabelle für die letzten 18 Monate geladen.</p>
+              <button id="btn-load-avg" class="btn btn-primary launch-btn">UGB Durchschnittszinssätze<br>Grafik &amp; Tabelle laden</button>
+            </div>
+            <div class="launch-card-item">
+              <h3>IFRS Zinsbandbreite</h3>
+              <p>Zeigt die IFRS-Zinsbandbreite auf Basis der Daten aus <strong>Zinssaetze.xlsx</strong>. Die Grafik stellt das Band zwischen Duration 5 und Duration 25 dar; zusätzlich wird die Tabelle mit den Standard-Durations geladen.</p>
+              <button id="btn-load-ifrs" class="btn btn-primary launch-btn">IFRS Zinsbandbreite<br>Grafik &amp; Tabelle laden</button>
+            </div>
           </div>
         </div>
       </section>
@@ -512,7 +548,7 @@
       <section class="card lazy-section" id="section-ifrs">
         <div class="card-header">
           <h2>Zinsbandbreite für Sozialkapitalbewertung nach IFRS <span class="stand-badge" id="stand-ifrs"></span></h2>
-          <p>Zinsbandbreite gemäß IAS 19 für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für Restlaufzeiten zwischen 5 und 25 Jahren. Das Band zeigt die Spanne zwischen Duration 5 und Duration 25.</p>
+          <p>Zinsbandbreite gemäß IAS 19 für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für Restlaufzeiten zwischen 5 und 25 Jahren. Die Grafik zeigt das Band zwischen Duration 5 und Duration 25; die Tabelle zeigt zusätzlich die Standard-Durations 5, 10, 15, 20 und 25.</p>
         </div>
         <div class="card-body">
           <div class="chart-wrapper"><canvas id="chart-ifrs"></canvas></div>
@@ -524,6 +560,7 @@
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
             </button>
           </div>
+          <div class="table-container" id="wrap-table-ifrs"><div id="table-ifrs"></div></div>
         </div>
       </section>
 
@@ -1311,7 +1348,9 @@ function renderDashboardSection(sectionKey) {
 
   if (sectionKey === 'ifrs' && !renderedSections.ifrs) {
     const rows = getLastMonths(dashboardChartsCache.ifrs);
+    const hl = latest(rows);
     makeIFRSBandChart("chart-ifrs", rows);
+    buildTable("table-ifrs", rows, TERM_KEYS, durationLabels, hl);
     renderedSections.ifrs = true;
   }
 
@@ -1561,17 +1600,10 @@ function hydrateCalculatorData(derivedData) {
    ========================================================== */
 async function init() {
   try {
-    let derivedData = null;
-
-    try {
-      const { workbook } = await fetchWorkbookFromCandidates(MINI_DATA_FILES);
-      derivedData = buildDashboardDataFromMiniWorkbook(workbook);
-    } catch (miniError) {
-      const { workbook } = await fetchWorkbookFromCandidates(FULL_DATA_FILES);
-      fullWorkbookCache = workbook;
-      fullDerivedDataCache = buildDashboardDataFromFullWorkbook(workbook);
-      derivedData = fullDerivedDataCache;
-    }
+    const { workbook } = await fetchWorkbookFromCandidates(FULL_DATA_FILES);
+    fullWorkbookCache = workbook;
+    fullDerivedDataCache = buildDashboardDataFromFullWorkbook(workbook);
+    const derivedData = fullDerivedDataCache;
 
     const D = derivedData.charts;
     dashboardChartsCache = D;
@@ -1590,7 +1622,7 @@ async function init() {
     bindDashboardLaunchers();
     document.getElementById('btn-load-calc').addEventListener('click', loadFullData, { once: true });
   } catch (e) {
-    showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass eine der Dateien <code>valog_zinssaetze_data.xlsx</code>, <code>Zinssaetze.xlsx</code> oder <code>UGB_Zinssätze.xlsx</code> verfügbar ist.`);
+    showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass eine der Dateien <code>Zinssaetze.xlsx</code>, <code>UGB_Zinssätze.xlsx</code> oder <code>UGB_Zinssaetze.xlsx</code> verfügbar ist.`);
   }
 }
 
