@@ -410,7 +410,7 @@
             </div>
           
             <div class="toolbar" style="margin-bottom:15px; padding-bottom:15px; border-bottom: none;">
-			  <button class="btn" onclick="alert('iBoxx-Chart Feature folgt in Kürze')">
+			  <button class="btn" id="btn-copy-iboxx" onclick="copyIboxxChart(this)">
 				<svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg> iBoxx-Chart Generieren
 			  </button>
 			  <button class="btn" id="btn-copy-disclaimer" onclick="copyDisclaimer(this)">
@@ -627,6 +627,114 @@ function getEndOfMonthStr(year, month) {
   return `${year}-${String(month).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+function escapeHtml(s) {
+  return String(s)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
+}
+
+async function copyRichToClipboard(html, plainText) {
+  const item = new ClipboardItem({
+    'text/html': new Blob([html], { type: 'text/html' }),
+    'text/plain': new Blob([plainText], { type: 'text/plain' })
+  });
+  await navigator.clipboard.write([item]);
+}
+
+function setCopiedState(btn, originalHtml) {
+  if (!btn) return;
+  btn.classList.add('copied');
+  btn.innerHTML = svgCopied;
+  setTimeout(() => {
+    btn.classList.remove('copied');
+    btn.innerHTML = originalHtml;
+  }, 2000);
+}
+
+function getIfrsValueForChart(dateStr, duration) {
+  const durKey = String(duration);
+  const row =
+    calcData.ifrsRaw?.[dateStr] ||
+    calcData.ifrsRaw?.[toIsoDate(dateStr)] ||
+    null;
+
+  if (!row) return null;
+  const n = Number(row[durKey]);
+  return Number.isFinite(n) ? n : null;
+}
+
+function buildIboxxChartClipboard(dateStr) {
+  const durations = [5, 10, 15, 20, 25];
+  const titleDate = fDE(dateStr);
+
+  const values = durations.map(d => ({
+    label: `${d} Jahre`,
+    value: getIfrsValueForChart(dateStr, d)
+  }));
+
+  const plainRows = [
+    [titleDate, '', `Rendite-Chart ${titleDate}`],
+    ['Restlaufzeit', 'Zinssatz', 'Quelle: iBoxx € Corporates AA'],
+    ...values.map(v => [v.label, pct(v.value), ''])
+  ];
+
+  const plainText = plainRows.map(r => r.join('\t')).join('\n');
+
+  const htmlRows = values.map(v => `
+    <tr>
+      <td style="border:1px solid #000; padding:4px 6px;">${escapeHtml(v.label)}</td>
+      <td style="border:1px solid #000; padding:4px 6px; text-align:right;">${escapeHtml(pct(v.value))}</td>
+      <td style="border:1px solid #000; padding:4px 6px;"></td>
+    </tr>
+  `).join('');
+
+  const html = `
+    <table style="border-collapse:collapse; font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; color:#000;">
+      <tr>
+        <td colspan="2" style="border:1px solid #000; padding:4px 6px; text-align:center; vertical-align:middle; font-weight:700;">
+          ${escapeHtml(titleDate)}
+        </td>
+        <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">
+          ${escapeHtml(`Rendite-Chart ${titleDate}`)}
+        </td>
+      </tr>
+      <tr>
+        <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">Restlaufzeit</td>
+        <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">Zinssatz</td>
+        <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">Quelle: iBoxx € Corporates AA</td>
+      </tr>
+      ${htmlRows}
+    </table>
+  `;
+
+  return { html, plainText };
+}
+
+async function copyIboxxChart(btn) {
+  if (!calcData.ifrsRaw) {
+    alert('Bitte zuerst den interaktiven Rechner laden.');
+    return;
+  }
+
+  const dateStr = document.getElementById('calc-date').value;
+  if (!dateStr) {
+    alert('Bitte zuerst einen Stichtag auswählen.');
+    return;
+  }
+
+  const origHtml = btn.innerHTML;
+
+  try {
+    const payload = buildIboxxChartClipboard(dateStr);
+    await copyRichToClipboard(payload.html, payload.plainText);
+    setCopiedState(btn, origHtml);
+  } catch (e) {
+    alert('Fehler beim Kopieren des iBoxx-Charts.');
+  }
+}
+
 function normalizeToMonthEnd(dateStr) {
   if (!dateStr) return '';
   const [y, m] = String(dateStr).split('-').map(Number);
@@ -835,20 +943,108 @@ async function exportChart(id, fn, type, btn) {
   chart.update('none');
 }
 
-function copyDisclaimer(btn) {
+function setCopiedState(btn) {
+  if (!btn) return;
+  const origHtml = btn.innerHTML;
+  btn.classList.add('copied');
+  btn.innerHTML = svgCopied;
+  setTimeout(() => {
+    btn.classList.remove('copied');
+    btn.innerHTML = origHtml;
+  }, 2000);
+}
+
+async function copyDisclaimer(btn) {
   const disclaimer = "Bitte beachten Sie, dass es sich bei den genannten Parametern um einen unverbindlichen Vorschlag der VALOG GmbH handelt. Die Auswahl der Parameter liegt letztlich in Ihrer Verantwortung. Wir empfehlen Ihnen daher, diese vorab mit Ihrem Wirtschaftsprüfer abzusprechen.";
   const origHtml = btn.innerHTML;
 
-  navigator.clipboard.writeText(disclaimer).then(() => {
-    btn.classList.add('copied');
-    btn.innerHTML = svgCopied;
-    setTimeout(() => {
-      btn.classList.remove('copied');
-      btn.innerHTML = origHtml;
-    }, 2000);
-  }).catch(() => {
+  const html = `
+    <div style="font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; color:#000;">
+      <i>${escapeHtml(disclaimer)}</i>
+    </div>
+  `;
+
+  try {
+    await copyRichToClipboard(html, disclaimer);
+    setCopiedState(btn, origHtml);
+  } catch (e) {
     alert('Fehler beim Kopieren.');
+  }
+}
+
+function buildIboxxChartClipboardRows(dateIso) {
+  const ifrsRow = calcData?.ifrs?.[dateIso];
+  if (!ifrsRow) {
+    throw new Error(`Für den Stichtag ${fDE(dateIso)} wurden keine IFRS-Daten gefunden.`);
+  }
+
+  const dateLabel = fDE(dateIso);
+  const rows = [
+    [dateLabel, '', `Rendite-Chart ${dateLabel}`],
+    ['Restlaufzeit', 'Zinssatz', 'Quelle: iBoxx € Corporates AA']
+  ];
+
+  TERM_KEYS.forEach(term => {
+    rows.push([`${term} Jahre`, pct(ifrsRow[`${term} Jahre`]), '']);
   });
+
+  return rows;
+}
+
+function rowsToTabSeparatedText(rows) {
+  return rows.map(row => row.join('\t')).join('\r\n');
+}
+
+function rowsToHtmlTable(rows) {
+  return `
+    <table>
+      <tbody>
+        ${rows.map(row => `<tr>${row.map(cell => `<td>${String(cell ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</td>`).join('')}</tr>`).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function fallbackCopyText(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+
+async function copyIboxxChartBlock(btn) {
+  try {
+    const dateIso = normalizeToMonthEnd(document.getElementById('calc-date').value);
+    if (!dateIso) {
+      throw new Error('Bitte wählen Sie zuerst einen Stichtag aus.');
+    }
+
+    const rows = buildIboxxChartClipboardRows(dateIso);
+    const plainText = rowsToTabSeparatedText(rows);
+    const htmlTable = rowsToHtmlTable(rows);
+
+    if (navigator.clipboard && window.ClipboardItem) {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'text/plain': new Blob([plainText], { type: 'text/plain' }),
+          'text/html': new Blob([htmlTable], { type: 'text/html' })
+        })
+      ]);
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(plainText);
+    } else {
+      fallbackCopyText(plainText);
+    }
+
+    setCopiedState(btn);
+  } catch (e) {
+    alert(e.message || 'iBoxx-Chart konnte nicht in die Zwischenablage kopiert werden.');
+  }
 }
 
 Chart.register({
