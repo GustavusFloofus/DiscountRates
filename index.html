@@ -538,6 +538,7 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
   <script>
+const JSON_DATA_FILES = ['./zins_graph_data.json'];
 const MINI_DATA_FILES = ['./valog_zinssaetze_data.xlsx'];
 const FULL_DATA_FILES = ['./Zinssaetze.xlsx', './UGB_Zinssätze.xlsx', './UGB_Zinssaetze.xlsx'];
 const CALC_ROW_COUNT = 11;
@@ -1370,28 +1371,41 @@ function hydrateCalculatorData(derivedData) {
 /* ==========================================================
    INITIALIZATION (MINI WITH FULL FALLBACK)
    ========================================================== */
+async function fetchJsonFromCandidates(candidates) {
+  const errors = [];
+
+  for (const file of candidates) {
+    try {
+      const resp = await fetch(file);
+      if (!resp.ok) {
+        errors.push(`${file}: HTTP ${resp.status}`);
+        continue;
+      }
+
+      return await resp.json();
+    } catch (e) {
+      errors.push(`${file}: ${e.message}`);
+    }
+  }
+
+  throw new Error(errors.join(' | '));
+}
+
 async function init() {
   try {
-    let derivedData = null;
+    const jsonData = await fetchJsonFromCandidates(JSON_DATA_FILES);
 
-    try {
-      const { workbook } = await fetchWorkbookFromCandidates(MINI_DATA_FILES);
-      derivedData = buildDashboardDataFromMiniWorkbook(workbook);
-    } catch (miniError) {
-      const { workbook } = await fetchWorkbookFromCandidates(FULL_DATA_FILES);
-      fullWorkbookCache = workbook;
-      fullDerivedDataCache = buildDashboardDataFromFullWorkbook(workbook);
-      derivedData = fullDerivedDataCache;
-    }
+    const D = jsonData.charts;
+    const T = jsonData.tables || D;
+    const meta = jsonData.meta || {};
 
-    const D = derivedData.charts;
-    const hl = latest(D.ugb) || latest(D.ifrs);
+    const hl = meta.window_end || latest(D.ugb) || latest(D.ifrs);
     const st = hl ? `Stand: ${fMY(hl)}` : '';
     ['stand-ugb', 'stand-avg', 'stand-ifrs', 'calc-stand'].forEach(id => {
       document.getElementById(id).textContent = st;
     });
 
-    const durationLabels = {
+    const durationLabels = meta.duration_labels || {
       "5": "Duration 5",
       "10": "Duration 10",
       "15": "Duration 15",
@@ -1399,24 +1413,24 @@ async function init() {
       "25": "Duration 25"
     };
 
-    const avgLabels = {
+    const avgLabels = meta.avg_labels || {
       "Stichtagszins": "Stichtagszins",
-      "5": "5J-DSZ",
-      "6": "6J-DSZ",
-      "7": "7J-DSZ",
-      "8": "8J-DSZ",
-      "9": "9J-DSZ",
-      "10": "10J-DSZ"
+      "5": "5-Jahres-Durchschnitt",
+      "6": "6-Jahres-Durchschnitt",
+      "7": "7-Jahres-Durchschnitt",
+      "8": "8-Jahres-Durchschnitt",
+      "9": "9-Jahres-Durchschnitt",
+      "10": "10-Jahres-Durchschnitt"
     };
 
     makeChart("chart-ugb", D.ugb, TERM_KEYS, P.ugb, durationLabels);
-    buildTable("table-ugb", D.ugb, TERM_KEYS, durationLabels, hl);
+    buildTable("table-ugb", T.ugb, TERM_KEYS, durationLabels, hl);
 
     makeChart("chart-avg", D.avg, AVG_KEYS, P.avg, avgLabels);
-    buildTable("table-avg", D.avg, AVG_KEYS, avgLabels, hl);
+    buildTable("table-avg", T.avg, AVG_KEYS, avgLabels, hl);
 
     makeChart("chart-ifrs", D.ifrs, TERM_KEYS, P.ifrs, durationLabels);
-    buildTable("table-ifrs", D.ifrs, TERM_KEYS, durationLabels, hl);
+    buildTable("table-ifrs", T.ifrs, TERM_KEYS, durationLabels, hl);
 
     if (hl) document.getElementById('calc-date').value = hl;
 
@@ -1425,7 +1439,7 @@ async function init() {
 
     document.getElementById('btn-load-calc').addEventListener('click', loadFullData, { once: true });
   } catch (e) {
-    showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass eine der Dateien <code>valog_zinssaetze_data.xlsx</code>, <code>Zinssaetze.xlsx</code> oder <code>UGB_Zinssätze.xlsx</code> verfügbar ist.`);
+    showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass die Datei <code>zins_graph_data.json</code> im selben Verzeichnis wie diese HTML-Datei liegt.`);
   }
 }
 
