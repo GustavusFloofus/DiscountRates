@@ -159,6 +159,19 @@
     
     .table-calc th { background: #DAEEF3; color: var(--vt); }
     .table-calc th.th-input { background: #FDE9D9; color: var(--vo); }
+
+    .table-container-compact {
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .table-container-compact table {
+      width: 100%;
+      table-layout: fixed;
+    }
+    .table-container-compact th,
+    .table-container-compact td {
+      width: 33.333%;
+    }
     .zinsdelta-cell { min-width: 130px; }
     .zinsdelta-input {
       width: 100%;
@@ -484,7 +497,7 @@
       <section class="card" id="ifrs">
         <div class="card-header">
           <h2>Zinsbandbreite für Sozialkapitalbewertung nach IFRS <span class="stand-badge" id="stand-ifrs"></span></h2>
-          <p>Zinsbandbreite gemäß IAS 19 für Anleihen von Unternehmen mit hochklassiger Bonitätseinstufung für Restlaufzeiten zwischen 5 und 25 Jahren.</p>
+          <p>Dargestellt werden je Stichtag nur der niedrigste und der höchste IAS-19-Zinssatz innerhalb der Restlaufzeiten von 5 bis 25 Jahren; die Fläche dazwischen visualisiert die Zinsbandbreite.</p>
         </div>
         <div class="card-body">
           <div class="chart-wrapper"><canvas id="chart-ifrs"></canvas></div>
@@ -496,7 +509,7 @@
               <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Grafik kopieren
             </button>
           </div>
-          <div class="table-container" id="wrap-table-ifrs"><div id="table-ifrs"></div></div>
+          <div class="table-container table-container-compact" id="wrap-table-ifrs"><div id="table-ifrs"></div></div>
         </div>
       </section>
 
@@ -539,7 +552,6 @@
 
   <script>
 const JSON_DATA_FILES = ['./zins_graph_data.json'];
-const MINI_DATA_FILES = ['./valog_zinssaetze_data.xlsx'];
 const FULL_DATA_FILES = ['./Zinssaetze.xlsx', './UGB_Zinssätze.xlsx', './UGB_Zinssaetze.xlsx'];
 const CALC_ROW_COUNT = 11;
 
@@ -552,6 +564,9 @@ const DURATION_PALETTE = {
   "25": "#C69214"
 };
 
+const IFRS_RANGE_LINE = "#B34E00";
+const IFRS_RANGE_FILL = "rgba(212, 93, 0, 0.12)";
+
 const P = {
   ugb: DURATION_PALETTE,
   avg: {
@@ -563,11 +578,16 @@ const P = {
     "9": "#C69214",
     "10": "#963821"
   },
-  ifrs: DURATION_PALETTE
+  ifrs: {
+    min: IFRS_RANGE_LINE,
+    max: IFRS_RANGE_LINE,
+    fill: IFRS_RANGE_FILL
+  }
 };
 
 const TERM_KEYS = ["5", "10", "15", "20", "25"];
 const AVG_KEYS = ["Stichtagszins", "5", "6", "7", "8", "9", "10"];
+const IFRS_KEYS = ["min", "max"];
 const AVG_YEAR_KEYS = [5, 6, 7, 8, 9, 10];
 
 const MO = ['Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
@@ -795,6 +815,26 @@ function buildDashboardDataFromFullWorkbook(wb) {
       timeline: stichtagRows.map(r => r.date).filter(Boolean).sort()
     }
   };
+}
+
+async function fetchJsonFromCandidates(candidates) {
+  const errors = [];
+
+  for (const file of candidates) {
+    try {
+      const resp = await fetch(file);
+      if (!resp.ok) {
+        errors.push(`${file}: HTTP ${resp.status}`);
+        continue;
+      }
+
+      return await resp.json();
+    } catch (e) {
+      errors.push(`${file}: ${e.message}`);
+    }
+  }
+
+  throw new Error(errors.join(' | '));
 }
 
 async function fetchWorkbookFromCandidates(candidates) {
@@ -1104,6 +1144,90 @@ function makeChart(cid, rows, keys, pal, lbl) {
   });
 }
 
+function makeIfrsRangeChart(cid, rows, pal, lbl) {
+  const ctx = document.getElementById(cid).getContext("2d");
+  const asc = [...rows].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+
+  let mx = 0;
+  asc.forEach(r => {
+    if (r.max != null && r.max > mx) mx = r.max;
+  });
+
+  const yMax = Math.ceil((mx + 0.5) * 2) / 2;
+
+  return new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: asc.map(r => fDE(r.date)),
+      datasets: [
+        {
+          label: lbl?.max || "Maximum",
+          data: asc.map(r => r.max),
+          borderColor: pal.max,
+          backgroundColor: pal.max,
+          borderWidth: 2.5,
+          tension: 0.15,
+          pointRadius: 0,
+          pointHoverRadius: 6
+        },
+        {
+          label: lbl?.min || "Minimum",
+          data: asc.map(r => r.min),
+          borderColor: pal.min,
+          backgroundColor: pal.fill,
+          borderWidth: 2.5,
+          tension: 0.15,
+          pointRadius: 0,
+          pointHoverRadius: 6,
+          fill: '-1'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        customCanvasBackgroundColor: { color: 'white' },
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            usePointStyle: true,
+            pointStyle: 'rectRounded',
+            padding: 20,
+            color: '#575757',
+            font: { family: "'Open Sans', sans-serif", size: 14, weight: '600' }
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(87, 87, 87, 0.95)',
+          padding: 12,
+          callbacks: {
+            label: c => ` ${c.dataset.label}: ${pct(c.parsed.y)}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: "rgba(87,87,87,0.08)", drawBorder: false },
+          ticks: { color: "#797979", maxRotation: 45, autoSkip: true, maxTicksLimit: 12 }
+        },
+        y: {
+          min: 0,
+          max: yMax,
+          grid: { color: "rgba(87,87,87,0.08)", drawBorder: false },
+          ticks: {
+            color: "#797979",
+            callback: v => Number(v).toFixed(2).replace(".", ",") + "%",
+            stepSize: 0.5
+          }
+        }
+      }
+    }
+  });
+}
+
 function buildTable(id, rows, keys, lbl, hl) {
   const w = document.getElementById(id);
   const desc = [...rows].sort((a, b) => String(b.date).localeCompare(String(a.date)));
@@ -1137,6 +1261,48 @@ function buildTable(id, rows, keys, lbl, hl) {
       td.textContent = pct(r[k]);
       tr.appendChild(td);
     });
+
+    tb.appendChild(tr);
+  });
+
+  t.appendChild(th);
+  t.appendChild(tb);
+  w.innerHTML = "";
+  w.appendChild(t);
+}
+
+function buildIfrsRangeTable(id, rows, lbl, hl) {
+  const w = document.getElementById(id);
+  const desc = [...rows].sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const t = document.createElement("table");
+  const th = document.createElement("thead");
+  const tb = document.createElement("tbody");
+  const hr = document.createElement("tr");
+
+  const headers = ["Stichtag", lbl?.min || "Minimum", lbl?.max || "Maximum"];
+  headers.forEach(text => {
+    const h = document.createElement("th");
+    h.textContent = text;
+    hr.appendChild(h);
+  });
+
+  th.appendChild(hr);
+
+  desc.forEach(r => {
+    const tr = document.createElement("tr");
+    if (hl && r.date === hl) tr.classList.add("highlight-latest");
+
+    const td0 = document.createElement("td");
+    td0.textContent = fDE(r.date);
+    tr.appendChild(td0);
+
+    const tdMin = document.createElement("td");
+    tdMin.textContent = pct(r.min);
+    tr.appendChild(tdMin);
+
+    const tdMax = document.createElement("td");
+    tdMax.textContent = pct(r.max);
+    tr.appendChild(tdMax);
 
     tb.appendChild(tr);
   });
@@ -1371,35 +1537,15 @@ function hydrateCalculatorData(derivedData) {
 /* ==========================================================
    INITIALIZATION (MINI WITH FULL FALLBACK)
    ========================================================== */
-async function fetchJsonFromCandidates(candidates) {
-  const errors = [];
-
-  for (const file of candidates) {
-    try {
-      const resp = await fetch(file);
-      if (!resp.ok) {
-        errors.push(`${file}: HTTP ${resp.status}`);
-        continue;
-      }
-
-      return await resp.json();
-    } catch (e) {
-      errors.push(`${file}: ${e.message}`);
-    }
-  }
-
-  throw new Error(errors.join(' | '));
-}
-
 async function init() {
   try {
     const jsonData = await fetchJsonFromCandidates(JSON_DATA_FILES);
 
-    const D = jsonData.charts;
+    const D = jsonData.charts || {};
     const T = jsonData.tables || D;
     const meta = jsonData.meta || {};
 
-    const hl = meta.window_end || latest(D.ugb) || latest(D.ifrs);
+    const hl = meta.window_end || latest(D.ugb || []) || latest(D.ifrs || []);
     const st = hl ? `Stand: ${fMY(hl)}` : '';
     ['stand-ugb', 'stand-avg', 'stand-ifrs', 'calc-stand'].forEach(id => {
       document.getElementById(id).textContent = st;
@@ -1423,14 +1569,19 @@ async function init() {
       "10": "10-Jahres-Durchschnitt"
     };
 
-    makeChart("chart-ugb", D.ugb, TERM_KEYS, P.ugb, durationLabels);
-    buildTable("table-ugb", T.ugb, TERM_KEYS, durationLabels, hl);
+    const ifrsLabels = meta.ifrs_labels || {
+      min: "Minimum",
+      max: "Maximum"
+    };
 
-    makeChart("chart-avg", D.avg, AVG_KEYS, P.avg, avgLabels);
-    buildTable("table-avg", T.avg, AVG_KEYS, avgLabels, hl);
+    makeChart("chart-ugb", D.ugb || [], TERM_KEYS, P.ugb, durationLabels);
+    buildTable("table-ugb", T.ugb || [], TERM_KEYS, durationLabels, hl);
 
-    makeChart("chart-ifrs", D.ifrs, TERM_KEYS, P.ifrs, durationLabels);
-    buildTable("table-ifrs", T.ifrs, TERM_KEYS, durationLabels, hl);
+    makeChart("chart-avg", D.avg || [], AVG_KEYS, P.avg, avgLabels);
+    buildTable("table-avg", T.avg || [], AVG_KEYS, avgLabels, hl);
+
+    makeIfrsRangeChart("chart-ifrs", D.ifrs || [], P.ifrs, ifrsLabels);
+    buildIfrsRangeTable("table-ifrs", T.ifrs || [], ifrsLabels, hl);
 
     if (hl) document.getElementById('calc-date').value = hl;
 
@@ -1439,7 +1590,7 @@ async function init() {
 
     document.getElementById('btn-load-calc').addEventListener('click', loadFullData, { once: true });
   } catch (e) {
-    showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass die Datei <code>zins_graph_data.json</code> im selben Verzeichnis wie diese HTML-Datei liegt.`);
+    showErr(`<strong>Daten konnten nicht geladen werden.</strong><br>${e.message}<br><br>Stelle sicher, dass die Datei <code>zins_graph_data.json</code> für die Grafiken/Tabellen und zusätzlich <code>Zinssaetze.xlsx</code> oder <code>UGB_Zinssätze.xlsx</code> für den interaktiven Rechner verfügbar ist.`);
   }
 }
 
