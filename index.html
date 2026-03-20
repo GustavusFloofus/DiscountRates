@@ -645,11 +645,15 @@ async function copyRichToClipboard(html, plainText) {
 
 function setCopiedState(btn, originalHtml) {
   if (!btn) return;
+
+  const restoreHtml = originalHtml ?? btn.innerHTML;
+
   btn.classList.add('copied');
   btn.innerHTML = svgCopied;
+
   setTimeout(() => {
     btn.classList.remove('copied');
-    btn.innerHTML = originalHtml;
+    btn.innerHTML = restoreHtml;
   }, 2000);
 }
 
@@ -908,29 +912,41 @@ function rowsToHtmlTable(rows) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
+  const dataRows = rows.slice(2).map(row => `
+    <tr>
+      <td style="border:1px solid #000; padding:3px 6px; font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; font-weight:400; text-align:left; white-space:nowrap;">
+        ${esc(row[0])}
+      </td>
+      <td style="border:1px solid #000; padding:3px 6px; font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; font-weight:400; text-align:right; white-space:nowrap;">
+        ${esc(row[1])}
+      </td>
+      <td style="border:none; padding:3px 0 3px 10px; font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; font-weight:400; text-align:left; white-space:nowrap;"></td>
+    </tr>
+  `).join('');
+
   return `
     <table style="border-collapse:collapse; font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; color:#000;">
       <tbody>
         <tr>
-          <td colspan="2" style="border:1px solid #000; padding:4px 6px; text-align:center; vertical-align:middle; font-weight:700;">
+          <td colspan="2" style="border:1px solid #000; padding:3px 6px; text-align:center; vertical-align:middle; font-weight:700; white-space:nowrap;">
             ${esc(rows[0][0])}
           </td>
-          <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">
+          <td style="border:none; padding:3px 0 3px 10px; text-align:left; vertical-align:middle; font-weight:400; white-space:nowrap;">
             ${esc(rows[0][2])}
           </td>
         </tr>
         <tr>
-          <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">${esc(rows[1][0])}</td>
-          <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">${esc(rows[1][1])}</td>
-          <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">${esc(rows[1][2])}</td>
+          <td style="border:1px solid #000; padding:3px 6px; text-align:left; font-weight:400; white-space:nowrap;">
+            ${esc(rows[1][0])}
+          </td>
+          <td style="border:1px solid #000; padding:3px 6px; text-align:right; font-weight:400; white-space:nowrap;">
+            ${esc(rows[1][1])}
+          </td>
+          <td style="border:none; padding:3px 0 3px 10px; text-align:left; font-weight:400; white-space:nowrap;">
+            ${esc(rows[1][2])}
+          </td>
         </tr>
-        ${rows.slice(2).map(row => `
-          <tr>
-            <td style="border:1px solid #000; padding:4px 6px;">${esc(row[0])}</td>
-            <td style="border:1px solid #000; padding:4px 6px; text-align:right;">${esc(row[1])}</td>
-            <td style="border:1px solid #000; padding:4px 6px;"></td>
-          </tr>
-        `).join('')}
+        ${dataRows}
       </tbody>
     </table>
   `;
@@ -949,6 +965,8 @@ function fallbackCopyText(text) {
 }
 
 async function copyIboxxChartBlock(btn) {
+  const origHtml = btn ? btn.innerHTML : '';
+
   try {
     const dateIso = normalizeToMonthEnd(document.getElementById('calc-date').value);
     if (!dateIso) {
@@ -972,7 +990,7 @@ async function copyIboxxChartBlock(btn) {
       fallbackCopyText(plainText);
     }
 
-    setCopiedState(btn);
+    setCopiedState(btn, origHtml);
   } catch (e) {
     alert(e.message || 'iBoxx-Chart konnte nicht in die Zwischenablage kopiert werden.');
   }
