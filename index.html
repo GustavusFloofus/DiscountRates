@@ -1048,7 +1048,7 @@ function makeChart(cid, rows, keys, pal, lbl) {
     data: {
       labels: asc.map(r => fDE(r.date)),
       datasets: keys.map(k => ({
-        label: lbl?.[k] || `${k} Jahre`,
+        label: lbl?.[k] || `Duration ${k}`,
         data: asc.map(r => r[k]),
         borderColor: pal[k],
         backgroundColor: pal[k],
@@ -1117,7 +1117,7 @@ function buildTable(id, rows, keys, lbl, hl) {
 
   keys.forEach(k => {
     const h = document.createElement("th");
-    h.textContent = lbl?.[k] || `${k} Jahre`;
+    h.textContent = lbl?.[k] || `Duration ${k}`;
     hr.appendChild(h);
   });
 
@@ -1392,11 +1392,11 @@ async function init() {
     });
 
     const durationLabels = {
-      "5": "5 Jahre",
-      "10": "10 Jahre",
-      "15": "15 Jahre",
-      "20": "20 Jahre",
-      "25": "25 Jahre"
+      "5": "Duration 5",
+      "10": "Duration 10",
+      "15": "Duration 15",
+      "20": "Duration 20",
+      "25": "Duration 25"
     };
 
     const avgLabels = {
