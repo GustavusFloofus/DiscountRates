@@ -410,7 +410,7 @@
             </div>
           
             <div class="toolbar" style="margin-bottom:15px; padding-bottom:15px; border-bottom: none;">
-			  <button class="btn" id="btn-copy-iboxx" onclick="copyIboxxChart(this)">
+			  <button class="btn" id="btn-copy-iboxx" onclick="copyIboxxChartBlock(this)">
 				<svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg> iBoxx-Chart Generieren
 			  </button>
 			  <button class="btn" id="btn-copy-disclaimer" onclick="copyDisclaimer(this)">
@@ -653,88 +653,6 @@ function setCopiedState(btn, originalHtml) {
   }, 2000);
 }
 
-function getIfrsValueForChart(dateStr, duration) {
-  const durKey = String(duration);
-  const row =
-    calcData.ifrsRaw?.[dateStr] ||
-    calcData.ifrsRaw?.[toIsoDate(dateStr)] ||
-    null;
-
-  if (!row) return null;
-  const n = Number(row[durKey]);
-  return Number.isFinite(n) ? n : null;
-}
-
-function buildIboxxChartClipboard(dateStr) {
-  const durations = [5, 10, 15, 20, 25];
-  const titleDate = fDE(dateStr);
-
-  const values = durations.map(d => ({
-    label: `${d} Jahre`,
-    value: getIfrsValueForChart(dateStr, d)
-  }));
-
-  const plainRows = [
-    [titleDate, '', `Rendite-Chart ${titleDate}`],
-    ['Restlaufzeit', 'Zinssatz', 'Quelle: iBoxx € Corporates AA'],
-    ...values.map(v => [v.label, pct(v.value), ''])
-  ];
-
-  const plainText = plainRows.map(r => r.join('\t')).join('\n');
-
-  const htmlRows = values.map(v => `
-    <tr>
-      <td style="border:1px solid #000; padding:4px 6px;">${escapeHtml(v.label)}</td>
-      <td style="border:1px solid #000; padding:4px 6px; text-align:right;">${escapeHtml(pct(v.value))}</td>
-      <td style="border:1px solid #000; padding:4px 6px;"></td>
-    </tr>
-  `).join('');
-
-  const html = `
-    <table style="border-collapse:collapse; font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; color:#000;">
-      <tr>
-        <td colspan="2" style="border:1px solid #000; padding:4px 6px; text-align:center; vertical-align:middle; font-weight:700;">
-          ${escapeHtml(titleDate)}
-        </td>
-        <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">
-          ${escapeHtml(`Rendite-Chart ${titleDate}`)}
-        </td>
-      </tr>
-      <tr>
-        <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">Restlaufzeit</td>
-        <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">Zinssatz</td>
-        <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">Quelle: iBoxx € Corporates AA</td>
-      </tr>
-      ${htmlRows}
-    </table>
-  `;
-
-  return { html, plainText };
-}
-
-async function copyIboxxChart(btn) {
-  if (!calcData.ifrsRaw) {
-    alert('Bitte zuerst den interaktiven Rechner laden.');
-    return;
-  }
-
-  const dateStr = document.getElementById('calc-date').value;
-  if (!dateStr) {
-    alert('Bitte zuerst einen Stichtag auswählen.');
-    return;
-  }
-
-  const origHtml = btn.innerHTML;
-
-  try {
-    const payload = buildIboxxChartClipboard(dateStr);
-    await copyRichToClipboard(payload.html, payload.plainText);
-    setCopiedState(btn, origHtml);
-  } catch (e) {
-    alert('Fehler beim Kopieren des iBoxx-Charts.');
-  }
-}
-
 function normalizeToMonthEnd(dateStr) {
   if (!dateStr) return '';
   const [y, m] = String(dateStr).split('-').map(Number);
@@ -943,17 +861,6 @@ async function exportChart(id, fn, type, btn) {
   chart.update('none');
 }
 
-function setCopiedState(btn) {
-  if (!btn) return;
-  const origHtml = btn.innerHTML;
-  btn.classList.add('copied');
-  btn.innerHTML = svgCopied;
-  setTimeout(() => {
-    btn.classList.remove('copied');
-    btn.innerHTML = origHtml;
-  }, 2000);
-}
-
 async function copyDisclaimer(btn) {
   const disclaimer = "Bitte beachten Sie, dass es sich bei den genannten Parametern um einen unverbindlichen Vorschlag der VALOG GmbH handelt. Die Auswahl der Parameter liegt letztlich in Ihrer Verantwortung. Wir empfehlen Ihnen daher, diese vorab mit Ihrem Wirtschaftsprüfer abzusprechen.";
   const origHtml = btn.innerHTML;
@@ -996,10 +903,34 @@ function rowsToTabSeparatedText(rows) {
 }
 
 function rowsToHtmlTable(rows) {
+  const esc = s => String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
   return `
-    <table>
+    <table style="border-collapse:collapse; font-family:'Segoe UI', Arial, sans-serif; font-size:10pt; color:#000;">
       <tbody>
-        ${rows.map(row => `<tr>${row.map(cell => `<td>${String(cell ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</td>`).join('')}</tr>`).join('')}
+        <tr>
+          <td colspan="2" style="border:1px solid #000; padding:4px 6px; text-align:center; vertical-align:middle; font-weight:700;">
+            ${esc(rows[0][0])}
+          </td>
+          <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">
+            ${esc(rows[0][2])}
+          </td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">${esc(rows[1][0])}</td>
+          <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">${esc(rows[1][1])}</td>
+          <td style="border:1px solid #000; padding:4px 6px; font-weight:700;">${esc(rows[1][2])}</td>
+        </tr>
+        ${rows.slice(2).map(row => `
+          <tr>
+            <td style="border:1px solid #000; padding:4px 6px;">${esc(row[0])}</td>
+            <td style="border:1px solid #000; padding:4px 6px; text-align:right;">${esc(row[1])}</td>
+            <td style="border:1px solid #000; padding:4px 6px;"></td>
+          </tr>
+        `).join('')}
       </tbody>
     </table>
   `;
